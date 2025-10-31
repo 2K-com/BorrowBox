@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BorrowBox - College Rental Site</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="js/main.js" defer></script>
+</head>
+<body>
+
+    <header>
+        <nav class="navbar">
+            <button class="menu-btn" id="menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="logo">
+                BorrowBox
+            </div>
+            
+            <button class="login-btn">Login</button>
+        </nav>
+    </header>
+
+    <div class="mobile-nav" id="mobile-nav">
+        <button class="close-btn" id="close-btn">&times;</button>
+        <a href="#">Home</a>
+        <a href="#">Electronics</a>
+        <a href="#">Clothing</a>
+        <a href="#">Textbooks</a>
+        <a href="#">My Profile</a>
+    </div>
+
+    <main>
+
+        <section class="hero-section">
+            <div class="carousel-container">
+                <div class="carousel-track" id="carousel-track">
+                    <div class="slide product-card">
+                        <h3>Recently Added: Gaming Console</h3>
+                        <p>PS5 for rent - $10/day</p>
+                    </div>
+                    <div class="slide product-card">
+                        <h3>Recently Added: Formal Suit</h3>
+                        <p>Perfect for interviews - $5/day</p>
+                    </div>
+                    <div class="slide product-card">
+                        <h3>Recently Added: Chemistry Textbook</h3>
+                        <p>CHEM 101, latest edition - $2/day</p>
+                    </div>
+                </div>
+                <button class="carousel-btn prev" id="prev-btn">&lt;</button>
+                <button class="carousel-btn next" id="next-btn">&gt;</button>
+            </div>
+        </section>
+
+        <section class="categories-section">
+            <h2>Browse by Category</h2>
+            <div class="category-list">
+                <div class="category-card">
+                    <i class="fas fa-laptop"></i>
+                    <span>Electronics</span>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-tshirt"></i>
+                    <span>Clothing</span>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-book"></i>
+                    <span>Textbooks</span>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-bicycle"></i>
+                    <span>Sporting Goods</span>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-couch"></i>
+                    <span>Furniture</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="#">About Us</a>
+            <a href="#">Contact</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Privacy Policy</a>
+        </div>
+        <p class="footer-copyright">
+            &copy; 2025 BorrowBox. All rights reserved.
+        </p>
+    </footer>
+
+</body>
+</html>

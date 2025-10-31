@@ -1,0 +1,237 @@
+/* --- Global Styles & Theme --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --primary-green: #4caf50;
+    --dark-bg-primary: #121212; /* Main background */
+    --dark-bg-secondary: #1c1c1c; /* Header/Footer background */
+    --text-light: #ffffff;
+    --text-dark: #111111;
+    --border-color: #333;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--dark-bg-primary);
+    color: var(--text-light);
+    min-height: 100vh;
+}
+
+main {
+    padding: 1.5rem 2rem;
+}
+
+h2 {
+    text-align: center;
+    font-size: 2rem;
+    color: var(--primary-green);
+    margin-bottom: 1.5rem;
+}
+
+/* --- Header / Navbar --- */
+.navbar {
+    display: flex;
+    justify-content: space-between; /* This is key! */
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: var(--dark-bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.menu-btn {
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    color: var(--primary-green);
+    cursor: pointer;
+    z-index: 1001; /* Keep it above mobile nav */
+}
+
+.logo {
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: var(--primary-green);
+    /* It's centered because of justify-content: space-between */
+}
+
+.login-btn {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: var(--primary-green);
+    color: var(--text-light);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.login-btn:hover {
+    background-color: #45a049;
+}
+
+/* --- Mobile Nav (Hidden by default) --- */
+.mobile-nav {
+    position: fixed;
+    top: 0;
+    left: -100%; /* Hides it off-screen */
+    width: 250px;
+    height: 100vh;
+    background-color: var(--dark-bg-secondary);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    padding-top: 5rem;
+    z-index: 1000;
+    transition: left 0.3s ease-in-out;
+}
+
+.mobile-nav.active {
+    left: 0; /* Slides it into view */
+}
+
+.mobile-nav a {
+    color: var(--text-light);
+    text-decoration: none;
+    font-size: 1.25rem;
+    padding: 1rem 2rem;
+}
+
+.mobile-nav a:hover {
+    background-color: var(--primary-green);
+}
+
+.close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 2.5rem;
+    background: none;
+    border: none;
+    color: var(--text-light);
+    cursor: pointer;
+}
+
+/* --- Hero Carousel --- */
+.hero-section {
+    width: 100%;
+    max-width: 900px; /* Optional: sets a max width */
+    margin: 2rem auto;
+    overflow: hidden; /* This hides the other slides */
+    position: relative;
+}
+
+.carousel-container {
+    position: relative;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out; /* The slide animation */
+}
+
+.slide {
+    min-width: 100%; /* Each slide takes full width */
+    height: 350px; /* Example height */
+}
+
+.product-card {
+    background-color: #2a2a2a;
+    border: 1px dashed var(--primary-green);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    font-size: 1.2rem;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 0.75rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.carousel-btn.prev { left: 10px; }
+.carousel-btn.next { right: 10px; }
+
+/* --- Categories Section --- */
+.categories-section {
+    padding: 2rem 0;
+}
+
+.category-list {
+    display: grid;
+    /* This creates a responsive grid */
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+}
+
+.category-card {
+    background-color: var(--dark-bg-secondary);
+    padding: 2rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    font-size: 1.25rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.category-card i {
+    font-size: 2rem;
+    color: var(--primary-green);
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-green);
+    color: var(--primary-green);
+}
+
+/* --- Footer --- */
+.footer {
+    background-color: var(--dark-bg-secondary);
+    color: #aaa;
+    padding: 2rem;
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+    margin-top: 2rem;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+.footer-links a {
+    color: var(--primary-green);
+    text-decoration: none;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+}
+
+.footer-copyright {
+    font-size: 0.9rem;
+}
