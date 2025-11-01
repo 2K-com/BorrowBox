@@ -1,35 +1,42 @@
-/* Reset and base setup */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Poppins:wght@400;500;600&display=swap');
+
+
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
 }
 
 body {
-  background: linear-gradient(120deg, #dfe9f3 0%, #ffffff 100%);
-  color: #222;
+  background: linear-gradient(135deg, #1a2a3a, #162d3f, #0e1c26);
+  color: #e8f9fd;
+  font-family: "Poppins", sans-serif;
+  min-height: 100vh;
 }
 
-/* Navbar container */
+
+
+/* ========Navbar=========*/
 .navbar {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 80px;
+  top: 15px;
+  left: 30px;
+  width: 96%;
+  height: 60px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 50px;
   backdrop-filter: blur(20px);
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.25);
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   z-index: 1000;
+  border-radius: 40px;
 }
 
-/* Left links */
+/* Left nav links */
 .nav-left {
   list-style: none;
   display: flex;
@@ -38,13 +45,13 @@ body {
 
 .nav-left li a {
   text-decoration: none;
-  color: #222;
-  font-weight: 500;
+  color:white;
+  font-weight: 400;
   transition: 0.3s;
 }
 
 .nav-left li a:hover {
-  color: #007bff;
+  color: rgb(79, 214, 255);
   transform: scale(1.05);
 }
 
@@ -52,31 +59,31 @@ body {
 .nav-center h1 {
   font-size: 1.6rem;
   font-weight: 600;
+  color: rgb(173, 243, 255);
   margin-left: -200px;
-  color: #111;
-  letter-spacing: 1px;
 }
 
 /* Right button */
 .nav-right .login-btn {
   padding: 8px 20px;
-  border: none;
+
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(10px);
-  color: #111;
+  background: none;
+  border: 2px solid #ffffff;
+  color: white;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 400;
   transition: 0.3s;
 }
 
 .nav-right .login-btn:hover {
-  background: #007bff;
-  color: #fff;
+  background: #e8eced;
+  color: black;
   transform: scale(1.05);
+  font-weight: 400;
 }
 
-/* Responsive for mobile */
+/* Mobile responsive navbar */
 @media (max-width: 768px) {
   .navbar {
     padding: 0 20px;
@@ -98,19 +105,20 @@ body {
   }
 }
 
-
-
-/* HERO SECTION */
+/* ===============================
+   HERO SECTION
+   =============================== */
 .hero {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 8%;
-  background: linear-gradient(135deg, #26a4e8 0%, #ffffff 100%);
-  color: #222;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-success) 100%);
+  color: var(--color-text);
 }
 
+/* Left content */
 .hero-content {
   max-width: 50%;
   animation: fadeInLeft 1s ease;
@@ -125,7 +133,7 @@ body {
 }
 
 .hero-content h1 span {
-  color: #007bff;
+  color: var(--color-success);
 }
 
 .hero-content p {
@@ -135,8 +143,9 @@ body {
   color: #f0f0f0;
 }
 
+/* CTA button */
 .hero-btn {
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(15px);
   border: 2px solid rgba(255, 255, 255, 0.6);
   padding: 15px 35px;
@@ -149,12 +158,12 @@ body {
 }
 
 .hero-btn:hover {
-  background: #007bff;
-  color: #fff;
-  border-color: #007bff;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
   transform: scale(1.05);
 }
 
+/* Right image */
 .hero-image img {
   width: 480px;
   max-width: 100%;
@@ -162,7 +171,7 @@ body {
   animation: fadeInUp 1.2s ease;
 }
 
-/* Animation */
+/* Animations */
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
@@ -173,7 +182,7 @@ body {
   to { opacity: 1; transform: translateX(0); }
 }
 
-/* Responsive */
+/* Responsive hero */
 @media (max-width: 900px) {
   .hero {
     flex-direction: column;
