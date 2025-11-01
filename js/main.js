@@ -1,62 +1,56 @@
-// Wait for the DOM to be fully loaded before running script
+// --- Carousel Logic ---
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- Hamburger Menu Logic ---
-    const menuBtn = document.getElementById('menu-btn');
-    const closeBtn = document.getElementById('close-btn');
-    const mobileNav = document.getElementById('mobile-nav');
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dots = document.querySelectorAll('.dot');
+    const prevBtn = document.getElementById('carousel-prev');
+    const nextBtn = document.getElementById('carousel-next');
 
-    // Open navigation
-    menuBtn.addEventListener('click', () => {
-        mobileNav.classList.add('active');
-    });
-
-    // Close navigation
-    closeBtn.addEventListener('click', () => {
-        mobileNav.classList.remove('active');
-    });
-
-
-    // --- Simple Carousel Logic ---
-    const track = document.getElementById('carousel-track');
-    // Get all slides as an array
-    const slides = Array.from(track.children);
-    const nextBtn = document.getElementById('next-btn');
-    const prevBtn = document.getElementById('prev-btn');
-
-    // Check if slides exist before running carousel logic
-    if (slides.length > 0) {
-        let currentIndex = 0;
+    // Check if carousel elements exist on the page
+    if (slides.length > 0 && dots.length > 0 && prevBtn && nextBtn) {
+        
+        let currentSlide = 0;
         const slideCount = slides.length;
 
-        // Function to update carousel position
-        const updateCarousel = () => {
-            // Move the track using CSS transform. 
-            // -currentIndex * 100% moves it left
-            track.style.transform = 'translateX(' + (-currentIndex * 100) + '%)';
+        // Function to show a specific slide
+        const showSlide = (n) => {
+            // Handle wrap-around
+            if (n >= slideCount) {
+                currentSlide = 0;
+            } else if (n < 0) {
+                currentSlide = slideCount - 1;
+            } else {
+                currentSlide = n;
+            }
+
+            // Hide all slides and deactivate all dots
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+
+            // Show the current slide and activate the current dot
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
         };
 
-        // Next button click
+        // Button Listeners
         nextBtn.addEventListener('click', () => {
-            currentIndex++;
-            // If at the end, loop back to the start
-            if (currentIndex > slideCount - 1) {
-                currentIndex = 0;
-            }
-            updateCarousel();
+            showSlide(currentSlide + 1);
         });
 
-        // Previous button click
         prevBtn.addEventListener('click', () => {
-            currentIndex--;
-            // If at the beginning, loop to the end
-            if (currentIndex < 0) {
-                currentIndex = slideCount - 1;
-            }
-            updateCarousel();
+            showSlide(currentSlide - 1);
         });
 
-        // Initialize carousel position
-        updateCarousel();
+        // Dot Listeners
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                // Get the slide number from the dot's 'data-slide' attribute
+                const slideIndex = parseInt(dot.getAttribute('data-slide'));
+                showSlide(slideIndex);
+            });
+        });
+
+        // Show the first slide on page load
+        showSlide(0);
     }
 });
