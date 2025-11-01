@@ -46,30 +46,61 @@
 
   <!-- category Section -->
   <section class="browse-section">
-    <h2>Browse by Category</h2>
-    <div class="categories">
-      <div class="category-card">
-        <img src="../assets/images/cat1.png" alt="Electronics">
-        <h3>Electronics</h3>
-      </div>
-      <div class="category-card">
-        <img src="../assets/images/cat1.png" alt="Books">
-        <h3>Books</h3>
-      </div>
-      <div class="category-card">
-        <img src="../assets/images/cat1.png" alt="Tools">
-        <h3>Tools</h3>
-      </div>
-      <div class="category-card">
-        <img src="../assets/images/cat1.png" alt="Accessories">
-        <h3>Accessories</h3>
-      </div>
+  <h2>Browse by Category</h2>
+  <div class="categories">
+    <div class="category-card">
+      <img src="images/electronics.jpg" alt="Electronics">
+      <h3>Electronics</h3>
     </div>
-    <button class="view-btn">View All</button>
-  </section>
+    <div class="category-card">
+      <img src="images/books.jpg" alt="Books">
+      <h3>Books</h3>
+    </div>
+    <div class="category-card">
+      <img src="images/tools.jpg" alt="Tools">
+      <h3>Tools</h3>
+    </div>
+    <div class="category-card">
+      <img src="images/accessories.jpg" alt="Accessories">
+      <h3>Accessories</h3>
+    </div>
+  </div>
+  <button class="view-btn">View All</button>
+  <section class="carousel-section">
+    
+    <div class="carousel-header">
+        <span>Recently Added Items</span>
+    </div>
+
+    <div class="carousel-wrapper">
+
+        <button class="carousel-btn prev" id="carousel-prev">&lt;</button>
+
+        <div class="carousel-container">
+            
+            <div class="carousel-slide active">
+                <div class="slide-content">PS5</div>
+            </div>
+            <div class="carousel-slide">
+                <div class="slide-content">Ikegai</div>
+            </div>
+            <div class="carousel-slide">
+                <div class="slide-content">GTA5 game disc</div>
+            </div>
+
+            <div class="carousel-dots" id="carousel-dots">
+                <span class="dot active" data-slide="0"></span>
+                <span class="dot" data-slide="1"></span>
+                <span class="dot" data-slide="2"></span>
+            </div>
+        </div>
+
+        <button class="carousel-btn next" id="carousel-next">&gt;</button>
+    </div> </section>
 
 
 
   <script src="../js/main.js"></script>
 </body>
 </html>
+]
