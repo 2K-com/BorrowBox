@@ -52,8 +52,9 @@ body {
 }
 
 .nav-left li a:hover {
-  color: rgb(14, 71, 111);
+  color: rgb(146, 146, 146);
   transform: scale(1.05);
+  font-size: 15px;
 
 }
 
@@ -207,15 +208,15 @@ body {
   padding: 80px 10%;
   color: #000000;
   margin-top: -90px;
+  align-items: center;
 }
 
 .browse-section h2 {
   font-size: 2.5rem;
-  
   margin-bottom: 50px;
   color: #020202;
   letter-spacing: 1px;
-  text-align:left;
+  text-align:center;
 }
 
 .categories {
@@ -225,7 +226,7 @@ body {
 }
 
 .category-card {
-  background: rgba(255, 255, 255, 0.277);
+  background: rgba(255, 255, 255, 0.554);
   border-radius: 16px;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -236,8 +237,8 @@ body {
 }
 
 .category-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 10px 20px rgba(181, 213, 255, 0.3);
+  transform: translateY(-6px);
+  box-shadow: 0 10px 20px rgba(27, 92, 176, 0.3);
 }
 
 .category-card img {
@@ -249,7 +250,30 @@ body {
 }
 
 .category-card h3 {
-  color: #fff;
+  text-align: center;
+  color: #070707cb;
   font-size: 1.2rem;
   margin-top: 10px;
+}
+
+
+.view-btn {
+  display: block;
+  margin: 50px auto 20px; 
+  padding: 10px 100px;
+  margin-top: 50px;
+  margin-bottom: 20px;
+  border-radius: 20px;
+  background: none;
+  border: 2px solid #000000;
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.3s;
+}
+.view-btn:hover {
+  background: #000000;
+  color: rgb(255, 255, 255);
+  transform: scale(0.94);
+  font-weight: 500;
 }
