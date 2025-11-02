@@ -208,6 +208,7 @@ body {
   padding: 40px;
   color: #000000;
   margin-top: -90px;
+  align-items: center;
 }
 
 .browse-section h2 {
@@ -216,7 +217,7 @@ body {
   margin-bottom: 50px;
   color: #020202;
   letter-spacing: 1px;
-  text-align:left;
+  text-align:center;
 }
 
 .categories {
@@ -226,7 +227,7 @@ body {
 }
 
 .category-card {
-  background: rgba(255, 255, 255, 0.277);
+  background: rgba(255, 255, 255, 0.554);
   border-radius: 16px;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -237,8 +238,8 @@ body {
 }
 
 .category-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 10px 20px rgba(181, 213, 255, 0.3);
+  transform: translateY(-6px);
+  box-shadow: 0 10px 20px rgba(27, 92, 176, 0.3);
 }
 
 .category-card img {
@@ -250,7 +251,8 @@ body {
 }
 
 .category-card h3 {
-  color: #fff;
+  text-align: center;
+  color: #070707cb;
   font-size: 1.2rem;
   margin-top: 10px;
 }
