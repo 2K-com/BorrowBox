@@ -27,7 +27,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 0 50px;
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(15px);
   background: rgba(255, 255, 255, 0.25);
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
@@ -205,7 +205,7 @@ body {
 
 .browse-section {
   justify-content:center;
-  padding: 80px 10%;
+  padding: 40px;
   color: #000000;
   margin-top: -90px;
 }
@@ -412,4 +412,300 @@ body {
 
 .dot.active {
     background-color: #007bff; /* Active dot color */
+}
+/* --- Product Grid Section --- */
+.product-grid-section {
+    max-width: 1000px; /* Or whatever max-width your content has */
+    margin: 3rem auto;
+    padding: 0 2rem;
+}
+
+.product-grid-section h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #222;
+    text-align: center; /* Center the main title */
+    margin-bottom: 2rem;
+}
+
+/* --- The 3-Column Grid --- */
+.product-grid {
+    display: grid;
+    /* This creates 3 equal-width columns */
+    grid-template-columns: repeat(3, 1fr); 
+    column-gap: 1.5rem;
+    gap: 1.5rem; /* Space between the cards */
+}
+
+/* --- Product Grid Section --- */
+.product-grid-section {
+    max-width: 2000px; /* Adjust to match your site's content width */
+    margin: 3rem auto;
+    padding: 0 2rem;
+}
+
+.product-grid-section h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #222;
+    text-align: center; /* Center the "Featured Products" title */
+    margin-bottom: 2rem;
+}
+
+/* --- The 4-Column Grid --- */
+.product-grid {
+    display: grid;
+    /* This creates 4 equal-width columns */
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 1.5rem; /* Space between the cards */
+}
+
+/* --- Product Card Styling --- */
+.product-card {
+    /* Glassmorphism theme */
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 12px;
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    
+    overflow: hidden; /* Keeps image corners rounded */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Placeholder for the product image */
+.card-image-placeholder {
+    height: 180px;
+    background-color: rgba(255, 255, 255, 0.7);
+    /* In a real site, you'd replace this div with:
+       <img src="path-to-image.jpg" alt="Product Image"> 
+       ...and style the img tag instead. */
+}
+
+.card-info {
+    padding: 1rem;
+}
+
+.card-info h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 0.25rem;
+    
+    /* Optional: Truncate long text */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-info p {
+    font-size: 0.9rem;
+    color: #007bff; /* Blue accent for price */
+    font-weight: 500;
+}
+
+/* --- View All Button Container --- */
+.view-all-container {
+    text-align: center; /* Centers the button */
+    margin-top: 2.5rem; /* Space between grid and button */
+}
+
+/* * NOTE: This re-uses the .view-all-btn style from your
+ * carousel/category headers. If it's already in your
+ * stylesheet, you don't need to add it again.
+*/
+.view-all-btn {
+    text-decoration: none;
+    padding: 0.6rem 1.2rem;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    color: #333;
+    background-color: rgba(255, 255, 255, 0.3);
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.view-all-btn:hover {
+    background: #007bff;
+    border-color: #007bff;
+    color: #fff;
+}
+
+
+/* --- Responsive (Mobile) --- */
+@media (max-width: 900px) { 
+    .product-grid {
+        /* 2 columns for tablets */
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .product-grid {
+        /* 1 column for mobile */
+        grid-template-columns: 1fr;
+    }
+}
+/* --- Footer Styles --- */
+/* --- Footer Styles --- */
+.site-footer {
+    /* Glassmorphism Design */
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    
+    color: #333; /* Darker text for light background */
+    padding: 3rem 2rem 0; /* 0 bottom padding, handled by .footer-bottom */
+
+    /* === MODIFIED SECTION === */
+    /* This creates the 15px space around the container */
+    margin: 4rem 5px 5px 5px; /* Top, Right, Bottom, Left margins */
+    
+    /* Adds rounded corners to the whole footer card */
+    border-radius: 16px; 
+    /* === END MODIFIED SECTION === */
+}
+
+.footer-container {
+    max-width: 2000px; /* This still controls your content width */
+    margin: 0 auto; /* This centers your content */
+}
+
+/* --- Main Footer Columns --- */
+.footer-main {
+    display: grid;
+    /* 4 equal columns on desktop */
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    padding-bottom: 2.5rem;
+}
+
+.footer-column {
+    min-width: 160px; /* Prevents columns from getting too small */
+}
+
+.footer-column h4 {
+    color: #111; /* Darker heading */
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.footer-column p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #444;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-column ul li {
+    margin-bottom: 0.75rem;
+}
+
+.footer-column ul li a {
+    color: #333;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.footer-column ul li a:hover {
+    color: #007bff; /* Blue hover accent */
+    text-decoration: underline;
+}
+
+/* Newsletter Form */
+.newsletter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.newsletter-form input {
+    width: 100%;
+    padding: 0.7rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.7);
+    font-family: "Poppins", sans-serif;
+}
+
+.newsletter-form button {
+    padding: 0.7rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff; /* Blue accent */
+    color: #fff;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.newsletter-form button:hover {
+    background-color: #0056b3;
+}
+
+
+/* --- Bottom Bar (Copyright & Socials) --- */
+.footer-bottom {
+    display: flex;
+    flex-wrap: wrap; /* Stacks on mobile */
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.2); /* Glassy separator */
+    font-size: 0.9rem;
+}
+
+.footer-copyright {
+    color: #444;
+}
+
+.footer-socials {
+    display: flex;
+    gap: 1rem;
+}
+
+.footer-socials a {
+    color: #333;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+.footer-socials a:hover {
+    color: #007bff; /* Blue hover */
+}
+
+/* --- Responsive (Mobile) --- */
+@media (max-width: 768px) {
+    .footer-main {
+        /* 2 columns for tablets */
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-main {
+        /* 1 column for mobile */
+        grid-template-columns: 1fr;
+    }
+    
+    .footer-bottom {
+        /* Stack copyright and socials */
+        flex-direction: column; 
+        text-align: center;
+    }
 }
