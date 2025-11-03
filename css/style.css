@@ -282,9 +282,15 @@ body {
 /* * NOTE: This is the same style as your category button.
  * If .view-all-btn is already in your CSS, you don't need to add it again.
 */
-.view-all-btn {
+.view-button {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:10vh;
+}
+.view-btn {
     text-decoration: none;
-    padding: 0.6rem 1.2rem;
+    padding: 0.6rem 5rem;
     border: 1px solid #ccc;
     border-radius: 25px;
     color: #333;
@@ -292,12 +298,14 @@ body {
     font-weight: 500;
     font-size: 0.9rem;
     transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    margin-top:20px;
+    
 }
-
-.view-all-btn:hover {
-    background: #007bff;
-    border-color: #007bff;
+.view-btn:hover {
+    background: #69696974;
     color: #fff;
+
 }
 
 
