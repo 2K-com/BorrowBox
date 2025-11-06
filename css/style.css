@@ -260,32 +260,6 @@ body {
   font-size: 1.2rem;
   margin-top: 10px;
 }
-/* --- Carousel Section --- */
-.carousel-section {
-    max-width: 1000px; /* Adjust this to match your site's content width */
-    margin: 3rem auto; /* Space above and below the carousel */
-    padding: 0 2rem;   /* Padding on the sides */
-}
-
-/* --- Carousel Header (Title + View All) --- */
-.carousel-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100px; 
-}
-
-.carousel-header span {
-    font-size: 2rem;
-    font-weight: 600;
-    color: #222;
-    margin: 0; 
-    text-align: center;
-}
-
-/* * NOTE: This is the same style as your category button.
- * If .view-all-btn is already in your CSS, you don't need to add it again.
-*/
 .view-button {
   display:flex;
   justify-content:center;
@@ -311,30 +285,46 @@ body {
     color: #fff;
 
 }
+/* --- Carousel Section --- */
+.carousel-section {
+    max-width: 1000px; /* Adjust to match your site's content width */
+    margin: 3rem auto;
+    padding: 0 2rem;
+}
 
+/* --- Carousel Header (Title) --- */
+.carousel-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1.5rem; 
+}
+
+.carousel-header span {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #222;
+    margin: 0; 
+}
 
 /* --- Carousel Wrapper (Holds Buttons + Card) --- */
 .carousel-wrapper {
     display: flex;
-    align-items: center; /* Vertically centers buttons with the card */
-    gap: 0.5rem; /* Space between buttons and card */
+    align-items: center;
+    gap: 0.5rem;
 }
-
 
 /* --- Carousel Buttons (Outside) --- */
 .carousel-btn {
-    /* Styles for the button appearance */
     background-color: rgba(255, 255, 255, 0.7);
     color: #222;
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 50%;
-    width: 45px;  /* Button size */
+    width: 45px;
     height: 45px;
     font-size: 1.5rem;
     cursor: pointer;
     transition: all 0.3s;
-    
-    /* Flexbox property to stop buttons from shrinking */
     flex-shrink: 0; 
 }
 
@@ -343,29 +333,19 @@ body {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* No position styles needed for .prev or .next */
-.carousel-btn.prev {}
-.carousel-btn.next {}
-
-
 /* --- Carousel Container (The main card) --- */
 .carousel-container {
-    position: relative; /* For the dots inside */
+    position: relative;
     height: 400px; 
     overflow: hidden;
-    
-    /* Glassmorphism theme */
     background: rgba(255, 255, 255, 0.5); 
     border-radius: 16px; 
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-
-    /* Flexbox property to take up remaining space */
     flex-grow: 1; 
-    min-width: 0; /* Fixes potential overflow */
+    min-width: 0;
 }
-
 
 /* --- Slides --- */
 .carousel-slide {
@@ -374,35 +354,41 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    opacity: 0; /* Hidden by default */
-    transition: opacity 0.6s ease-in-out; /* Fade animation */
-    
-    /* Centering content */
+    opacity: 0; 
+    transition: opacity 0.6s ease-in-out;
+    padding: 2rem;
+
+    /* This stacks the image and text vertically */
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 2rem;
 }
 
 .carousel-slide.active {
-    opacity: 1; /* Visible slide */
+    opacity: 1;
 }
 
-/* Content inside the slide */
+/* --- Image Style --- */
+.slide-image {
+    /* Let the image take up most of the slide's height */
+    height: 80%; 
+    max-width: 100%; /* Don't overflow the padding */
+    
+    /* This ensures the image scales to fit, not stretch */
+    object-fit: contain; 
+    
+    margin-bottom: 1rem; /* Space between image and text */
+}
+
+/* --- Caption Style --- */
 .slide-content {
     text-align: center;
-}
-.slide-content h3 {
-    font-size: 2.5rem;
-    font-weight: 600;
-    color: #222;
-    margin-bottom: 0.5rem;
-}
-.slide-content p {
     font-size: 1.2rem;
-    color: #555;
+    font-weight: 500;
+    color: #333;
+    margin-bottom:40px;
 }
-
 
 /* --- Dot Indicators (Inside) --- */
 .carousel-dots {
@@ -419,13 +405,13 @@ body {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.2); /* Inactive dot */
+    background-color: rgba(0, 0, 0, 0.2);
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
 .dot.active {
-    background-color: #007bff; /* Active dot color */
+    background-color: #007bff;
 }
 /* --- Product Grid Section --- */
 .product-grid-section {
@@ -546,8 +532,7 @@ body {
 }
 
 .view-all-btn:hover {
-    background: #007bff;
-    border-color: #007bff;
+    background: #53535393;
     color: #fff;
 }
 
