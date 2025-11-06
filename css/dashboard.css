@@ -1,0 +1,860 @@
+/* --- Global Reset/Setup (Ensure Box Model is consistent) --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif; /* Use a clean, readable font */
+    background: linear-gradient(135deg, #c3e1ff, #e4f4ff, #b8e1ff);
+}
+
+/* --- 1. Header/Navbar Styling (app-header) --- */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    backdrop-filter: blur(15px);
+    background: rgba(255, 255, 255, 0.682);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 2px 22px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    position: sticky;
+    top: 0;
+    
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #005691; /* Darker accent color */
+}
+
+.header-search {
+    padding: 8px 15px;
+    width: 350px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    align-items: right;
+    font-size: 14px;
+}
+
+.user-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.nav-icon-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.user-profile {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: 500;
+}
+
+/* --- 2. Main Dashboard Layout (CSS Grid) --- */
+.dashboard-container {
+    display: grid;
+    /* Define 2 columns: Sidebar (fixed width) and Content (takes remaining space) */
+    grid-template-columns: 250px 1fr; 
+    height: calc(100vh - 70px); /* Full height minus header height */
+}
+
+/* --- Sidebar Styling --- */
+.dashboard-sidebar {
+    backdrop-filter: blur(15px);
+    background: rgba(255, 255, 255, 0.682);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 2px 22px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    padding-top: 20px;
+    margin-top: 7px;
+    margin-left: 7px;
+    border-radius: 20px;
+    border-right: 1px solid #ddd;
+    overflow-y: auto; /* Allow scrolling if the menu is too long */
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0 10px;
+}
+
+.menu-divider {
+    color: #888;
+    font-size: 12px;
+    text-transform: uppercase;
+    margin: 20px 0 10px 15px;
+    font-weight: bold;
+}
+
+.menu-item {
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+
+.menu-item a {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+    transition: background-color 0.2s;
+}
+
+.menu-item:hover:not(.active) {
+    background-color: #1f70d37a;
+}
+
+/* Active link style using the theme's blue */
+.menu-item.active {
+    background-color: #005691; /* Dark blue background */
+}
+
+.menu-item.active a {
+    color: #fff; /* White text for active link */
+    font-weight: bold;
+}
+
+
+/* --- 3. Main Content Area Styling --- */
+.dashboard-content {
+    padding: 30px;
+    overflow-y: auto; /* Allow content scrolling */
+}
+
+.content-header {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Basic Card Grid for Dashboard Overview */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.info-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border-left: 5px solid #005691; /* Accent color bar */
+}
+
+.info-card h3 {
+    font-size: 32px;
+    margin-bottom: 5px;
+    color: #005691;
+}
+
+.info-card p {
+    color: #666;
+    font-size: 14px;
+}
+
+/* Hides inactive views, managed by JS later */
+.content-view {
+    display: none;
+}
+
+.content-view.active {
+    display: block;
+}
+
+
+/* --- Browse Layout (Filters and Grid) --- */
+.browse-layout {
+    display: grid;
+    /* Sidebar fixed width, results take remaining space */
+    grid-template-columns: 200px 1fr; 
+    gap: 30px;
+}
+
+/* --- Filter Sidebar Styling --- */
+.browse-filters {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.browse-filters h3 {
+    margin-bottom: 20px;
+    color: #005691;
+}
+
+.filter-group {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.filter-group h4 {
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.browse-filters select,
+.browse-filters input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.btn-apply-filters {
+    width: 100%;
+    padding: 10px;
+    background-color: #005691;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.btn-apply-filters:hover {
+    background-color: #004477;
+}
+
+/* --- Item Grid Styling --- */
+#item-count {
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.item-card-container {
+    display: grid;
+    /* Responsive grid: minimum card width of 300px */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+    gap: 20px;
+}
+
+.item-card {
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.item-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.item-card img {
+    width: 100%;
+    height: 200px; /* Fixed height for consistent look */
+    object-fit: cover;
+    display: block;
+    /* Placeholder styling for the image tags */
+    background-color: #f0f0f0;
+    line-height: 200px;
+    text-align: center;
+    color: #aaa;
+    font-style: italic;
+}
+
+.card-body {
+    padding: 15px;
+}
+
+.card-body h4 {
+    font-size: 18px;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.price {
+    font-size: 16px;
+    font-weight: bold;
+    color: #28a745; /* Green color for pricing */
+    margin-bottom: 5px;
+}
+
+.location, .description {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.btn-borrow {
+    width: 100%;
+    padding: 10px;
+    background-color: #005691;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+
+/* --- Listing Form Styles --- */
+.listing-form {
+    max-width: 700px; /* Constrain width for better readability */
+    margin: 20px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.form-section {
+    display: none; /* Hidden by default, JS manages visibility */
+    padding: 10px 0;
+}
+
+.form-section.active {
+    display: block; /* Only active step is visible */
+}
+
+.listing-form h2 {
+    color: #005691;
+    border-bottom: 2px solid #b3e5fc; /* Light blue underline */
+    padding-bottom: 10px;
+    margin-bottom: 25px;
+}
+
+.listing-form label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+    font-size: 15px;
+}
+
+.listing-form input[type="text"],
+.listing-form input[type="number"],
+.listing-form select,
+.listing-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    transition: border-color 0.2s;
+}
+
+.listing-form input:focus,
+.listing-form select:focus,
+.listing-form textarea:focus {
+    border-color: #005691;
+    outline: none;
+}
+
+.required {
+    color: #e74c3c; /* Red color for required fields */
+}
+
+/* --- Price Inputs Group --- */
+.price-inputs {
+    display: flex;
+    gap: 30px;
+}
+
+.price-inputs > div {
+    flex: 1;
+}
+
+.input-with-icon {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.input-with-icon .currency {
+    padding: 10px 8px;
+    background-color: #f8f8f8;
+    border-right: 1px solid #ccc;
+    color: #666;
+    font-weight: bold;
+}
+
+.input-with-icon input {
+    border: none;
+    margin: 0;
+    padding: 10px;
+    flex-grow: 1;
+}
+
+/* --- Form Controls & Buttons --- */
+.form-controls {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.btn-next, .btn-submit, .btn-prev {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+    flex-basis: 48%; /* Ensures spacing between buttons */
+}
+
+.btn-next, .btn-submit {
+    background-color: #005691;
+    color: white;
+}
+
+.btn-submit {
+    background-color: #28a745; /* Green submit button */
+}
+
+.btn-prev {
+    background-color: #ccc;
+    color: #333;
+}
+
+.btn-prev:hover {
+    background-color: #aaa;
+}
+
+.btn-next:hover {
+    background-color: #004477;
+}
+
+.btn-submit:hover {
+    background-color: #1f8b35;
+}
+
+/* Terms Checkbox */
+.terms-check {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.terms-check input[type="checkbox"] {
+    width: auto;
+    margin-right: 10px;
+}
+
+
+/* --- Pending Requests Table Styles --- */
+.requests-table-container {
+    margin-top: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.requests-table-container table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+}
+
+.requests-table-container th, 
+.requests-table-container td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.requests-table-container th {
+    background-color: #f8f8f8;
+    color: #005691;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 13px;
+}
+
+/* Style for the pending row to make it visually important */
+.request-row.pending {
+    transition: background-color 0.2s;
+}
+
+.request-row.pending:hover {
+    background-color: #fffde7; /* Light yellow hover for attention */
+}
+
+/* Action Buttons */
+.action-cell {
+    white-space: nowrap; /* Keep buttons on one line */
+}
+
+.btn-action {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-right: 5px;
+    transition: background-color 0.2s;
+}
+
+.btn-approve {
+    background-color: #28a745; /* Green for go/approve */
+    color: white;
+}
+
+.btn-approve:hover {
+    background-color: #1f8b35;
+}
+
+.btn-reject {
+    background-color: #e74c3c; /* Red for stop/reject */
+    color: white;
+}
+
+.btn-reject:hover {
+    background-color: #c0392b;
+}
+
+/* Responsive Table (Optional but recommended for mobile view) */
+@media (max-width: 768px) {
+    .requests-table-container table, 
+    .requests-table-container thead, 
+    .requests-table-container tbody, 
+    .requests-table-container th, 
+    .requests-table-container td, 
+    .requests-table-container tr {
+        display: block;
+    }
+    
+    .requests-table-container thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    .requests-table-container tr {
+        border: 1px solid #ccc;
+        margin-bottom: 15px;
+        display: block;
+    }
+    
+    .requests-table-container td {
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
+        text-align: right;
+    }
+    
+    .requests-table-container td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-weight: bold;
+        text-align: left;
+        color: #005691;
+    }
+    
+    .requests-table-container .action-cell {
+        text-align: right;
+        padding-left: 10px;
+    }
+}
+
+/* --- My Listings Table Styles (Reuses base requests table styles) --- */
+.listings-table-container {
+    margin-top: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.listings-table-container table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+}
+
+.listings-table-container th, 
+.listings-table-container td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.listings-table-container th {
+    background-color: #f8f8f8;
+    color: #005691;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 13px;
+}
+
+.listing-row:hover {
+    background-color: #fcfcfc;
+}
+
+/* --- Status Tag Styling --- */
+.status-tag {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.status-tag.available {
+    background-color: #e6f7e9; /* Light Green */
+    color: #38761d; /* Dark Green */
+}
+
+.status-tag.rented {
+    background-color: #fef5e7; /* Light Orange/Yellow */
+    color: #a0522d; /* Brownish Orange */
+}
+
+.status-tag.inactive {
+    background-color: #f2f2f2; /* Light Gray */
+    color: #777; /* Dark Gray */
+}
+
+/* --- Listing Action Buttons --- */
+.btn-edit {
+    background-color: #005691; /* Primary Blue */
+    color: white;
+}
+.btn-requests {
+    background-color: #b3e5fc; /* Light Blue */
+    color: #005691;
+}
+.btn-deactivate {
+    background-color: #e74c3c; /* Red for stopping service */
+    color: white;
+}
+.btn-activate {
+    background-color: #28a745; /* Green for starting service */
+    color: white;
+}
+.btn-view {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+/* Reuse the responsive table media query from the pending requests view */
+@media (max-width: 768px) {
+    .listings-table-container td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-weight: bold;
+        text-align: left;
+        color: #005691;
+    }
+}
+
+/* --- My Rentals History Table Styling --- */
+
+/* Reuse the generic .listings-table-container for overall styling */
+.rental-history-container {
+    margin-top: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.rental-history-container table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+}
+
+.rental-history-container th, 
+.rental-history-container td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.rental-history-container th {
+    background-color: #f8f8f8;
+    color: #005691;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 13px;
+}
+
+.history-row:hover {
+    background-color: #fcfcfc;
+}
+
+/* --- Action Button Corrections and Standardization --- */
+
+/* Standard Action Button Base */
+.btn-action {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-right: 5px;
+    margin-bottom: 5px; /* Added spacing for wrap on mobile */
+    transition: background-color 0.2s;
+}
+
+/* Specific Actions for History */
+.btn-receipt {
+    background-color: #005691; /* Blue for documentation */
+    color: white;
+}
+
+.btn-rerent {
+    background-color: #28a745; /* Green for re-engaging/easy action */
+    color: white;
+}
+
+.btn-return {
+    background-color: #f39c12; /* Orange/Yellow for critical pending action */
+    color: white;
+}
+
+.btn-contact, .btn-view-note {
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ccc;
+}
+
+
+/* --- Status Tag Styling (Simplified) --- */
+.status-tag.rental-completed {
+    background-color: #e6f7e9; /* Light Green */
+    color: #38761d;
+}
+
+.status-tag.rental-pending {
+    background-color: #e0f7fa; /* Light Blue */
+    color: #005691;
+}
+
+.status-tag.rental-cancelled {
+    background-color: #f2f2f2; /* Light Gray */
+    color: #777;
+}
+
+/* --- Responsive Table Fix (Ensure this is at the end of the file) --- */
+@media (max-width: 768px) {
+    .rental-history-container td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-weight: bold;
+        text-align: left;
+        color: #005691;
+    }
+}
+
+
+/* --- Account Settings Styles --- */
+.settings-form {
+    display: grid;
+    /* Two columns on larger screens for better use of space */
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.settings-section {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.settings-section h2 {
+    color: #005691;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 25px;
+    font-size: 20px;
+}
+
+.settings-section label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+    font-size: 14px;
+}
+
+.settings-section input[type="text"],
+.settings-section input[type="email"],
+.settings-section input[type="tel"],
+.settings-section input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.settings-section small {
+    display: block;
+    color: #e74c3c;
+    margin-top: -10px;
+    margin-bottom: 15px;
+    font-size: 12px;
+}
+
+.btn-save-profile,
+.btn-save-password,
+.btn-save-payment {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background-color: #005691;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.btn-save-profile:hover,
+.btn-save-password:hover,
+.btn-save-payment:hover {
+    background-color: #004477;
+}
+
+/* Specific styling for the password update button for emphasis */
+.btn-save-password {
+    background-color: #e67e22; /* Orange for Security actions */
+}
+
+.btn-save-password:hover {
+    background-color: #d35400;
+}

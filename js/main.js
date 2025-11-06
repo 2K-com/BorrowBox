@@ -88,3 +88,50 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 });
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const sidebarItems = document.querySelectorAll('.menu-item');
+    const contentViews = document.querySelectorAll('.content-view');
+    const dashboardContent = document.querySelector('.dashboard-content');
+
+    // Function to show the selected view and hide others
+    const showView = (viewId) => {
+        // Hide all views
+        contentViews.forEach(view => {
+            view.classList.remove('active');
+        });
+        
+        // Show the requested view
+        const activeView = document.getElementById(`view-${viewId}`);
+        if (activeView) {
+            activeView.classList.add('active');
+        }
+        
+    };
+
+    // Function to handle sidebar clicks
+    sidebarItems.forEach(item => {
+        item.addEventListener('click', (event) => {
+            // Prevent the default link behavior
+            event.preventDefault(); 
+            
+            // Remove active class from all sidebar items
+            sidebarItems.forEach(i => i.classList.remove('active'));
+            
+            // Add active class to the clicked item
+            item.classList.add('active');
+            
+            // Get the data-view attribute to know which content to load
+            const viewId = item.getAttribute('data-view');
+            
+            if (viewId) {
+                showView(viewId);
+            }
+        });
+    });
+
+    // Initial check: Ensure the default dashboard view is active on load
+    // The HTML already sets the 'dashboard' view to active, but this ensures JS consistency.
+    // We don't need to call showView('dashboard') here unless we want to dynamically generate it.
+});
