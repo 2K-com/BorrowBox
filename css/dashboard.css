@@ -111,7 +111,7 @@ body {
 }
 
 .menu-item:hover:not(.active) {
-    background-color: #1f70d37a;
+    background-color: #2f73c67a;
 }
 
 /* Active link style using the theme's blue */

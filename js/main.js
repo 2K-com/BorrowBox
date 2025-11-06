@@ -1,4 +1,3 @@
-// --- Carousel Logic ---
 document.addEventListener('DOMContentLoaded', () => {
 
     const slides = document.querySelectorAll('.carousel-slide');
@@ -6,15 +5,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const prevBtn = document.getElementById('carousel-prev');
     const nextBtn = document.getElementById('carousel-next');
 
-    // Check if carousel elements exist on the page
     if (slides.length > 0 && dots.length > 0 && prevBtn && nextBtn) {
-        
         let currentSlide = 0;
         const slideCount = slides.length;
 
-        // Function to show a specific slide
         const showSlide = (n) => {
-            // Handle wrap-around
             if (n >= slideCount) {
                 currentSlide = 0;
             } else if (n < 0) {
@@ -23,115 +18,220 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentSlide = n;
             }
 
-            // Hide all slides and deactivate all dots
             slides.forEach(slide => slide.classList.remove('active'));
             dots.forEach(dot => dot.classList.remove('active'));
 
-            // Show the current slide and activate the current dot
             slides[currentSlide].classList.add('active');
             dots[currentSlide].classList.add('active');
         };
 
-        // Button Listeners
-        nextBtn.addEventListener('click', () => {
-            showSlide(currentSlide + 1);
-        });
+        nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+        prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
 
-        prevBtn.addEventListener('click', () => {
-            showSlide(currentSlide - 1);
-        });
-
-        // Dot Listeners
         dots.forEach(dot => {
             dot.addEventListener('click', () => {
-                // Get the slide number from the dot's 'data-slide' attribute
                 const slideIndex = parseInt(dot.getAttribute('data-slide'));
                 showSlide(slideIndex);
             });
         });
-
-        // Show the first slide on page load
         showSlide(0);
     }
-});
-// Wait for the DOM to be fully loaded
-document.addEventListener('DOMContentLoaded', () => {
-
-    // ... (Your other JS for smooth scroll & hamburger menu) ...
 
 
-    // --- LOGIN/SIGNUP TOGGLE LOGIC ---
-    
-    // Find all the elements we need
     const loginForm = document.getElementById('login-form');
     const signupForm = document.getElementById('signup-form');
     const showSignupBtn = document.getElementById('show-signup');
     const showLoginBtn = document.getElementById('show-login');
 
-    // IMPORTANT: Check if these elements exist before adding listeners
-    // This stops errors from appearing on your index.html page
     if (loginForm && signupForm && showSignupBtn && showLoginBtn) {
-
-        // When user clicks "Sign Up" link...
         showSignupBtn.addEventListener('click', (e) => {
-            e.preventDefault(); // Stop the link from jumping
+            e.preventDefault();
             loginForm.style.display = 'none';
-            signupForm.style.display = 'flex'; // Show the signup form
+            signupForm.style.display = 'flex';
         });
 
-        // When user clicks "Login" link...
         showLoginBtn.addEventListener('click', (e) => {
-            e.preventDefault(); // Stop the link from jumping
-            loginForm.style.display = 'flex'; // Show the login form
+            e.preventDefault();
+            loginForm.style.display = 'flex';
             signupForm.style.display = 'none';
         });
     }
 
-});
 
-
-document.addEventListener('DOMContentLoaded', () => {
     const sidebarItems = document.querySelectorAll('.menu-item');
-    const contentViews = document.querySelectorAll('.content-view');
     const dashboardContent = document.querySelector('.dashboard-content');
 
-    // Function to show the selected view and hide others
+    const viewTemplates = {};
+    document.querySelectorAll('.content-view').forEach(view => {
+
+        viewTemplates[view.id.replace('view-', '')] = view.outerHTML; 
+        view.style.display = 'none'; 
+    });
+
     const showView = (viewId) => {
-        // Hide all views
-        contentViews.forEach(view => {
-            view.classList.remove('active');
-        });
-        
-        // Show the requested view
-        const activeView = document.getElementById(`view-${viewId}`);
-        if (activeView) {
-            activeView.classList.add('active');
+        dashboardContent.innerHTML = '';
+
+        if (viewTemplates[viewId]) {
+            dashboardContent.innerHTML = viewTemplates[viewId];
+            
+
+            const injectedView = dashboardContent.querySelector(`#view-${viewId}`);
+            if (injectedView) {
+                injectedView.style.display = 'block'; 
+                injectedView.classList.add('active'); 
+            }
+            
+
+            if (viewId === 'new-item') {
+                initMultiStepForm();
+            } else if (viewId === 'browse') {
+                initBrowseFiltering();
+            }
+        } else {
+            dashboardContent.innerHTML = `<section class="content-view active" style="display:block">
+                <h1 class="content-header">${viewId.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}</h1>
+                <p>This feature is coming soon! Thank you for your patience.</p>
+            </section>`;
         }
-        
     };
 
-    // Function to handle sidebar clicks
     sidebarItems.forEach(item => {
         item.addEventListener('click', (event) => {
-            // Prevent the default link behavior
             event.preventDefault(); 
             
-            // Remove active class from all sidebar items
             sidebarItems.forEach(i => i.classList.remove('active'));
-            
-            // Add active class to the clicked item
             item.classList.add('active');
             
-            // Get the data-view attribute to know which content to load
             const viewId = item.getAttribute('data-view');
-            
             if (viewId) {
                 showView(viewId);
+                window.scrollTo(0, 0);
             }
         });
     });
 
-    // Initial check: Ensure the default dashboard view is active on load
-    // The HTML already sets the 'dashboard' view to active, but this ensures JS consistency.
-    // We don't need to call showView('dashboard') here unless we want to dynamically generate it.
+    const initialActiveItem = document.querySelector('.sidebar-menu .menu-item.active');
+    if (initialActiveItem) {
+        const initialViewId = initialActiveItem.getAttribute('data-view');
+        showView(initialViewId);
+    }
+
+    
+    const initMultiStepForm = () => {
+        const form = document.querySelector('.listing-form');
+        if (!form) return;
+
+        const moveStep = (currentStep, nextStep) => {
+            const currentElement = form.querySelector(`.form-section[data-step="${currentStep}"]`);
+            const nextElement = form.querySelector(`.form-section[data-step="${nextStep}"]`);
+
+            if (currentElement && nextElement) {
+                currentElement.classList.remove('active');
+                nextElement.classList.add('active');
+            }
+        };
+
+        form.addEventListener('click', (e) => {
+            if (e.target.classList.contains('btn-next')) {
+                const nextStep = e.target.getAttribute('data-next-step');
+                const currentStep = e.target.closest('.form-section').getAttribute('data-step');
+                moveStep(currentStep, nextStep);
+            } else if (e.target.classList.contains('btn-prev')) {
+                const prevStep = e.target.getAttribute('data-prev-step');
+                const currentStep = e.target.closest('.form-section').getAttribute('data-step');
+                moveStep(currentStep, prevStep);
+            }
+        });
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (document.getElementById('terms-agree').checked) {
+                alert('Item listing submitted successfully!');
+            } else {
+                alert('You must agree to the Terms & Conditions.');
+            }
+        });
+    };
+
+    const ALL_ITEMS_DATA = [
+        { id: 1, name: 'PlayStation 5 Controller', price: 50, category: 'electronics', location: 'Mumbai', lender: 'Jane', distance: 5 },
+        { id: 2, name: 'Electric Drill Kit', price: 150, category: 'tools', location: 'Navi Mumbai', lender: 'John', distance: 2 },
+
+    ];
+
+    const createItemCard = (item) => {
+
+        return `
+            <div class="item-card" data-category="${item.category}" data-price="${item.price}">
+                <div class="item-card-image">
+                    <img src="../assets/images/${item.category}_${item.id}.jpg" alt="${item.name}"> 
+                    <div class="img-placeholder">Image of ${item.name}</div> 
+                </div>
+                <div class="card-body">
+                    <h4>${item.name}</h4>
+                    <p class="price">₹${item.price} / day</p>
+                    <p class="location">Lender: ${item.lender} (${item.distance} km away)</p>
+                    <p class="description">
+                        Item description placeholder text...
+                    </p>
+                    <button class="btn-borrow">Borrow Now</button>
+                </div>
+            </div>
+        `;
+    };
+
+    const renderItems = (items) => {
+        const gridContainer = document.querySelector('.item-card-grid'); 
+        const itemCountDisplay = document.getElementById('item-count');
+
+        if (!gridContainer || !itemCountDisplay) {
+            return;
+        }
+
+
+        gridContainer.innerHTML = items.map(createItemCard).join('');
+        itemCountDisplay.textContent = `Showing ${items.length} items`;
+    };
+
+    const applyFilters = (e) => {
+        if(e && e.preventDefault) e.preventDefault(); 
+        
+        // Get values from the elements in the currently loaded DOM
+        const searchInput = document.getElementById('dashboard-search') ? document.getElementById('dashboard-search').value.toLowerCase() : '';
+        const categoryFilter = document.getElementById('filter-category') ? document.getElementById('filter-category').value : '';
+        const priceMax = document.getElementById('filter-price-range') ? parseInt(document.getElementById('filter-price-range').value) : 5000;
+        
+        let filteredItems = ALL_ITEMS_DATA.filter(item => {
+            const matchesSearch = item.name.toLowerCase().includes(searchInput);
+            const matchesCategory = categoryFilter === '' || item.category === categoryFilter;
+            const matchesPrice = item.price <= priceMax;
+            
+            return matchesSearch && matchesCategory && matchesPrice;
+        });
+
+        renderItems(filteredItems);
+    };
+
+    const initBrowseFiltering = () => {
+
+        renderItems(ALL_ITEMS_DATA);
+
+        const categorySelect = document.getElementById('filter-category');
+        const priceRangeInput = document.getElementById('filter-price-range');
+        const applyFiltersBtn = document.querySelector('.btn-apply-filters');
+        const searchInput = document.getElementById('dashboard-search'); 
+
+        if (categorySelect && priceRangeInput && applyFiltersBtn) {
+            
+
+            categorySelect.addEventListener('change', applyFilters);
+            priceRangeInput.addEventListener('input', applyFilters);
+            applyFiltersBtn.addEventListener('click', applyFilters);
+            
+
+            if (searchInput) {
+                searchInput.addEventListener('input', applyFilters);
+            }
+        }
+    };
 });
