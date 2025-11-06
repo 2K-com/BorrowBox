@@ -54,3 +54,37 @@ document.addEventListener('DOMContentLoaded', () => {
         showSlide(0);
     }
 });
+// Wait for the DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', () => {
+
+    // ... (Your other JS for smooth scroll & hamburger menu) ...
+
+
+    // --- LOGIN/SIGNUP TOGGLE LOGIC ---
+    
+    // Find all the elements we need
+    const loginForm = document.getElementById('login-form');
+    const signupForm = document.getElementById('signup-form');
+    const showSignupBtn = document.getElementById('show-signup');
+    const showLoginBtn = document.getElementById('show-login');
+
+    // IMPORTANT: Check if these elements exist before adding listeners
+    // This stops errors from appearing on your index.html page
+    if (loginForm && signupForm && showSignupBtn && showLoginBtn) {
+
+        // When user clicks "Sign Up" link...
+        showSignupBtn.addEventListener('click', (e) => {
+            e.preventDefault(); // Stop the link from jumping
+            loginForm.style.display = 'none';
+            signupForm.style.display = 'flex'; // Show the signup form
+        });
+
+        // When user clicks "Login" link...
+        showLoginBtn.addEventListener('click', (e) => {
+            e.preventDefault(); // Stop the link from jumping
+            loginForm.style.display = 'flex'; // Show the login form
+            signupForm.style.display = 'none';
+        });
+    }
+
+});
