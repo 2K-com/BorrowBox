@@ -222,14 +222,16 @@ body {
 
 /* =============hero================== */
 .hero {
-  min-height: 100vh;
+  min-height: 70vh;
   display: flex;
+  margin-bottom:0px;
   align-items: center;
   justify-content: space-between;
   padding: 0 8%;
   position: relative;
   /* Context for absolute overlay */
   overflow: hidden;
+  padding-top:80px;
   /* Keep blur edges clean */
 }
 
@@ -246,7 +248,7 @@ body {
 }
 
 .hero-content h1 {
-  font-size: var(--fs-xl);
+  font-size: var(--fs-xxl);
   font-weight: var(--fw-bold);
   font-family: var(--font-main);
   line-height: 1.2;
@@ -267,9 +269,22 @@ body {
 
 /* CTA button */
 .hero-btn {
-  background: var(--glass-bg);
+  background: var(--primary-color);
   backdrop-filter: var(--glass-blur);
   border: 2px solid var(--glass-border);
+  padding: 15px 35px;
+  border-radius: var(--radius-lg);
+  font-weight: var(--fw-bold);
+  cursor: pointer;
+  transition: 0.3s;
+  color: var(--primary-dark);
+  font-size: 1.1rem;
+}
+
+.hero-btn_2 {
+  background: transparent;
+  backdrop-filter: var(--glass-blur);
+  border: 2px solid #ff6663ff;
   padding: 15px 35px;
   border-radius: var(--radius-lg);
   font-weight: var(--fw-bold);
@@ -286,6 +301,13 @@ body {
   transform: scale(1.04);
 }
 
+.hero-btn_2:hover {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: rgba(170, 169, 169, 0.1);
+  transform: scale(1.04);
+}
+
 /* Right image */
 .hero-image img {
   width: 480px;
@@ -296,6 +318,37 @@ body {
   z-index: 1;
   /* Above overlay */
 }
+
+.hero-stats {
+            display: grid;
+            max-width:55%;
+            margin-left:120px;
+            backdrop-filter: var(--glass-blur);
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 32px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: clamp(28px, 4vw, 36px);
+            font-weight: 800;
+            color: var(--primary-color);
+            display: block;
+        }
+
+        .stat-label {
+            font: var(--font-main);
+            font-size: 13px;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
 
 /* Animations */
 @keyframes fadeInUp {
