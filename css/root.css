@@ -3,14 +3,20 @@
 
 :root {
     --font-main: 'Alata', sans-serif;
-    --font-secondary:'Inter', sans-serif;
+    --font-secondary: 'Inter', sans-serif;
     /* Font Sizes */
-    --fs-xs: 0.75rem;   /* 12px - Captions */
-    --fs-sm: 0.875rem;  /* 14px - Small labels */
-    --fs-base: 1rem;    /* 16px - Body text */
-    --fs-md: 1.25rem;   /* 20px - Subheadings */
-    --fs-lg: 1.5rem;    /* 24px - Section headers */
-    --fs-xl: 2.25rem;   /* 36px - Main Hero Titles */
+    --fs-xs: 0.75rem;
+    /* 12px - Captions */
+    --fs-sm: 0.875rem;
+    /* 14px - Small labels */
+    --fs-base: 1rem;
+    /* 16px - Body text */
+    --fs-md: 1.25rem;
+    /* 20px - Subheadings */
+    --fs-lg: 1.5rem;
+    /* 24px - Section headers */
+    --fs-xl: 2.25rem;
+    /* 36px - Main Hero Titles */
 
     /* Font Weights */
     --fw-light: 300;
@@ -18,19 +24,35 @@
     --fw-med: 500;
     --fw-bold: 700;
 
-    /* --- Color Palette --- */
-    --primary-color: #68A691;
-    --primary-dark: #FFE5D4 ;
-    --accent-color: #694F5D;        /* For links or call-to-action */
-    --bg-dark: #0f172a;             /* Deep Navy/Black for the background */
-    --text-main: #343434;           /* Off-white for readability */
-    --text-muted: #a6a6a6;          /* Gray for subtitles */
+    /* --- Color Palette (Primitives) --- */
+    --deep-space-blue: #0b3954ff;
+    --pale-sky: #bfd7eaff;
+    --vibrant-coral: #ff6663ff;
+    --lime-yellow: #e0ff4fff;
+    --white: #fefffeff;
+    /* Auto-generated Dark for Text Contrast */
+    --text-charcoal: #2c3e50;
+
+    /* --- Semantic Colors --- */
+    --primary-color: var(--vibrant-coral);
+    /* Soft accent */
+    --primary-dark: var(--deep-space-blue);
+    /* Dark text for contrast on Coral */
+    --accent-color: var(--lime-yellow);
+    /* Secondary accent */
+    --bg-dark: var(--pale-sky);
+    /* Warm light background */
+    --text-main: var(--deep-space-blue);
+    /* Main text (dark) */
+    --text-muted: var(--deep-space-blue);
+    /* Muted text */
 
     /* --- Glassmorphism Values --- */
-    --glass-bg: rgba(255, 255, 255, 0.05);     /* Transparent white */
-    --glass-border: rgba(255, 255, 255, 0.1);  /* Subtle edge */
-    --glass-blur: blur(12px);                  /* The "frosted" effect */
-    
+    --glass-bg: rgba(255, 255, 255, 0.4);
+    /* White tint */
+    --glass-border: rgba(255, 255, 255, 0.6);
+    --glass-blur: blur(12px);
+
     /* --- Spacing & Radius --- */
     --radius-sm: 8px;
     --radius-md: 15px;

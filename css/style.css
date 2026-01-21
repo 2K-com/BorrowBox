@@ -233,6 +233,9 @@ body {
   /* Keep blur edges clean */
 }
 
+/* Blur Overlay for Hero Only */
+
+
 /* Left content */
 .hero-content {
   max-width: 50%;
