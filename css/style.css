@@ -234,23 +234,7 @@ body {
 }
 
 /* Blur Overlay for Hero Only */
-.hero-overlay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80%;
-  height: 80%;
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(80px);
-  /* Strong blur */
-  -webkit-backdrop-filter: blur(80px);
-  border-radius: 50%;
-  z-index: 0;
-  pointer-events: none;
-  box-shadow: 0 0 100px rgba(104, 166, 145, 0.2);
-  /* Soft glow using primary color */
-}
+
 
 /* Left content */
 .hero-content {
