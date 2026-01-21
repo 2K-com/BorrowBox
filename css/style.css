@@ -222,7 +222,7 @@ body {
 
 /* =============hero================== */
 .hero {
-  min-height: 100vh;
+  min-height: 85vh;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -232,8 +232,6 @@ body {
   overflow: hidden;
   /* Keep blur edges clean */
 }
-
-/* Blur Overlay for Hero Only */
 
 
 /* Left content */
