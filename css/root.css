@@ -20,7 +20,7 @@
 
     /* --- Color Palette --- */
     --primary-color: #68A691;
-    --primary-dark: #FFE5D4;
+    --primary-dark: #FFE5D4 ;
     --accent-color: #694F5D;        /* For links or call-to-action */
     --bg-dark: #0f172a;             /* Deep Navy/Black for the background */
     --text-main: #343434;           /* Off-white for readability */
