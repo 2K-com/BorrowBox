@@ -302,7 +302,7 @@ body {
 .hero-btn_2:hover {
   background: var(--primary-color);
   border-color: var(--primary-color);
-  color: rgba(170, 169, 169, 0.1);
+  color: var(--bg-dark);
   transform: scale(1.04);
 }
 
@@ -319,12 +319,12 @@ body {
 
 .hero-stats {
   display: grid;
-  max-width: 55%;
+  max-width: 45%;
   margin-left: 120px;
   backdrop-filter: var(--glass-blur);
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.20);
   padding: 32px;
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.2);
