@@ -30,10 +30,10 @@
     --primary-color: #1C3E35;
     /* Soft accent */
     --primary-dark: var(--deep-space-blue);
-    /* Dark text for contrast on Coral */
+    /* Dark text for contrast on Coral */   
     --accent-color: var(--lime-yellow);
     /* Secondary accent */
-    --bg-dark:linear-gradient(90deg, #1C3E35, #99F2D1);;
+    --bg-dark: linear-gradient(90deg, #1C3E35, #99F2D1);
     /* Warm light background */
     --text-main: var(--deep-space-blue);
     /* Main text (dark) */

@@ -18,11 +18,6 @@ body {
   z-index: 1;
 }
 
-main{
-  background: linear-gradient(90deg, #0E1C26, #2A454B, #294861);
-}
-
-
 .floating-background {
   position: fixed;
   top: 0;
