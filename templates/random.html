@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BorrowBox | The Smart Way to Share</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FF6B6B",
+                        "electric-lime": "#CCFF00",
+                        "soft-clay": "#D9CAB3",
+                        "deep-charcoal": "#1A1A1A",
+                        "background-light": "#F8F9FA",
+                        "background-dark": "#0F0F0F",
+                    },
+                    fontFamily: {
+                        display: ["Space Grotesk", "sans-serif"],
+                        body: ["Plus Jakarta Sans", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "12px",
+                    },
+                },
+            },
+        };
+    </script>
+<style type="text/tailwindcss">
+        .neo-brutalism-shadow {
+            box-shadow: 4px 4px 0px 0px #1A1A1A;
+        }
+        .dark .neo-brutalism-shadow {
+            box-shadow: 4px 4px 0px 0px #CCFF00;
+        }
+        .neo-brutalism-shadow-lg {
+            box-shadow: 8px 8px 0px 0px #1A1A1A;
+        }
+        .dark .neo-brutalism-shadow-lg {
+            box-shadow: 8px 8px 0px 0px #CCFF00;
+        }
+        .neo-brutalism-button {
+            transition: all 0.2s ease;
+        }
+        .neo-brutalism-button:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px 0px #1A1A1A;
+        }
+        .dark .neo-brutalism-button:hover {
+            box-shadow: 6px 6px 0px 0px #CCFF00;
+        }
+        .geo-pattern {
+            background-image: radial-gradient(#1A1A1A11 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        .dark .geo-pattern {
+            background-image: radial-gradient(#CCFF0022 1px, transparent 1px);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="font-body bg-background-light dark:bg-background-dark text-deep-charcoal dark:text-gray-100 transition-colors duration-300">
+<nav class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-7xl z-50">
+<div class="bg-white/80 dark:bg-deep-charcoal/80 backdrop-blur-md border-2 border-deep-charcoal dark:border-electric-lime px-6 py-4 rounded-full flex items-center justify-between shadow-lg">
+<div class="flex items-center gap-10">
+<a class="text-2xl font-display font-bold text-primary tracking-tighter" href="#">BorrowBox</a>
+<div class="hidden md:flex items-center gap-8 font-semibold text-sm uppercase tracking-wider">
+<a class="hover:text-primary transition-colors" href="#">Home</a>
+<a class="hover:text-primary transition-colors" href="#">Categories</a>
+<a class="hover:text-primary transition-colors" href="#">Products</a>
+<a class="hover:text-primary transition-colors" href="#">Contact</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors" onclick="document.documentElement.classList.toggle('dark')">
+<span class="material-symbols-outlined align-middle">contrast</span>
+</button>
+<a class="bg-deep-charcoal dark:bg-electric-lime text-white dark:text-deep-charcoal px-6 py-2.5 rounded-full font-bold text-sm neo-brutalism-button border-2 border-transparent" href="#">
+                    Login / Sign Up
+                </a>
+</div>
+</div>
+</nav>
+<main class="relative pt-40 pb-20 px-8 lg:px-12 overflow-hidden min-h-screen geo-pattern">
+<div class="absolute top-20 left-10 w-64 h-64 bg-primary/10 rounded-full blur-3xl -z-10 animate-pulse"></div>
+<div class="absolute bottom-20 right-10 w-80 h-80 bg-electric-lime/10 rounded-full blur-3xl -z-10"></div>
+<div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+<div class="space-y-8">
+<div class="inline-block bg-electric-lime dark:bg-primary px-4 py-1.5 border-2 border-deep-charcoal dark:border-white rounded-lg neo-brutalism-shadow">
+<span class="font-display font-bold text-xs uppercase tracking-widest text-deep-charcoal dark:text-white">Peer-to-Peer Student Sharing</span>
+</div>
+<h1 class="text-6xl md:text-7xl font-display font-bold leading-[1.1] text-deep-charcoal dark:text-white">
+                    Borrow Anything, Anytime — <span class="text-primary underline decoration-4 underline-offset-8">The Smart Way</span>
+</h1>
+<p class="text-xl text-gray-600 dark:text-gray-400 max-w-lg leading-relaxed">
+                    From electronics to books, tools to accessories – borrow or lend items easily and securely in one place. Join your university community today.
+                </p>
+<div class="flex flex-wrap gap-4 pt-4">
+<button class="bg-primary text-white px-8 py-4 rounded-2xl font-bold text-lg border-2 border-deep-charcoal dark:border-white neo-brutalism-button">
+                        Start Borrowing
+                    </button>
+<button class="bg-white dark:bg-transparent border-2 border-deep-charcoal dark:border-electric-lime px-8 py-4 rounded-2xl font-bold text-lg neo-brutalism-button dark:text-electric-lime">
+                        Know More
+                    </button>
+</div>
+<div class="bg-soft-clay dark:bg-deep-charcoal border-2 border-deep-charcoal dark:border-electric-lime p-8 rounded-3xl neo-brutalism-shadow grid grid-cols-3 gap-8 mt-12">
+<div class="text-center">
+<div class="text-3xl font-display font-bold text-primary mb-1">2.4k+</div>
+<div class="text-xs uppercase font-bold tracking-tighter opacity-60">Active Students</div>
+</div>
+<div class="text-center border-x-2 border-deep-charcoal/10 dark:border-white/10">
+<div class="text-3xl font-display font-bold text-primary mb-1">850+</div>
+<div class="text-xs uppercase font-bold tracking-tighter opacity-60">Items Listed</div>
+</div>
+<div class="text-center">
+<div class="text-3xl font-display font-bold text-primary mb-1">12</div>
+<div class="text-xs uppercase font-bold tracking-tighter opacity-60">Universities</div>
+</div>
+</div>
+</div>
+<div class="relative group">
+<div class="absolute inset-0 bg-electric-lime rounded-[40px] rotate-3 -z-10 group-hover:rotate-1 transition-transform border-2 border-deep-charcoal"></div>
+<div class="bg-white dark:bg-deep-charcoal border-2 border-deep-charcoal p-4 rounded-[40px] shadow-2xl">
+<img alt="Students collaborating" class="rounded-[32px] w-full h-[500px] object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDs1IgYZ9IM65so0c903jOXnm6trbc1MVL3klXk9BQINtP3fXVXxnbaRb865ykQPISQWUfSWaVWgS1OR10ATeCyO59KkhSEu-a-da5fK9fGl_ukKTA_Mibqu24eafxH3ZM-n0QBpFTPTogByU_qNYwGX1knH3i5P9BRiDJW9kV9vNK0ON-hui4A3QowXf4X8okfEaxtVn6fZL6MDKn3H803PO2bsfUflxdXNaLo2wwQy2yjpYBOR59ogj_NnPR4g--Ju0t27KmmQG1z"/>
+</div>
+<div class="absolute -bottom-6 -left-6 bg-white dark:bg-deep-charcoal border-2 border-deep-charcoal p-4 rounded-2xl neo-brutalism-shadow max-w-[200px]">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm">verified_user</span>
+</div>
+<div>
+<p class="text-xs font-bold leading-tight">Verified Security</p>
+<p class="text-[10px] opacity-60">Student-only network</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<section class="py-24 bg-deep-charcoal text-white overflow-hidden relative px-8 lg:px-12">
+<div class="max-w-7xl mx-auto">
+<div class="flex justify-between items-end mb-12">
+<div>
+<h2 class="text-4xl font-display font-bold mb-4">Popular Categories</h2>
+<p class="text-gray-400">Whatever you need, a peer nearby has it.</p>
+</div>
+<button class="flex items-center gap-2 font-bold hover:text-electric-lime transition-colors group">
+                    View all items 
+                    <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+<div class="bg-white/5 border border-white/10 p-6 rounded-3xl hover:bg-electric-lime hover:text-deep-charcoal transition-all cursor-pointer group">
+<div class="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center mb-6 text-white group-hover:bg-deep-charcoal">
+<span class="material-symbols-outlined">laptop_mac</span>
+</div>
+<h3 class="text-xl font-bold">Electronics</h3>
+<p class="text-sm opacity-60 mt-2">120+ Items available</p>
+</div>
+<div class="bg-white/5 border border-white/10 p-6 rounded-3xl hover:bg-primary hover:text-white transition-all cursor-pointer group">
+<div class="w-12 h-12 bg-electric-lime rounded-2xl flex items-center justify-center mb-6 text-deep-charcoal group-hover:bg-white">
+<span class="material-symbols-outlined">auto_stories</span>
+</div>
+<h3 class="text-xl font-bold">Textbooks</h3>
+<p class="text-sm opacity-60 mt-2">450+ Items available</p>
+</div>
+<div class="bg-white/5 border border-white/10 p-6 rounded-3xl hover:bg-soft-clay hover:text-deep-charcoal transition-all cursor-pointer group">
+<div class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center mb-6 text-white group-hover:bg-deep-charcoal">
+<span class="material-symbols-outlined">construction</span>
+</div>
+<h3 class="text-xl font-bold">Tools</h3>
+<p class="text-sm opacity-60 mt-2">85+ Items available</p>
+</div>
+<div class="bg-white/5 border border-white/10 p-6 rounded-3xl hover:bg-electric-lime hover:text-deep-charcoal transition-all cursor-pointer group">
+<div class="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center mb-6 text-white group-hover:bg-deep-charcoal">
+<span class="material-symbols-outlined">sports_basketball</span>
+</div>
+<h3 class="text-xl font-bold">Sports Gear</h3>
+<p class="text-sm opacity-60 mt-2">60+ Items available</p>
+</div>
+</div>
+</div>
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary/20 blur-[120px]"></div>
+</section>
+<section class="py-24 bg-background-light dark:bg-background-dark px-8 lg:px-12 overflow-hidden">
+<div class="max-w-7xl mx-auto">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+<div>
+<h2 class="text-4xl font-display font-bold text-deep-charcoal dark:text-white">Featured New Arrivals</h2>
+<p class="text-gray-500 dark:text-gray-400 mt-2">The latest listings from your campus peers.</p>
+</div>
+<div class="flex gap-4">
+<button class="w-12 h-12 rounded-full border-2 border-deep-charcoal dark:border-white flex items-center justify-center hover:bg-primary hover:text-white transition-colors">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-12 h-12 rounded-full border-2 border-deep-charcoal dark:border-white flex items-center justify-center hover:bg-primary hover:text-white transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="flex gap-8 overflow-x-auto pb-12 pt-4 hide-scrollbar snap-x">
+<div class="min-w-[320px] snap-start">
+<div class="bg-white dark:bg-deep-charcoal border-4 border-electric-lime p-4 rounded-3xl neo-brutalism-shadow-lg group">
+<div class="aspect-square rounded-2xl overflow-hidden mb-6 relative">
+<img alt="DJ Controller" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQHI3aLvp-cPJi-0M1TiI4SM9vvm-tXNoTKc4pPcWtmKN1h3OCHprdvkvDeYCEgyaQ-aFYXqMfnbtZ6VRpkvaYeYHxZQZFU7eRFFuskIHkkzRsem8fw_fZS_vMssjYrvA2Kd9gh4-zQli50_x_axbccJXRk1I_tQ-CP8CxvXsrDUY8IlqsM4tR7IFVfwfa5287Tg57VezhmS6NCwYaKO8lidyK0S_jppf9JkOq2pkJAE8m0h6bLKqW44v6NqjKlmYxtBDf7IYkwVK2"/>
+<span class="absolute top-4 left-4 bg-primary text-white text-xs font-bold px-3 py-1 rounded-full">NEW</span>
+</div>
+<h4 class="text-xl font-bold mb-1">DJ Controller DDJ-400</h4>
+<p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Central Library • 2km away</p>
+<div class="flex items-center justify-between">
+<span class="text-primary font-bold">$15/day</span>
+<button class="bg-deep-charcoal dark:bg-white text-white dark:text-deep-charcoal px-4 py-2 rounded-xl text-sm font-bold neo-brutalism-button">Borrow Now</button>
+</div>
+</div>
+</div>
+<div class="min-w-[320px] snap-start">
+<div class="bg-white dark:bg-deep-charcoal border-4 border-electric-lime p-4 rounded-3xl neo-brutalism-shadow-lg group">
+<div class="aspect-square rounded-2xl overflow-hidden mb-6 relative">
+<img alt="Drawing Tablet" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxb_FpjGPejnp1pG4AybkpFqsqfimnWkd6ZIMdfodLYRZ3UQ6uJ-6w2WjaIVfDL2c4xyybHPSrY4sBCTJgvUeP8QTfSf_D9k-LevqwMLUJK9YSKPU4d_0TaFldwGH2uzESzGczOmZ9Na00llDXXrFRLw5E_vViueaHIB5ZW_CwgsyQR78AKOyXPT-QhsJ5XbP9FUy8G5PF7l1iwx-wlGabrASum10Xa8uhi-luxXfRCHv2erUxTj6Vl9tTWm7RHaLB0tWkPJylBAyB"/>
+<span class="absolute top-4 left-4 bg-primary text-white text-xs font-bold px-3 py-1 rounded-full">NEW</span>
+</div>
+<h4 class="text-xl font-bold mb-1">Wacom Intuos Pro</h4>
+<p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Engineering Block • 1.2km away</p>
+<div class="flex items-center justify-between">
+<span class="text-primary font-bold">$10/day</span>
+<button class="bg-deep-charcoal dark:bg-white text-white dark:text-deep-charcoal px-4 py-2 rounded-xl text-sm font-bold neo-brutalism-button">Borrow Now</button>
+</div>
+</div>
+</div>
+<div class="min-w-[320px] snap-start">
+<div class="bg-white dark:bg-deep-charcoal border-4 border-electric-lime p-4 rounded-3xl neo-brutalism-shadow-lg group">
+<div class="aspect-square rounded-2xl overflow-hidden mb-6 relative">
+<img alt="Camping Tent" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBaf2HmgDPO7ol-5p_4FtvpkedmzRFk2UwXo5xcImPi1RnQKoXMSlyTPIS8burQUVKtu8QauiHnmwjl59YlW4igkCBGyNX05Vo1EgVCch48NebnfUSvvHGyWj6rT3-G0smAcTslx3_eXQIv4d8LBIDpB3KANh0M4S1l_E-EWM97EVHMG7D9pVla4hq4sTrmT1DsJN9tFhwCSJWa-fWbN9lpdiE_-nMr3J3_YbN3NqzgzsaGHH0oj8oWEr3VJpptpZyjTW8wdKQVDEWP"/>
+<span class="absolute top-4 left-4 bg-primary text-white text-xs font-bold px-3 py-1 rounded-full">NEW</span>
+</div>
+<h4 class="text-xl font-bold mb-1">2-Person Camping Tent</h4>
+<p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Student Union • 0.5km away</p>
+<div class="flex items-center justify-between">
+<span class="text-primary font-bold">$12/day</span>
+<button class="bg-deep-charcoal dark:bg-white text-white dark:text-deep-charcoal px-4 py-2 rounded-xl text-sm font-bold neo-brutalism-button">Borrow Now</button>
+</div>
+</div>
+</div>
+<div class="min-w-[320px] snap-start">
+<div class="bg-white dark:bg-deep-charcoal border-4 border-electric-lime p-4 rounded-3xl neo-brutalism-shadow-lg group">
+<div class="aspect-square rounded-2xl overflow-hidden mb-6 relative">
+<img alt="Camera Lens" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMKBQybfh82MLg_uvtZ9CMLKW_6qwNKudMKaMaril8dQoO9wRjoPibXcq_6e9BBQuts047KqnqqoTj8hyYmOpWYRTyeV2cWuadDz9Z7Ndw9pcYyhaXqvJdczZ84JvPdwM2DIXXYSKUv3-0axuIYmJCc8JoS3DVQXuL6Y6zum0A8C55Hk-LxzEBGrE1_x6kwaoqT4e38SxEB6gljfibkIDiL6P6tkma_uUPZnZkXOeTU5eUvdD9-Jpp53NHykkdCIZQv0zzpsqZmVJV"/>
+<span class="absolute top-4 left-4 bg-primary text-white text-xs font-bold px-3 py-1 rounded-full">NEW</span>
+</div>
+<h4 class="text-xl font-bold mb-1">Sony 50mm f/1.8 Lens</h4>
+<p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Arts Center • 3km away</p>
+<div class="flex items-center justify-between">
+<span class="text-primary font-bold">$20/day</span>
+<button class="bg-deep-charcoal dark:bg-white text-white dark:text-deep-charcoal px-4 py-2 rounded-xl text-sm font-bold neo-brutalism-button">Borrow Now</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-24 bg-white dark:bg-deep-charcoal px-8 lg:px-12">
+<div class="max-w-7xl mx-auto">
+<h2 class="text-4xl font-display font-bold text-deep-charcoal dark:text-white mb-12">Deeper Dive</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="md:col-span-2 bg-soft-clay dark:bg-background-dark border-2 border-deep-charcoal dark:border-white rounded-[40px] p-8 flex flex-col md:flex-row gap-8 items-center neo-brutalism-shadow group">
+<div class="w-full md:w-1/2 aspect-video rounded-3xl overflow-hidden">
+<img alt="Study Setup" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUuxZBk7vUtb4ihawLXeax605-v5vvI0Wl1aNWurjvEfksRTemoAuJHuPnlW1EQfN2ZdfCZxNXJQKW5zM2YO0Q1zqKCU1qMm9YCbtT8gJqa46KPAaXk2EO1R6A2XQyRv8iZ-cjOcJdJ_7kGO2chsV3KuxKw7kO7FHKwJ-DjohGj_5FP2msOUodNsY7IjhlF61kVek7nrL_t604pIoGFO5aV4AFLmtsv9s9cttdoV9Nmfo9MLCPqYOheiml3Dv3MGYJLcYfa-Arh6rT"/>
+</div>
+<div class="w-full md:w-1/2 space-y-4">
+<span class="text-xs font-bold uppercase tracking-widest text-primary">Editor's Pick</span>
+<h3 class="text-3xl font-display font-bold text-primary">Ultra-Focus Study Kit</h3>
+<p class="text-gray-600 dark:text-gray-400">Includes Sony XM4 headphones, a desk lamp, and a white noise machine. Perfect for finals week.</p>
+<button class="bg-deep-charcoal dark:bg-electric-lime text-white dark:text-deep-charcoal px-8 py-3 rounded-2xl font-bold neo-brutalism-button">Explore Kit</button>
+</div>
+</div>
+<div class="bg-background-light dark:bg-background-dark border-2 border-deep-charcoal dark:border-white p-6 rounded-[32px] neo-brutalism-shadow">
+<div class="aspect-square bg-gray-200 dark:bg-gray-800 rounded-2xl mb-6 overflow-hidden">
+<img alt="Scientific Calculator" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRHnYq6LKDF2N5tpfHEYzFyM70Aq8JQ7mFzMCiMJQ3DPuD_MnVmglMC6ABKc0G8_oPNPfi8O9Sa9a5DvZGH61exJNJ2S96N3IQcUfu3Z7OpeeukPDY8WviTraQcvps7OWLo59lIJdTXoWaHVn16nZBJdWO2V96MT707d2q3ZesZTy9iMgUFo5zNCB8_6GtJJqv29_SBwyUB5V4jk_619fqqOIZcpneR4i17BDkYpXGxcZwIyx8ySy39lupMUdCDoOHDzia7QKEJSVI"/>
+</div>
+<h4 class="text-xl font-bold mb-2">TI-84 Plus CE</h4>
+<p class="text-sm opacity-60 mb-6">Graphing calculator for advanced math and science courses.</p>
+<div class="flex items-center justify-between pt-4 border-t border-deep-charcoal/10 dark:border-white/10">
+<span class="font-bold text-primary">$4/day</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">favorite</span>
+</div>
+</div>
+<div class="bg-background-light dark:bg-background-dark border-2 border-deep-charcoal dark:border-white p-6 rounded-[32px] neo-brutalism-shadow">
+<div class="aspect-square bg-gray-200 dark:bg-gray-800 rounded-2xl mb-6 overflow-hidden">
+<img alt="Board Games" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBPRx-5XX97ys9sAPMwOO8_H_Jpu5awIdfSzRw2J2sF4ZDoiReJ8NlF1IW522gmEO8ZXAqBA5GIqKy7ZSdTFnSm-j0CjsKGXLTYUARcm5smNijzbvIK4-7nMqYjYjYapzvXtVXKpNmk4A9OB3XgWOJG93cc01RjyU9n3OnpMAmyD4bAklxA7w1ZWhwzaEFIE-oql9JjD6ko5TK3ggcdQrkSYliYfBsbLMcWvQiRz5Z9NE5h_WROZG0AWOkbUcvKWDe4vSPgMWb4Ddu"/>
+</div>
+<h4 class="text-xl font-bold mb-2">Catan: Board Game</h4>
+<p class="text-sm opacity-60 mb-6">Perfect for game night with your dorm mates. All pieces included.</p>
+<div class="flex items-center justify-between pt-4 border-t border-deep-charcoal/10 dark:border-white/10">
+<span class="font-bold text-primary">$5/day</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">favorite</span>
+</div>
+</div>
+<div class="bg-background-light dark:bg-background-dark border-2 border-deep-charcoal dark:border-white p-6 rounded-[32px] neo-brutalism-shadow">
+<div class="aspect-square bg-gray-200 dark:bg-gray-800 rounded-2xl mb-6 overflow-hidden">
+<img alt="Ring Light" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIsJH6ITghRRQhF_1-JRUhVdz30X-s8k2RBq1NhNXODMAfLM7Hhj9LM2snYnaWAjm3BdmcLXyG6S6eo28d95qP70XXrPk91RyxDzORT8zEAyQXWOAKAku5z-jlTciK4HpmfbzDJjGhQfVa6eA9c-YzLtTJSIcsRVWzMrrtdPlMKbyzOfXqjH4VohaIpWmNuXnDEu3x3WkgoB9hIWZz2VXXtZYMIVM9K2QMlIu7fA1Bbrl42ZXI2f4-gBXGnUkj7Ewd5DRhFCPkpAx-"/>
+</div>
+<h4 class="text-xl font-bold mb-2">LED Ring Light</h4>
+<p class="text-sm opacity-60 mb-6">10-inch ring light with tripod stand for creators and zoom calls.</p>
+<div class="flex items-center justify-between pt-4 border-t border-deep-charcoal/10 dark:border-white/10">
+<span class="font-bold text-primary">$6/day</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">favorite</span>
+</div>
+</div>
+<div class="bg-background-light dark:bg-background-dark border-2 border-deep-charcoal dark:border-white p-6 rounded-[32px] neo-brutalism-shadow">
+<div class="aspect-square bg-gray-200 dark:bg-gray-800 rounded-2xl mb-6 overflow-hidden">
+<img alt="Drawing Tablet" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoR5Z4cLp1i-x365lBPgGgQZ-uV3fB_y0uPaMFXYMJebF_yfCPISjROLIZGvm4Uyzyjz-TuiujksO16spnM--mQATgxZgQ2uSi07eoeqTZ1z2bGuGrPpiQbhA9ZqRUrIU8uLjpnFTtIENZeg8SQanGnREb2mr_qllYJrnW786zBoREFCDmHzUcgqaazsHLctKCDtJEOoARyV5SmTSkKoVY3Crc0nZhdhAUPRxwbLVc0bwJbAXWNr4Ez4iMNo2oww4Q8H4Zzy-tC6v_"/>
+</div>
+<h4 class="text-xl font-bold mb-2">Huion Inspiroy</h4>
+<p class="text-sm opacity-60 mb-6">Sleek drawing tablet for digital art and note-taking.</p>
+<div class="flex items-center justify-between pt-4 border-t border-deep-charcoal/10 dark:border-white/10">
+<span class="font-bold text-primary">$8/day</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">favorite</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<footer class="bg-background-light dark:bg-background-dark border-t-2 border-deep-charcoal dark:border-white/10 py-16 px-8 lg:px-12">
+<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+<div class="md:col-span-2 space-y-6">
+<div class="text-3xl font-display font-bold text-primary tracking-tighter">BorrowBox</div>
+<p class="text-gray-500 max-w-sm">Empowering students to share resources, save money, and build a more sustainable campus community together.</p>
+<div class="flex gap-4">
+<div class="w-10 h-10 border-2 border-deep-charcoal dark:border-white rounded-lg flex items-center justify-center cursor-pointer hover:bg-electric-lime hover:text-deep-charcoal transition-colors">
+<span class="material-symbols-outlined text-sm">share</span>
+</div>
+<div class="w-10 h-10 border-2 border-deep-charcoal dark:border-white rounded-lg flex items-center justify-center cursor-pointer hover:bg-primary hover:text-white transition-colors">
+<span class="material-symbols-outlined text-sm">thumb_up</span>
+</div>
+</div>
+</div>
+<div>
+<h5 class="font-display font-bold mb-6 text-sm uppercase tracking-widest">Platform</h5>
+<ul class="space-y-4 text-sm font-semibold opacity-60">
+<li><a class="hover:text-primary transition-colors" href="#">How it works</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Trust &amp; Safety</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Community Guidelines</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Insurance Policies</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-display font-bold mb-6 text-sm uppercase tracking-widest">Company</h5>
+<ul class="space-y-4 text-sm font-semibold opacity-60">
+<li><a class="hover:text-primary transition-colors" href="#">About Us</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Careers</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Contact Support</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Terms &amp; Privacy</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-7xl mx-auto pt-8 border-t border-deep-charcoal/5 dark:border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-xs opacity-40">
+<p>© 2024 BorrowBox. Designed with neo-modern aesthetics for the next generation of sharing.</p>
+<p>Made with ❤️ for students everywhere.</p>
+</div>
+</footer>
+
+</body></html>
