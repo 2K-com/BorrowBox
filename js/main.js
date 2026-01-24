@@ -1,238 +1,270 @@
+// main.js - Enhanced BorrowBox functionality
+
 document.addEventListener('DOMContentLoaded', () => {
 
+    // ========== CAROUSEL FUNCTIONALITY ==========
+    initCarousel();
+
+    // ========== SMOOTH SCROLLING ==========
+    initSmoothScroll();
+
+    // ========== NAVBAR SCROLL EFFECT ==========
+    initNavbarScroll();
+
+    // ========== STATS COUNTER ANIMATION ==========
+    initStatsCounter();
+
+    // ========== FORM HANDLERS ==========
+    initFormHandlers();
+});
+
+// Carousel functionality
+function initCarousel() {
     const slides = document.querySelectorAll('.carousel-slide');
     const dots = document.querySelectorAll('.dot');
     const prevBtn = document.getElementById('carousel-prev');
     const nextBtn = document.getElementById('carousel-next');
 
-    if (slides.length > 0 && dots.length > 0 && prevBtn && nextBtn) {
-        let currentSlide = 0;
-        const slideCount = slides.length;
+    if (slides.length === 0 || !prevBtn || !nextBtn) return;
 
-        const showSlide = (n) => {
-            if (n >= slideCount) {
-                currentSlide = 0;
-            } else if (n < 0) {
-                currentSlide = slideCount - 1;
-            } else {
-                currentSlide = n;
-            }
+    let currentSlide = 0;
+    const slideCount = slides.length;
+    let autoPlayInterval;
 
-            slides.forEach(slide => slide.classList.remove('active'));
-            dots.forEach(dot => dot.classList.remove('active'));
-
-            slides[currentSlide].classList.add('active');
-            dots[currentSlide].classList.add('active');
-        };
-
-        nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
-        prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
-
-        dots.forEach(dot => {
-            dot.addEventListener('click', () => {
-                const slideIndex = parseInt(dot.getAttribute('data-slide'));
-                showSlide(slideIndex);
-            });
-        });
-        showSlide(0);
-    }
-
-
-    const loginForm = document.getElementById('login-form');
-    const signupForm = document.getElementById('signup-form');
-    const showSignupBtn = document.getElementById('show-signup');
-    const showLoginBtn = document.getElementById('show-login');
-
-    if (loginForm && signupForm && showSignupBtn && showLoginBtn) {
-        showSignupBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            loginForm.style.display = 'none';
-            signupForm.style.display = 'flex';
-        });
-
-        showLoginBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            loginForm.style.display = 'flex';
-            signupForm.style.display = 'none';
-        });
-    }
-
-
-    const sidebarItems = document.querySelectorAll('.menu-item');
-    const dashboardContent = document.querySelector('.dashboard-content');
-
-    const viewTemplates = {};
-    document.querySelectorAll('.content-view').forEach(view => {
-
-        viewTemplates[view.id.replace('view-', '')] = view.outerHTML; 
-        view.style.display = 'none'; 
-    });
-
-    const showView = (viewId) => {
-        dashboardContent.innerHTML = '';
-
-        if (viewTemplates[viewId]) {
-            dashboardContent.innerHTML = viewTemplates[viewId];
-            
-
-            const injectedView = dashboardContent.querySelector(`#view-${viewId}`);
-            if (injectedView) {
-                injectedView.style.display = 'block'; 
-                injectedView.classList.add('active'); 
-            }
-            
-
-            if (viewId === 'new-item') {
-                initMultiStepForm();
-            } else if (viewId === 'browse') {
-                initBrowseFiltering();
-            }
+    const showSlide = (n) => {
+        if (n >= slideCount) {
+            currentSlide = 0;
+        } else if (n < 0) {
+            currentSlide = slideCount - 1;
         } else {
-            dashboardContent.innerHTML = `<section class="content-view active" style="display:block">
-                <h1 class="content-header">${viewId.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}</h1>
-                <p>This feature is coming soon! Thank you for your patience.</p>
-            </section>`;
+            currentSlide = n;
+        }
+
+        slides.forEach(slide => slide.classList.remove('active'));
+        dots.forEach(dot => dot.classList.remove('active'));
+
+        slides[currentSlide].classList.add('active');
+        if (dots[currentSlide]) {
+            dots[currentSlide].classList.add('active');
         }
     };
 
-    sidebarItems.forEach(item => {
-        item.addEventListener('click', (event) => {
-            event.preventDefault(); 
-            
-            sidebarItems.forEach(i => i.classList.remove('active'));
-            item.classList.add('active');
-            
-            const viewId = item.getAttribute('data-view');
-            if (viewId) {
-                showView(viewId);
-                window.scrollTo(0, 0);
-            }
+    // Button controls
+    nextBtn.addEventListener('click', () => {
+        showSlide(currentSlide + 1);
+        resetAutoPlay();
+    });
+
+    prevBtn.addEventListener('click', () => {
+        showSlide(currentSlide - 1);
+        resetAutoPlay();
+    });
+
+    // Dot controls
+    dots.forEach(dot => {
+        dot.addEventListener('click', () => {
+            const slideIndex = parseInt(dot.getAttribute('data-slide'));
+            showSlide(slideIndex);
+            resetAutoPlay();
         });
     });
 
-    const initialActiveItem = document.querySelector('.sidebar-menu .menu-item.active');
-    if (initialActiveItem) {
-        const initialViewId = initialActiveItem.getAttribute('data-view');
-        showView(initialViewId);
+    // Auto-play functionality
+    function startAutoPlay() {
+        autoPlayInterval = setInterval(() => {
+            showSlide(currentSlide + 1);
+        }, 5000); // Change slide every 5 seconds
     }
 
-    
-    const initMultiStepForm = () => {
-        const form = document.querySelector('.listing-form');
-        if (!form) return;
+    function resetAutoPlay() {
+        clearInterval(autoPlayInterval);
+        startAutoPlay();
+    }
 
-        const moveStep = (currentStep, nextStep) => {
-            const currentElement = form.querySelector(`.form-section[data-step="${currentStep}"]`);
-            const nextElement = form.querySelector(`.form-section[data-step="${nextStep}"]`);
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+            showSlide(currentSlide - 1);
+            resetAutoPlay();
+        } else if (e.key === 'ArrowRight') {
+            showSlide(currentSlide + 1);
+            resetAutoPlay();
+        }
+    });
 
-            if (currentElement && nextElement) {
-                currentElement.classList.remove('active');
-                nextElement.classList.add('active');
+    // Start carousel
+    showSlide(0);
+    startAutoPlay();
+
+    // Pause on hover
+    const carouselContainer = document.querySelector('.carousel-container');
+    if (carouselContainer) {
+        carouselContainer.addEventListener('mouseenter', () => {
+            clearInterval(autoPlayInterval);
+        });
+
+        carouselContainer.addEventListener('mouseleave', () => {
+            startAutoPlay();
+        });
+    }
+}
+
+// Smooth scrolling for navigation links
+function initSmoothScroll() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+
+            if (target) {
+                const navHeight = document.querySelector('.navbar').offsetHeight;
+                const targetPosition = target.offsetTop - navHeight - 20;
+
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+}
+
+// Navbar scroll effect
+function initNavbarScroll() {
+    const navbar = document.querySelector('.navbar');
+    let lastScroll = 0;
+
+    window.addEventListener('scroll', () => {
+        const currentScroll = window.pageYOffset;
+
+        if (currentScroll > 100) {
+            navbar.style.boxShadow = '0 8px 30px rgba(0, 0, 0, 0.12)';
+        } else {
+            navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.08)';
+        }
+
+        lastScroll = currentScroll;
+    });
+}
+
+// Animated stats counter
+function initStatsCounter() {
+    const stats = document.querySelectorAll('.stat-number');
+    const observerOptions = {
+        threshold: 0.5,
+        rootMargin: '0px'
+    };
+
+    const animateCounter = (element) => {
+        const target = parseInt(element.textContent);
+        const duration = 2000; // 2 seconds
+        const increment = target / (duration / 16); // 60fps
+        let current = 0;
+
+        const updateCounter = () => {
+            current += increment;
+            if (current < target) {
+                element.textContent = Math.ceil(current);
+                requestAnimationFrame(updateCounter);
+            } else {
+                element.textContent = target + '+';
             }
         };
 
-        form.addEventListener('click', (e) => {
-            if (e.target.classList.contains('btn-next')) {
-                const nextStep = e.target.getAttribute('data-next-step');
-                const currentStep = e.target.closest('.form-section').getAttribute('data-step');
-                moveStep(currentStep, nextStep);
-            } else if (e.target.classList.contains('btn-prev')) {
-                const prevStep = e.target.getAttribute('data-prev-step');
-                const currentStep = e.target.closest('.form-section').getAttribute('data-step');
-                moveStep(currentStep, prevStep);
+        updateCounter();
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !entry.target.classList.contains('counted')) {
+                entry.target.classList.add('counted');
+                animateCounter(entry.target);
             }
         });
+    }, observerOptions);
 
-        form.addEventListener('submit', (e) => {
+    stats.forEach(stat => observer.observe(stat));
+}
+
+// Form handlers
+function initFormHandlers() {
+    // Newsletter form
+    const newsletterForm = document.querySelector('.newsletter-form');
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            if (document.getElementById('terms-agree').checked) {
-                alert('Item listing submitted successfully!');
-            } else {
-                alert('You must agree to the Terms & Conditions.');
+            const email = newsletterForm.querySelector('input[type="email"]').value;
+
+            // Show success message (you can customize this)
+            alert(`Thank you for subscribing with ${email}! We'll keep you updated.`);
+            newsletterForm.reset();
+        });
+    }
+
+    // Hero buttons
+    const heroBtn = document.querySelector('.hero-btn');
+    const heroBtn2 = document.querySelector('.hero-btn_2');
+
+    if (heroBtn) {
+        heroBtn.addEventListener('click', () => {
+            // Navigate to browse or login page
+            window.location.href = '/templates/login.html';
+        });
+    }
+
+    if (heroBtn2) {
+        heroBtn2.addEventListener('click', () => {
+            // Scroll to products section
+            const productsSection = document.getElementById('Products');
+            if (productsSection) {
+                productsSection.scrollIntoView({ behavior: 'smooth' });
             }
         });
+    }
+}
+
+// Add loading animation for product cards
+function initProductCards() {
+    const productCards = document.querySelectorAll('.product-card');
+
+    const observerOptions = {
+        threshold: 0.2,
+        rootMargin: '0px'
     };
 
-    const ALL_ITEMS_DATA = [
-        { id: 1, name: 'PlayStation 5 Controller', price: 50, category: 'electronics', location: 'Mumbai', lender: 'Jane', distance: 5 },
-        { id: 2, name: 'Electric Drill Kit', price: 150, category: 'tools', location: 'Navi Mumbai', lender: 'John', distance: 2 },
-
-    ];
-
-    const createItemCard = (item) => {
-
-        return `
-            <div class="item-card" data-category="${item.category}" data-price="${item.price}">
-                <div class="item-card-image">
-                    <img src="../assets/images/${item.category}_${item.id}.jpg" alt="${item.name}"> 
-                    <div class="img-placeholder">Image of ${item.name}</div> 
-                </div>
-                <div class="card-body">
-                    <h4>${item.name}</h4>
-                    <p class="price">₹${item.price} / day</p>
-                    <p class="location">Lender: ${item.lender} (${item.distance} km away)</p>
-                    <p class="description">
-                        Item description placeholder text...
-                    </p>
-                    <button class="btn-borrow">Borrow Now</button>
-                </div>
-            </div>
-        `;
-    };
-
-    const renderItems = (items) => {
-        const gridContainer = document.querySelector('.item-card-grid'); 
-        const itemCountDisplay = document.getElementById('item-count');
-
-        if (!gridContainer || !itemCountDisplay) {
-            return;
-        }
-
-
-        gridContainer.innerHTML = items.map(createItemCard).join('');
-        itemCountDisplay.textContent = `Showing ${items.length} items`;
-    };
-
-    const applyFilters = (e) => {
-        if(e && e.preventDefault) e.preventDefault(); 
-        
-        // Get values from the elements in the currently loaded DOM
-        const searchInput = document.getElementById('dashboard-search') ? document.getElementById('dashboard-search').value.toLowerCase() : '';
-        const categoryFilter = document.getElementById('filter-category') ? document.getElementById('filter-category').value : '';
-        const priceMax = document.getElementById('filter-price-range') ? parseInt(document.getElementById('filter-price-range').value) : 5000;
-        
-        let filteredItems = ALL_ITEMS_DATA.filter(item => {
-            const matchesSearch = item.name.toLowerCase().includes(searchInput);
-            const matchesCategory = categoryFilter === '' || item.category === categoryFilter;
-            const matchesPrice = item.price <= priceMax;
-            
-            return matchesSearch && matchesCategory && matchesPrice;
-        });
-
-        renderItems(filteredItems);
-    };
-
-    const initBrowseFiltering = () => {
-
-        renderItems(ALL_ITEMS_DATA);
-
-        const categorySelect = document.getElementById('filter-category');
-        const priceRangeInput = document.getElementById('filter-price-range');
-        const applyFiltersBtn = document.querySelector('.btn-apply-filters');
-        const searchInput = document.getElementById('dashboard-search'); 
-
-        if (categorySelect && priceRangeInput && applyFiltersBtn) {
-            
-
-            categorySelect.addEventListener('change', applyFilters);
-            priceRangeInput.addEventListener('input', applyFilters);
-            applyFiltersBtn.addEventListener('click', applyFilters);
-            
-
-            if (searchInput) {
-                searchInput.addEventListener('input', applyFilters);
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }, index * 100); // Stagger animation
             }
-        }
-    };
-    
-});
+        });
+    }, observerOptions);
+
+    productCards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        observer.observe(card);
+    });
+}
+
+// Initialize product cards animation
+initProductCards();
+
+// Add category card interactions
+function initCategoryCards() {
+    const categoryCards = document.querySelectorAll('.category-card');
+
+    categoryCards.forEach(card => {
+        card.addEventListener('click', function () {
+            const categoryName = this.querySelector('h3').textContent;
+            console.log(`Navigating to ${categoryName} category`);
+            // Add your navigation logic here
+        });
+    });
+}
+
+initCategoryCards();

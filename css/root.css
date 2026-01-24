@@ -1,54 +1,102 @@
 /* css/root.css */
-@import url('https://fonts.googleapis.com/css2?family=Alata&family=Inter:wght@300;400;500;600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Alata&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
-:root {
-    --font-main: 'Plus Jakarta Sans', sans-serif;
-    --font-secondary: 'Plus Jakarta Sans', sans-serif;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700;800&display=swap');
 
+:root {
+    /* Typography */
+    --font-main: 'Sora', sans-serif;
+    --font-secondary: 'Inter', sans-serif;
+
+    /* Font Sizes */
     --fs-xs: 0.75rem;
     --fs-sm: 0.875rem;
     --fs-base: 1rem;
-    --fs-md: 1.25rem;
+    --fs-md: 1.125rem;
     --fs-lg: 1.5rem;
     --fs-xl: 2.25rem;
     --fs-xxl: 3rem;
+    --fs-hero: 3.5rem;
 
+    /* Font Weights */
     --fw-light: 300;
     --fw-reg: 400;
     --fw-med: 500;
+    --fw-semibold: 600;
     --fw-bold: 700;
+    --fw-extrabold: 800;
 
-    /* --- Color Palette (Primitives) --- */
-    --deep-space-blue: #0b3954ff;
-    --pale-sky: #bfd7eaff;
-    --vibrant-coral: #ff6663ff;
-    --lime-yellow: #e0ff4fff;
-    --white: #fefffeff;
-    --text-charcoal: #2c3e50;
-
-    /* --- Semantic Colors --- */
+    /* Color Palette - Keeping your primary colors */
     --primary-color: #1C3E35;
-    /* Soft accent */
-    --primary-dark: var(--deep-space-blue);
-    /* Dark text for contrast on Coral */
-    --accent-color: var(--lime-yellow);
-    /* Secondary accent */
-    --bg-dark:linear-gradient(90deg, #1C3E35, #99F2D1);;
-    /* Warm light background */
-    --text-main: var(--deep-space-blue);
-    /* Main text (dark) */
-    --text-muted: var(--deep-space-blue);
-    /* Muted text */
+    --primary-light: #2A5A4D;
+    --primary-dark: #0F2821;
 
-    /* --- Glassmorphism Values --- */
-    --glass-bg: rgba(255, 255, 255, 0.4);
-    /* White tint */
-    --glass-border: rgba(255, 255, 255, 0.6);
-    --glass-blur: blur(12px);
+    --accent-green: #99F2D1;
+    --accent-green-light: #C5F7E5;
+    --accent-green-dark: #6FE0BC;
 
-    /* --- Spacing & Radius --- */
-    --radius-sm: 8px;
-    --radius-md: 15px;
-    --radius-lg: 25px;
-    --padding-std: 1.5rem;
+    /* Neutral Colors */
+    --white: #FFFFFF;
+    --off-white: #F8F9FA;
+    --light-gray: #E9ECEF;
+    --gray: #ADB5BD;
+    --dark-gray: #495057;
+    --charcoal: #212529;
+
+    /* Semantic Colors */
+    --bg-gradient: linear-gradient(135deg, #1C3E35 0%, #99F2D1 100%);
+    --text-primary: #212529;
+    --text-secondary: #495057;
+    --text-muted: #6C757D;
+    --text-light: #FFFFFF;
+
+    /* UI Colors */
+    --border-light: #DEE2E6;
+    --border-medium: #CED4DA;
+    --shadow-sm: rgba(0, 0, 0, 0.05);
+    --shadow-md: rgba(0, 0, 0, 0.1);
+    --shadow-lg: rgba(0, 0, 0, 0.15);
+
+    /* Glassmorphism */
+    --glass-bg: rgba(255, 255, 255, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --glass-blur: blur(16px);
+
+    /* Spacing */
+    --space-xs: 0.5rem;
+    --space-sm: 0.75rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-xxl: 3rem;
+    --space-xxxl: 4rem;
+
+    /* Border Radius */
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --radius-full: 9999px;
+
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-base: 0.3s ease;
+    --transition-slow: 0.5s ease;
+
+    /* Shadows */
+    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
+    --shadow-button: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    /* Container */
+    --container-max: 1200px;
+    --container-padding: 2rem;
+}
+
+/* Responsive Font Sizes */
+@media (max-width: 768px) {
+    :root {
+        --fs-hero: 2.5rem;
+        --fs-xxl: 2rem;
+        --fs-xl: 1.5rem;
+        --container-padding: 1rem;
+    }
 }
