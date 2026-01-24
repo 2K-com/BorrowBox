@@ -183,7 +183,6 @@ body {
 /* Right button */
 .nav-right .login-btn {
   padding: 8px 20px;
-
   border-radius: var(--radius-lg);
   background: none;
   border: 2px solid var(--primary-color);
@@ -196,7 +195,7 @@ body {
 .nav-right .login-btn:hover {
   background: var(--primary-color);
   color: var(--bg-dark);
-  transform: scale(0.94);
+  transform: scale(1.04);
   font-weight: var(--fw-med);
 }
 
@@ -325,7 +324,7 @@ body {
   margin-top: 50px;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
-  background: var(--white);
+  background: rgba(255, 255, 255, 0.20);
   padding: 32px;
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -424,8 +423,10 @@ body {
 }
 
 .category-card {
-  background: var(--white);
-  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.20);
+  border-radius: 60px;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
   padding: 20px;
   transition: all 0.3s ease;
