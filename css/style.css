@@ -18,6 +18,7 @@ body {
   position: relative;
   /* Ensure body can hold fixed elements if needed, though background is usually fixed */
   overflow-x: hidden;
+  z-index: 1;
 }
 
 /* =========================================
@@ -58,7 +59,7 @@ body {
   top: 70%;
   right: -20px;
   animation-duration: 30s;
-  background: var(--accent-color);
+  background: var(--primary-color);
   border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
 }
 
@@ -306,7 +307,6 @@ body {
 
 .hero-btn_2 {
   background: transparent;
-  backdrop-filter: var(--glass-blur);
   border: 2px solid #ff6663ff;
   padding: 15px 35px;
   border-radius: var(--radius-lg);
@@ -349,7 +349,6 @@ body {
   display: grid;
   border: 2px solid #000000;
   margin-top: 50px;
-  backdrop-filter: var(--glass-blur);
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
   background: rgba(255, 255, 255, 0.20);
@@ -498,11 +497,10 @@ body {
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
   color: var(--primary-dark);
-  background-color: var(--glass-bg);
+  background-color: var(--white);
   font-weight: var(--fw-med);
   font-size: var(--fs-sm);
   transition: all 0.3s ease;
-  backdrop-filter: var(--glass-blur);
   margin-top: 20px;
 
 }
@@ -546,7 +544,7 @@ body {
 
 /* --- Carousel Buttons (Outside) --- */
 .carousel-btn {
-  background-color: var(--glass-bg);
+  background-color: var(--white);
   color: var(--primary-dark);
   border: 1px solid var(--glass-border);
   border-radius: 50%;
@@ -569,9 +567,8 @@ body {
   position: relative;
   height: 400px;
   overflow: hidden;
-  background: var(--glass-bg);
+  background: var(--white);
   border-radius: var(--radius-md);
-  backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   flex-grow: 1;
@@ -705,9 +702,8 @@ body {
 /* --- Product Card Styling --- */
 .product-card {
   /* Glassmorphism theme */
-  background: var(--glass-bg);
+  background: var(--white);
   border-radius: var(--radius-md);
-  backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 
@@ -772,7 +768,7 @@ body {
   border: 1px solid var(--glass-border);
   border-radius: 25px;
   color: var(--primary-dark);
-  background-color: var(--glass-bg);
+  background-color: var(--white);
   font-weight: var(--fw-med);
   font-size: var(--fs-sm);
   transition: all 0.3s ease;
@@ -803,8 +799,7 @@ body {
 /* --- Footer Styles --- */
 .site-footer {
   /* Glassmorphism Design */
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
+  background: var(--white);
   border: 1px solid var(--glass-border);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 
