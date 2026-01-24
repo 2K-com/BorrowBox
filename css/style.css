@@ -9,7 +9,7 @@
 }
 
 body {
-  background: var(--bg-dark);
+  background: var(--bg-light);
   background-image: radial-gradient(#1A1A1A11 1px, transparent 1px);
   background-size: 30px 30px;
   color: var(--primary-dark);
@@ -19,6 +19,11 @@ body {
   overflow-x: hidden;
   z-index: 1;
 }
+
+main{
+  background: linear-gradient(90deg, #0E1C26, #2A454B, #294861);
+}
+
 
 .floating-background {
   position: fixed;

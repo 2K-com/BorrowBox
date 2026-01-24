@@ -40,7 +40,7 @@
     /* Dark text for contrast on Coral */
     --accent-color: var(--lime-yellow);
     /* Secondary accent */
-    --bg-light: rgb(255, 255, 255);
+    --bg-light: linear-gradient(90deg, #0E1C26, #2A454B, #294861);
     /* Warm light background */
     --text-main: var(--deep-space-blue);
     /* Main text (dark) */
