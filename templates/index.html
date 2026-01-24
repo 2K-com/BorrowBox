@@ -1,294 +1,326 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BorrowBox</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="BorrowBox - Borrow anything, anytime. The smart way to rent items from fellow students."
+    />
+    <title>BorrowBox - Smart Student Borrowing Platform</title>
 
-  <!-- Link CSS -->
-  <link rel="stylesheet" href="../css/root.css" />
-  <link rel="stylesheet" href="../css/style.css" />
-</head>
-<body>
-  <div class="floating-background">
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../css/root.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+
+    <!-- Font Awesome for Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- Floating Background Shapes -->
+    <div class="floating-background">
       <div class="shape shape-1"></div>
       <div class="shape shape-2"></div>
       <div class="shape shape-3"></div>
       <div class="shape shape-4"></div>
       <div class="shape shape-5"></div>
-  </div>
-  <!-- Navbar -->
-  <nav class="navbar">
-    <ul class="nav-left">
-      <li><a href="#Home">Home</a></li>
-      <li><a href="#Categories">Categories</a></li>
-      <li><a href="#Products">Products</a></li>
-      <li><a href="#Contact">Contact</a></li>
-    </ul>
-
-    <div class="nav-center">
-      <h1>BorrowBox</h1>
     </div>
 
-    <div class="nav-right">
-      <a href="/templates/login.html"><button class="login-btn">Login / Sign up</button></a>
-    </div>
-  </nav>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+      <ul class="nav-left">
+        <li><a href="#Home">Home</a></li>
+        <li><a href="#Categories">Categories</a></li>
+        <li><a href="#Products">Products</a></li>
+        <li><a href="#Contact">Contact</a></li>
+      </ul>
 
-<main>
-  <!-- Hero Section -->
-  <section class="hero" id="Home">
-  <div class="hero-content">
-    <h1>Borrow Anything, Anytime — The Smart Way with <span>BorrowBox</span></h1>
-    <p>
-      From electronics to books, tools to accessories
-      borrow or lend items easily and securely in one place.
-    </p>
-    <button class="hero-btn">Start Borrowing</button>
-    <button style = "margin-left:15px " class="hero-btn_2">See items </button>
+      <div class="nav-center">
+        <h1>BorrowBox</h1>
+      </div>
 
-    <div class="hero-stats">
-        <div class="stat">
-            <span class="stat-number">0</span>
-            <span class="stat-label">Active Students</span>
+      <div class="nav-right">
+        <a href="/templates/login.html">
+          <button class="login-btn">Get Started</button>
+        </a>
+      </div>
+    </nav>
+
+    <main>
+      <!-- Hero Section -->
+      <section class="hero" id="Home">
+        <div class="hero-content">
+          <h1>
+            Borrow Anything, Anytime — The Smart Way with <span>BorrowBox</span>
+          </h1>
+          <p>
+            From electronics to books, tools to accessories — borrow or lend
+            items easily and securely in one convenient platform.
+          </p>
+          <div class="hero-buttons">
+            <button class="hero-btn">Start Borrowing</button>
+            <button class="hero-btn_2">Browse Items</button>
+          </div>
+
+          <!-- Stats Section -->
+          <div class="hero-stats">
+            <div class="stat">
+              <span class="stat-number">500+</span>
+              <span class="stat-label">Active Students</span>
+            </div>
+            <div class="stat">
+              <span class="stat-number">1,200+</span>
+              <span class="stat-label">Items Listed</span>
+            </div>
+            <div class="stat">
+              <span class="stat-number">15+</span>
+              <span class="stat-label">Universities</span>
+            </div>
+          </div>
         </div>
-        <div class="stat">
-            <span class="stat-number">0</span>
-            <span class="stat-label">Items Listed</span>
+
+        <div class="hero-image">
+          <img
+            src="../assets/images/hero.png"
+            alt="BorrowBox Platform Illustration"
+          />
         </div>
-        <div class="stat">
-            <span class="stat-number">0</span>
-            <span class="stat-label">University</span>
+      </section>
+
+      <!-- Categories Section -->
+      <section class="browse-section" id="Categories">
+        <h2>Browse by Category</h2>
+        <div class="categories">
+          <div class="category-card">
+            <img
+              src="../assets/images/electronics.png"
+              alt="Electronics Category"
+            />
+            <h3>Electronics</h3>
+          </div>
+          <div class="category-card">
+            <img src="../assets/images/books.png" alt="Books Category" />
+            <h3>Books</h3>
+          </div>
+          <div class="category-card">
+            <img src="../assets/images/tools.png" alt="Tools Category" />
+            <h3>Tools</h3>
+          </div>
+          <div class="category-card">
+            <img
+              src="../assets/images/accessories.png"
+              alt="Accessories Category"
+            />
+            <h3>Accessories</h3>
+          </div>
         </div>
-    </div>
-  </div>
-    <div class="hero-image">
-        <img src="../assets/images/hero.png" alt="BorrowBox" />
-    </div>
-  </section>
-  
+        <div class="view-button">
+          <a href="#" class="view-btn">View All Categories</a>
+        </div>
+      </section>
 
-  <!-- category Section -->
-  <section class="browse-section" id="Categories">
-  <h2>Browse by Category</h2>
-  <div class="categories">
-    <div class="category-card">
-      <img src="../assets/images/electronics.png" alt="Electronics">
-      <h3>Electronics</h3>
-    </div>
-    <div class="category-card">
-      <img src="../assets/images/books.png" alt="Books">
-      <h3>Books</h3>
-    </div>
-    <div class="category-card">
-      <img src="../assets/images/tools.png" alt="Tools">
-      <h3>Tools</h3>
-    </div>
-    <div class="category-card">
-      <img src="../assets/images/accessories.png" alt="Accessories">
-      <h3>Accessories</h3>
-    </div>
-  </div>
-  <div class="view-button">
-  <button class="view-btn">View All</button>
-  </div>
+      <!-- Carousel Section -->
+      <section class="carousel-section">
+        <div class="carousel-header">
+          <span>Recently Added Items</span>
+        </div>
 
-  <section class="carousel-section">
-    
-    <div class="carousel-header">
-        <span>Recently Added Items</span>
-    </div>
+        <div class="carousel-wrapper">
+          <button
+            class="carousel-btn prev"
+            id="carousel-prev"
+            aria-label="Previous slide"
+          >
+            <i class="fas fa-chevron-left"></i>
+          </button>
 
-    <div class="carousel-wrapper">
-
-        <button class="carousel-btn prev" id="carousel-prev">&lt;</button>
-
-        <div class="carousel-container">
-            
+          <div class="carousel-container">
             <div class="carousel-slide active">
-                <img src="../assets/images/headphone.png" alt="Headphone" class="slide-image">
-                <div class="slide-content">Headphone</div>
+              <img
+                src="../assets/images/headphone.png"
+                alt="Headphone"
+                class="slide-image"
+              />
+              <div class="slide-content">Premium Wireless Headphones</div>
             </div>
 
             <div class="carousel-slide">
-                <img src="../assets/images/shoes.png" alt="Shoes" class="slide-image">
-                <div class="slide-content">Shoes</div>
+              <img
+                src="../assets/images/shoes.png"
+                alt="Shoes"
+                class="slide-image"
+              />
+              <div class="slide-content">Sports Running Shoes</div>
             </div>
 
             <div class="carousel-slide">
-                <img src="../assets/images/hoodie.png" alt="Controller" class="slide-image">
-                <div class="slide-content">Hoodie</div>
+              <img
+                src="../assets/images/hoodie.png"
+                alt="Hoodie"
+                class="slide-image"
+              />
+              <div class="slide-content">Comfortable Hoodie</div>
             </div>
 
-            <div class="carousel-dots" id="carousel-dots">
-                <span class="dot active" data-slide="0"></span>
-                <span class="dot" data-slide="1"></span>
-                <span class="dot" data-slide="2"></span>
+            <div class="carousel-dots">
+              <span class="dot active" data-slide="0"></span>
+              <span class="dot" data-slide="1"></span>
+              <span class="dot" data-slide="2"></span>
             </div>
+          </div>
+
+          <button
+            class="carousel-btn next"
+            id="carousel-next"
+            aria-label="Next slide"
+          >
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- Featured Products Section -->
+      <section class="product-grid-section" id="Products">
+        <h2>Featured Products</h2>
+
+        <div class="product-grid">
+          <div class="product-card">
+            <div class="card-image-placeholder">Product Image</div>
+            <div class="card-info">
+              <h4>Wireless Mouse</h4>
+              <p>₹50 / day</p>
+            </div>
+          </div>
+
+          <div class="product-card">
+            <div class="card-image-placeholder">Product Image</div>
+            <div class="card-info">
+              <h4>Gaming Controller</h4>
+              <p>₹100 / day</p>
+            </div>
+          </div>
+
+          <div class="product-card">
+            <div class="card-image-placeholder">Product Image</div>
+            <div class="card-info">
+              <h4>DSLR Camera</h4>
+              <p>₹500 / day</p>
+            </div>
+          </div>
+
+          <div class="product-card">
+            <div class="card-image-placeholder">Product Image</div>
+            <div class="card-info">
+              <h4>Study Lamp</h4>
+              <p>₹30 / day</p>
+            </div>
+          </div>
+
+          <div class="product-card">
+            <div class="card-image-placeholder">Product Image</div>
+            <div class="card-info">
+              <h4>Electric Kettle</h4>
+              <p>₹40 / day</p>
+            </div>
+          </div>
+
+          <div class="product-card">
+            <div class="card-image-placeholder">Product Image</div>
+            <div class="card-info">
+              <h4>Textbook Bundle</h4>
+              <p>₹80 / day</p>
+            </div>
+          </div>
+
+          <div class="product-card">
+            <div class="card-image-placeholder">Product Image</div>
+            <div class="card-info">
+              <h4>Bluetooth Speaker</h4>
+              <p>₹70 / day</p>
+            </div>
+          </div>
+
+          <div class="product-card">
+            <div class="card-image-placeholder">Product Image</div>
+            <div class="card-info">
+              <h4>Camping Tent</h4>
+              <p>₹200 / day</p>
+            </div>
+          </div>
         </div>
 
-        <button class="carousel-btn next" id="carousel-next">&gt;</button>
-    </div> 
-    </section>
+        <div class="view-all-container">
+          <a href="#" class="view-all-btn">View All Products</a>
+        </div>
+      </section>
+    </main>
 
-    <section class="product-grid-section" id="Products">
-        
-    
-    <h2>Featured Products</h2>
-
-    <div class="product-grid">
-
-        <div class="product-card">
-            <div class="card-image-placeholder"></div>
-            <div class="card-info">
-                <h4>Product Name</h4>
-                <p>Rs. 100 / day</p>
-            </div>
-        </div>
-        <div class="product-card">
-            <div class="card-image-placeholder"></div>
-            <div class="card-info">
-                <h4>Product Name</h4>
-                <p>Rs. 500 / day</p>
-            </div>
-        </div>
-        <div class="product-card">
-            <div class="card-image-placeholder"></div>
-            <div class="card-info">
-                <h4>Product Name</h4>
-                <p>Rs. 1250 / day</p>
-            </div>
-        </div>
-        <div class="product-card">
-            <div class="card-image-placeholder"></div>
-            <div class="card-info">
-                <h4>Product Name</h4>
-                <p>Rs. 800 / day</p>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <div class="card-image-placeholder"></div>
-            <div class="card-info">
-                <h4>Product Name</h4>
-                <p>Rs. 100 / day</p>
-            </div>
-        </div>
-        <div class="product-card">
-            <div class="card-image-placeholder"></div>
-            <div class="card-info">
-                <h4>Product Name</h4>
-                <p>Rs. 20 / day</p>
-            </div>
-        </div>
-        <div class="product-card">
-            <div class="card-image-placeholder"></div>
-            <div class="card-info">
-                <h4>Product Name</h4>
-                <p>Rs. 700 / day</p>
-            </div>
-        </div>
-        <div class="product-card">
-            <div class="card-image-placeholder"></div>
-            <div class="card-info">
-                <h4>Product Name</h4>
-                <p>Rs. 350 / day</p>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <div class="card-image-placeholder"></div>
-            <div class="card-info">
-                <h4>Product Name</h4>
-                <p>Rs. 900 / day</p>
-            </div>
-        </div>
-        <div class="product-card">
-            <div class="card-image-placeholder"></div>
-            <div class="card-info">
-                <h4>Product Name</h4>
-                <p>Rs. 2000 / day</p>
-            </div>
-        </div>
-        <div class="product-card">
-            <div class="card-image-placeholder"></div>
-            <div class="card-info">
-                <h4>Product Name</h4>
-                <p>Rs. 150 / day</p>
-            </div>
-        </div>
-        <div class="product-card">
-            <div class="card-image-placeholder"></div>
-            <div class="card-info">
-                <h4>Product Name</h4>
-                <p>Rs. 600 / day</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="view-all-container">
-        <a href="#" class="view-all-btn">View All Products</a>
-    </div>
-
-    </section>
-
-</main>
-
-
-<footer class="site-footer" id="Contact">
-    <div class="footer-container">
+    <!-- Footer -->
+    <footer class="site-footer" id="Contact">
+      <div class="footer-container">
         <div class="footer-main">
+          <div class="footer-column">
+            <h4>BorrowBox</h4>
+            <p>
+              The easiest way for college students to rent or borrow items from
+              fellow students. Save money, reduce waste, build community.
+            </p>
+          </div>
 
-            <div class="footer-column">
-                <h4>BorrowBox</h4>
-                <p>The easiest way for college students to rent or borrow items from fellow students. Save money, reduce waste.</p>
-            </div>
+          <div class="footer-column">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="#Categories">Categories</a></li>
+              <li><a href="#Products">Featured Products</a></li>
+              <li><a href="#">How It Works</a></li>
+              <li><a href="#">My Account</a></li>
+            </ul>
+          </div>
 
-            <div class="footer-column">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="#">Categories</a></li>
-                    <li><a href="#">Featured Products</a></li>
-                    <li><a href="#">How It Works</a></li>
-                    <li><a href="#">My Account</a></li>
-                </ul>
-            </div>
+          <div class="footer-column">
+            <h4>Support</h4>
+            <ul>
+              <li><a href="#">Contact Us</a></li>
+              <li><a href="#">FAQ</a></li>
+              <li><a href="#">Terms of Service</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+            </ul>
+          </div>
 
-            <div class="footer-column">
-                <h4>Support</h4>
-                <ul>
-                    <li><a href="#">Contact Us</a></li>
-                    <li><a href="#">FAQ</a></li>
-                    <li><a href="#">Terms of Service</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-column">
-                <h4>Stay Updated</h4>
-                <p>Get news and updates about new items.</p>
-                <form class="newsletter-form">
-                    <input type="email" placeholder="Enter your email" />
-                    <button type="submit">Subscribe</button>
-                </form>
-            </div>
-
+          <div class="footer-column">
+            <h4>Stay Updated</h4>
+            <p>Get news and updates about new items and features.</p>
+            <form class="newsletter-form">
+              <input type="email" placeholder="Enter your email" required />
+              <button type="submit">Subscribe</button>
+            </form>
+          </div>
         </div>
 
         <div class="footer-bottom">
-            <div class="footer-copyright">
-                &copy; 2025 BorrowBox. All rights reserved.
-            </div>
-            <div class="footer-socials">
-                <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-            </div>
+          <div class="footer-copyright">
+            &copy; 2025 BorrowBox. All rights reserved.
+          </div>
+          <div class="footer-socials">
+            <a href="#" aria-label="Facebook"
+              ><i class="fab fa-facebook-f"></i
+            ></a>
+            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" aria-label="Instagram"
+              ><i class="fab fa-instagram"></i
+            ></a>
+            <a href="#" aria-label="LinkedIn"
+              ><i class="fab fa-linkedin-in"></i
+            ></a>
+          </div>
         </div>
-    </div>
-</footer>
+      </div>
+    </footer>
 
-
-  <script src="../js/main.js"></script>
-</body>
+    <!-- JavaScript -->
+    <script src="../js/main.js"></script>
+  </body>
 </html>

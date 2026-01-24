@@ -1,23 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Poppins:wght@400;500;600&display=swap');
-
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+html {
   scroll-behavior: smooth;
 }
 
 body {
-  background: var(--bg-dark);
-  color: var(--primary-dark);
+  background: var(--bg-gradient);
+  color: var(--text-primary);
   font-family: var(--font-secondary);
-  min-height: 100vh;;
-  position: relative;
+  font-size: var(--fs-base);
+  line-height: 1.6;
+  min-height: 100vh;
   overflow-x: hidden;
-  z-index: 1;
+  position: relative;
 }
 
+/* ========== FLOATING BACKGROUND ========== */
 .floating-background {
   position: fixed;
   top: 0;
@@ -32,152 +35,156 @@ body {
 .shape {
   position: absolute;
   border-radius: 50%;
-  opacity: 0.15;
-  background: var(--primary-color);
-  animation: float 20s infinite linear;
+  opacity: 0.08;
+  background: var(--white);
+  animation: float 25s infinite ease-in-out;
 }
 
-/* Specific Shapes */
 .shape-1 {
-  width: 200px;
-  height: 200px;
+  width: 300px;
+  height: 300px;
   top: 10%;
-  left: -50px;
-  animation-duration: 25s;
-  background: var(--primary-color);
+  left: -100px;
+  animation-duration: 30s;
 }
 
 .shape-2 {
-  width: 150px;
-  height: 150px;
-  top: 70%;
-  right: -20px;
-  animation-duration: 30s;
-  background: var(--primary-color);
+  width: 200px;
+  height: 200px;
+  top: 60%;
+  right: -50px;
+  animation-duration: 35s;
   border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
 }
 
 .shape-3 {
-  width: 100px;
-  height: 100px;
-  top: 30%;
-  right: 20%;
-  animation-duration: 35s;
-  background: #007bff;
-  opacity: 0.1;
+  width: 150px;
+  height: 150px;
+  top: 35%;
+  right: 15%;
+  animation-duration: 40s;
 }
 
 .shape-4 {
-  width: 80px;
-  height: 80px;
-  bottom: 10%;
-  left: 20%;
-  animation-duration: 20s;
-  background: var(--text-muted);
+  width: 100px;
+  height: 100px;
+  bottom: 15%;
+  left: 25%;
+  animation-duration: 28s;
 }
 
 .shape-5 {
-  width: 300px;
-  height: 300px;
-  top: -100px;
-  right: -100px;
-  background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
-  opacity: 0.1;
-  animation: floatReverse 40s infinite linear;
+  width: 400px;
+  height: 400px;
+  top: -150px;
+  right: -150px;
+  background: radial-gradient(circle, var(--white) 0%, transparent 70%);
+  opacity: 0.06;
+  animation: floatReverse 45s infinite ease-in-out;
 }
 
 @keyframes float {
-  0% {
+
+  0%,
+  100% {
     transform: translate(0, 0) rotate(0deg);
   }
 
   33% {
-    transform: translate(30px, -50px) rotate(10deg);
+    transform: translate(40px, -60px) rotate(15deg);
   }
 
   66% {
-    transform: translate(-20px, 20px) rotate(-5deg);
-  }
-
-  100% {
-    transform: translate(0, 0) rotate(0deg);
+    transform: translate(-30px, 30px) rotate(-10deg);
   }
 }
 
 @keyframes floatReverse {
-  0% {
+
+  0%,
+  100% {
     transform: translate(0, 0) rotate(0deg);
   }
 
   33% {
-    transform: translate(-30px, 50px) rotate(-10deg);
+    transform: translate(-40px, 60px) rotate(-15deg);
   }
 
   66% {
-    transform: translate(20px, -20px) rotate(5deg);
-  }
-
-  100% {
-    transform: translate(0, 0) rotate(0deg);
+    transform: translate(30px, -30px) rotate(10deg);
   }
 }
 
-
-
-/* ========Navbar=========*/
+/* ========== NAVBAR ========== */
 .navbar {
-  position:sticky;
-  top: 15px;
+  position: sticky;
+  top: 20px;
   left: 50px;
   width: 94%;
-  height: 60px;
+  height: 70px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border: 2px solid #000000;
   padding: 0 42px;
-  background: #dcf5e7;
-  border-color: black;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border-light);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border-radius: var(--radius-xl);
   z-index: 1000;
-  border-radius: var(--radius-lg);
-
+  transition: var(--transition-base);
 }
 
-/* Left nav links */
+.navbar:hover {
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.12);
+}
+
 .nav-left {
   list-style: none;
   display: flex;
-  gap: 25px;
+  gap: 2rem;
+  align-items: center;
 }
 
 .nav-left li a {
   text-decoration: none;
-  color: var(--primary-dark);
+  color: var(--text-primary);
   font-weight: var(--fw-med);
-  transition: 0.3s;
+  font-size: var(--fs-base);
+  position: relative;
+  padding: 0.5rem 0;
+  transition: var(--transition-base);
+}
 
+.nav-left li a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primary-color);
+  transition: width var(--transition-base);
 }
 
 .nav-left li a:hover {
   color: var(--primary-color);
-  transform: scale(1.05);
-  font-size: 15px;
-
 }
 
-/* Center title */
+.nav-left li a:hover::after {
+  width: 100%;
+}
+.nav-center{
+  margin-right:230px;
+}
 .nav-center h1 {
-  font-size: 1.6rem;
+  font-size: 1.75rem;
   font-weight: var(--fw-bold);
   font-family: var(--font-main);
   color: var(--primary-color);
-  margin-left: -200px;
-  letter-spacing: 1px;
-
+  letter-spacing: -0.5px;
 }
 
-/* Right button */
 .nav-right .login-btn {
   position: relative; /* Required for the pseudo-element position */
   overflow: hidden;   /* Keeps the fill inside the rounded corners */
@@ -193,7 +200,6 @@ body {
   font-family: var(--font-secondary); /* Matches your nav links */
 }
 
-/* The Liquid Fill Layer */
 .nav-right .login-btn::before {
   content: "";
   position: absolute;
@@ -217,11 +223,14 @@ body {
   width: 100%;        /* Fills from left to right */
 }
 
-/* Mobile responsive navbar */
+
+
+/* Mobile Navbar */
 @media (max-width: 768px) {
   .navbar {
-    padding: 0 20px;
-    height: 70px;
+    width: calc(100% - 2rem);
+    padding: 0 1.5rem;
+    height: 60px;
   }
 
   .nav-left {
@@ -229,152 +238,150 @@ body {
   }
 
   .nav-center h1 {
-    font-size: 1.3rem;
-    margin-left: 0;
+    font-size: 1.4rem;
   }
 
   .nav-right .login-btn {
-    padding: 6px 16px;
-    font-size: 0.9rem;
+    padding: 0.6rem 1.5rem;
+    font-size: 0.85rem;
   }
 }
 
-/* =============hero================== */
+/* ========== HERO SECTION ========== */
 .hero {
   display: flex;
-  margin-bottom: 0px;
   align-items: center;
   justify-content: space-between;
-  padding: 0 8%;
-  position: relative;
-  /* Context for absolute overlay */
-  overflow: hidden;
-
-  /* Keep blur edges clean */
+  padding: 0 6%;
+  position:relative;
+  overflow:relative;
+  gap: 4rem;
+  min-height: 110vh;
 }
 
-
-/* Left content */
 .hero-content {
-  max-width: 50%;
-  animation: fadeInLeft 1s ease;
-  position: relative;
-  z-index: 1;
-  /* Above overlay */
+  flex: 1;
+  max-width: 600px;
+  animation: fadeInLeft 0.8s ease;
 }
 
 .hero-content h1 {
-  font-size: var(--fs-xxl);
-  font-weight: var(--fw-bold);
+  font-size: var(--fs-hero);
+  font-weight: var(--fw-extrabold);
   font-family: var(--font-main);
-  line-height: 1.2;
-  margin-bottom: 25px;
-  padding-top: 100px;
-  color: #F8E9E9;
+  line-height: 1.15;
+  margin-bottom: 1.5rem;
+  color: var(--white);
+  letter-spacing: -1px;
 }
 
 .hero-content h1 span {
-  color: #cff8c0;
+  color: var(--accent-green);
+  position: relative;
+  display: inline-block;
 }
 
 .hero-content p {
   font-size: var(--fs-md);
-  line-height: 1.7;
-  margin-bottom: 35px;
-  color: #F8E9E9;
+  line-height: 1.8;
+  margin-bottom: 2.5rem;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 500px;
 }
 
-/* CTA button */
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
 .hero-btn {
-  background: var(--primary-color);
-  backdrop-filter: var(--glass-blur);
+  background: var(--white);
+  color: var(--primary-color);
   border: none;
-  padding: 15px 35px;
-  border-radius: var(--radius-lg);
-  font-weight: var(--fw-bold);
+  padding: 1rem 2.5rem;
+  border-radius: var(--radius-full);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-base);
   cursor: pointer;
-  transition: 0.3s;
-  color: #cff8c0;
-  font-size: 1.1rem;
+  transition: var(--transition-base);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.hero-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 .hero-btn_2 {
   background: transparent;
-  border: 2px solid #cff8c0;
-  padding: 15px 35px;
-  border-radius: var(--radius-lg);
-  font-weight: var(--fw-bold);
+  color: var(--white);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  padding: 1rem 2.5rem;
+  border-radius: var(--radius-full);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-base);
   cursor: pointer;
-  transition: 0.3s;
-  color: #cff8c0;
-  backdrop-filter: var(--glass-blur );
-  font-size: 1.1rem;
-}
-
-.hero-btn:hover {
-  background: var(--primary-color);
-  border-color: var(--primary-color);
-  color: var(--bg-dark);
-  transform: scale(1.04);
-  border: 2px solid #000000;
+  transition: var(--transition-base);
 }
 
 .hero-btn_2:hover {
-  background: var(--primary-color);
-  border-color: var(--primary-color);
-  color: var(--bg-dark);
-  transform: scale(1.04);
-}
-
-/* Right image */
-.hero-image img {
-  height: 500px;
-  width: 550px;
-
-  max-width: 100%;
-  filter: drop-shadow(0 5px 20px rgba(0, 0, 0, 0.15));
-  animation: fadeInUp 1.2s ease;
-  position: relative;
-  z-index: 1;
-  /* Above overlay */
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--white);
+  transform: translateY(-3px);
 }
 
 .hero-stats {
   display: grid;
-  border: 2px solid #000000;
-  margin-top: 50px;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  background: rgba(255, 255, 255, 0.20);
-  padding: 32px;
-  border-radius: 16px;
-  backdrop-filter: var(--glass-blur)
+  gap: 2rem;
+  margin-top: 3rem;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: var(--glass-blur);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .stat {
   text-align: center;
-
 }
 
 .stat-number {
-  font-size: clamp(28px, 4vw, 36px);
-  font-weight: 800;
-  color: var(--primary-color);
+  font-size: 2.5rem;
+  font-weight: var(--fw-extrabold);
+  color: var(--accent-green);
   display: block;
+  font-family: var(--font-main);
 }
 
 .stat-label {
-  font: var(--font-main);
-  font-size: 13px;
-  opacity: 0.9;
-  margin-top: 4px;
+  font-size: var(--fs-sm);
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 0.5rem;
+}
+
+.hero-image {
+  height:500px;
+  width:550px;
+  max-width:100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeInUp 1s ease;
+}
+
+.hero-image img {
+  max-width: 100%;
+  height: auto;
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.2));
 }
 
 /* Animations */
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(40px);
   }
 
   to {
@@ -386,7 +393,7 @@ body {
 @keyframes fadeInLeft {
   from {
     opacity: 0;
-    transform: translateX(-50px);
+    transform: translateX(-40px);
   }
 
   to {
@@ -395,12 +402,13 @@ body {
   }
 }
 
-/* Responsive hero */
+/* Hero Responsive */
 @media (max-width: 900px) {
   .hero {
     flex-direction: column;
     text-align: center;
-    padding: 120px 5% 50px;
+    padding: 3rem 1.5rem;
+    gap: 3rem;
   }
 
   .hero-content {
@@ -411,166 +419,161 @@ body {
     font-size: 2.5rem;
   }
 
-  .hero-image img {
-    margin-top: 50px;
-    width: 300px;
+  .hero-content p {
+    max-width: 100%;
+  }
+
+  .hero-buttons {
+    justify-content: center;
+  }
+
+  .hero-stats {
+    gap: 1.5rem;
   }
 }
 
-/* =============Category ================== */
-
+/* ========== CATEGORIES SECTION ========== */
 .browse-section {
-  justify-content: center;
-  padding: 40px;
-  color: var(--primary-dark);
-  margin-top: 0px;
-  align-items: center;
+  padding: 5rem 2rem;
+  max-width: var(--container-max);
+  margin: 0 auto;
 }
 
 .browse-section h2 {
-  font-size: var(--fs-lg);
-  position: relative;
-  margin-bottom: 50px;
-  color: var(--primary-dark);
-  letter-spacing: 1px;
-  text-align: center;
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
   font-family: var(--font-main);
+  text-align: center;
+  margin-bottom: 3rem;
+  color: var(--white);
+  letter-spacing: -0.5px;
 }
 
 .categories {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 36px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
 }
 
 .category-card {
-  background: rgba(255, 255, 255, 0.20);
-  border-radius: 60px;
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  padding: 20px;
-  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 2rem;
+  transition: var(--transition-base);
   cursor: pointer;
+  border: 1px solid var(--border-light);
+  text-align: center;
 }
 
 .category-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 10px 20px rgba(104, 166, 145, 0.3);
-  /* Using primary color */
+  transform: translateY(-8px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  background: var(--white);
 }
 
 .category-card img {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: var(--radius-sm);
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 15px;
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin-bottom: 1.5rem;
+  transition: var(--transition-base);
+}
+
+.category-card:hover img {
+  transform: scale(1.1);
 }
 
 .category-card h3 {
-  text-align: center;
-  color: var(--primary-dark);
+  color: var(--text-primary);
   font-size: var(--fs-md);
-  margin-top: 10px;
+  font-weight: var(--fw-semibold);
   font-family: var(--font-main);
 }
 
 .view-button {
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 10vh;
+  margin-top: 3rem;
 }
 
 .view-btn {
   text-decoration: none;
-  padding: 0.6rem 5rem;
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-  color: var(--primary-dark);
-  background-color: var(--white);
-  font-weight: var(--fw-med);
-  font-size: var(--fs-sm);
-  transition: all 0.3s ease;
-  margin-top: 20px;
-
+  padding: 1rem 3rem;
+  border-radius: var(--radius-full);
+  color: var(--white);
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-base);
+  transition: var(--transition-base);
+  backdrop-filter: var(--glass-blur);
 }
 
 .view-btn:hover {
-  background: var(--glass-border);
-  color: var(--primary-dark);
-
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
 }
 
-/* --- Carousel Section --- */
+/* ========== CAROUSEL SECTION ========== */
 .carousel-section {
-  max-width: 1000px;
-  /* Adjust to match your site's content width */
-  margin: 3rem auto;
+  max-width: var(--container-max);
+  margin: 5rem auto;
   padding: 0 2rem;
 }
 
-/* --- Carousel Header (Title) --- */
 .carousel-header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 1.5rem;
+  text-align: center;
+  margin-bottom: 2.5rem;
 }
 
 .carousel-header span {
-  font-size: var(--fs-lg);
+  font-size: var(--fs-xl);
   font-weight: var(--fw-bold);
-  color: var(--primary-dark);
-  margin: 0;
   font-family: var(--font-main);
+  color: var(--white);
+  letter-spacing: -0.5px;
 }
 
-/* --- Carousel Wrapper (Holds Buttons + Card) --- */
 .carousel-wrapper {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1rem;
 }
 
-/* --- Carousel Buttons (Outside) --- */
 .carousel-btn {
-  background-color: var(--white);
-  color: var(--primary-dark);
-  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--primary-color);
+  border: none;
   border-radius: 50%;
-  width: 45px;
-  height: 45px;
+  width: 50px;
+  height: 50px;
   font-size: 1.5rem;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: var(--transition-base);
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-card);
 }
 
 .carousel-btn:hover {
-  background-color: var(--primary-color);
-  color: var(--bg-dark);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background: var(--white);
+  transform: scale(1.1);
+  box-shadow: var(--shadow-card-hover);
 }
 
-/* --- Carousel Container (The main card) --- */
 .carousel-container {
   position: relative;
-  height: 400px;
+  height: 450px;
   overflow: hidden;
-  background: var(--white);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   flex-grow: 1;
-  min-width: 0;
 }
 
-/* --- Slides --- */
 .carousel-slide {
   position: absolute;
   top: 0;
@@ -578,10 +581,8 @@ body {
   width: 100%;
   height: 100%;
   opacity: 0;
-  transition: opacity 0.6s ease-in-out;
-  padding: 2rem;
-
-  /* This stacks the image and text vertically */
+  transition: opacity 0.6s ease;
+  padding: 3rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -592,34 +593,24 @@ body {
   opacity: 1;
 }
 
-/* --- Image Style --- */
 .slide-image {
-  /* Let the image take up most of the slide's height */
-  height: 80%;
+  height: 75%;
   max-width: 100%;
-  /* Don't overflow the padding */
-
-  /* This ensures the image scales to fit, not stretch */
   object-fit: contain;
-
-  margin-bottom: 1rem;
-  /* Space between image and text */
+  margin-bottom: 2rem;
 }
 
-/* --- Caption Style --- */
 .slide-content {
   text-align: center;
-  font-size: var(--fs-md);
-  font-weight: var(--fw-med);
-  color: var(--primary-dark);
-  margin-bottom: 40px;
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold);
   font-family: var(--font-main);
+  color: var(--text-primary);
 }
 
-/* --- Dot Indicators (Inside) --- */
 .carousel-dots {
   position: absolute;
-  bottom: 20px;
+  bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -628,231 +619,161 @@ body {
 }
 
 .dot {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.2);
+  background: var(--gray);
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: var(--transition-base);
 }
 
 .dot.active {
-  background-color: var(--primary-color);
+  background: var(--primary-color);
+  transform: scale(1.2);
 }
 
-/* --- Product Grid Section --- */
+/* ========== PRODUCT GRID ========== */
 .product-grid-section {
-  max-width: 1000px;
-  /* Or whatever max-width your content has */
-  margin: 3rem auto;
+  max-width: var(--container-max);
+  margin: 5rem auto;
   padding: 0 2rem;
 }
 
 .product-grid-section h2 {
-  font-size: var(--fs-lg);
+  font-size: var(--fs-xl);
   font-weight: var(--fw-bold);
-  color: var(--primary-dark);
-  text-align: center;
-  /* Center the main title */
-  margin-bottom: 2rem;
   font-family: var(--font-main);
-}
-
-/* --- The 3-Column Grid --- */
-.product-grid {
-  display: grid;
-  /* This creates 3 equal-width columns */
-  grid-template-columns: repeat(3, 1fr);
-  column-gap: 1.5rem;
-  gap: 1.5rem;
-  /* Space between the cards */
-}
-
-/* --- Product Grid Section --- */
-.product-grid-section {
-  max-width: 2000px;
-  /* Adjust to match your site's content width */
-  margin: 3rem auto;
-  padding: 0 2rem;
-}
-
-.product-grid-section h2 {
-  font-size: var(--fs-lg);
-  font-weight: var(--fw-bold);
-  color: var(--primary-dark);
+  color: var(--white);
   text-align: center;
-  /* Center the "Featured Products" title */
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
+  letter-spacing: -0.5px;
 }
 
-/* --- The 4-Column Grid --- */
 .product-grid {
   display: grid;
-  /* This creates 4 equal-width columns */
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
-  /* Space between the cards */
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 2rem;
 }
 
-/* --- Product Card Styling --- */
 .product-card {
-  /* Glassmorphism theme */
-  background: var(--white);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  /* Keeps image corners rounded */
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: var(--transition-base);
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border-light);
 }
 
 .product-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-card-hover);
+  background: var(--white);
 }
 
-/* Placeholder for the product image */
 .card-image-placeholder {
-  height: 180px;
-  background-color: rgba(255, 255, 255, 0.1);
-  /* In a real site, you'd replace this div with:
-       <img src="path-to-image.jpg" alt="Product Image"> 
-       ...and style the img tag instead. */
+  height: 200px;
+  background: linear-gradient(135deg, var(--light-gray) 0%, var(--off-white) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray);
+  font-size: var(--fs-sm);
 }
 
 .card-info {
-  padding: 1rem;
+  padding: 1.5rem;
 }
 
 .card-info h4 {
-  font-size: 1.1rem;
-  font-weight: var(--fw-bold);
-  color: var(--primary-dark);
-  margin-bottom: 0.25rem;
+  font-size: var(--fs-md);
+  font-weight: var(--fw-semibold);
   font-family: var(--font-main);
-
-  /* Optional: Truncate long text */
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .card-info p {
-  font-size: var(--fs-sm);
+  font-size: var(--fs-base);
   color: var(--primary-color);
-  /* Blue accent for price */
-  font-weight: var(--fw-med);
+  font-weight: var(--fw-semibold);
 }
 
-/* --- View All Button Container --- */
 .view-all-container {
   text-align: center;
-  /* Centers the button */
-  margin-top: 2.5rem;
-  /* Space between grid and button */
+  margin-top: 3rem;
 }
 
-/* * NOTE: This re-uses the .view-all-btn style from your
- * carousel/category headers. If it's already in your
- * stylesheet, you don't need to add it again.
-*/
 .view-all-btn {
   text-decoration: none;
-  padding: 0.6rem 1.2rem;
-  border: 1px solid var(--glass-border);
-  border-radius: 25px;
-  color: var(--primary-dark);
-  background-color: var(--white);
-  font-weight: var(--fw-med);
-  font-size: var(--fs-sm);
-  transition: all 0.3s ease;
+  padding: 1rem 3rem;
+  border-radius: var(--radius-full);
+  color: var(--white);
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-base);
+  transition: var(--transition-base);
+  backdrop-filter: var(--glass-blur);
+  display: inline-block;
 }
 
 .view-all-btn:hover {
-  background: var(--glass-border);
-  color: var(--primary-dark);
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
 }
 
-
-/* --- Responsive (Mobile) --- */
-@media (max-width: 900px) {
+/* Responsive Products */
+@media (max-width: 768px) {
   .product-grid {
-    /* 2 columns for tablets */
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
   }
 }
 
-@media (max-width: 480px) {
-  .product-grid {
-    /* 1 column for mobile */
-    grid-template-columns: 1fr;
-  }
-}
-
-/* --- Footer Styles --- */
-/* --- Footer Styles --- */
+/* ========== FOOTER ========== */
 .site-footer {
-  /* Glassmorphism Design */
-  background: var(--white);
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-
-  color: var(--primary-dark);
-  /* Darker text for light background */
-  padding: 3rem 2rem 0;
-  /* 0 bottom padding, handled by .footer-bottom */
-
-  /* === MODIFIED SECTION === */
-  /* This creates the 15px space around the container */
-  margin: 4rem 5px 5px 5px;
-  /* Top, Right, Bottom, Left margins */
-
-  /* Adds rounded corners to the whole footer card */
-  border-radius: var(--radius-md);
-  /* === END MODIFIED SECTION === */
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: var(--glass-blur);
+  color: var(--text-primary);
+  padding: 4rem 2rem 0;
+  margin: 5rem 1rem 1rem;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-light);
 }
 
 .footer-container {
-  max-width: 2000px;
-  /* This still controls your content width */
+  max-width: var(--container-max);
   margin: 0 auto;
-  /* This centers your content */
 }
 
-/* --- Main Footer Columns --- */
 .footer-main {
   display: grid;
-  /* 4 equal columns on desktop */
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
-  padding-bottom: 2.5rem;
-}
-
-.footer-column {
-  min-width: 160px;
-  /* Prevents columns from getting too small */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 3rem;
+  padding-bottom: 3rem;
 }
 
 .footer-column h4 {
   color: var(--primary-color);
-  /* Darker heading */
-  font-size: 1.1rem;
+  font-size: var(--fs-md);
   font-weight: var(--fw-bold);
-  margin-bottom: 1rem;
   font-family: var(--font-main);
+  margin-bottom: 1.5rem;
 }
 
 .footer-column p {
   font-size: var(--fs-sm);
-  line-height: 1.6;
-  color: var(--text-muted);
+  line-height: 1.7;
+  color: var(--text-secondary);
 }
 
 .footer-column ul {
   list-style: none;
-  padding: 0;
-  margin: 0;
 }
 
 .footer-column ul li {
@@ -860,62 +781,62 @@ body {
 }
 
 .footer-column ul li a {
-  color: var(--primary-dark);
+  color: var(--text-secondary);
   text-decoration: none;
   font-size: var(--fs-sm);
-  transition: color 0.3s ease;
+  transition: var(--transition-fast);
 }
 
 .footer-column ul li a:hover {
   color: var(--primary-color);
+  padding-left: 4px;
 }
 
-/* Newsletter Form */
 .newsletter-form {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.75rem;
 }
 
 .newsletter-form input {
-  width: 100%;
-  padding: 0.7rem;
-  border: 1px solid var(--glass-border);
-  border-radius: 5px;
-  background: var(--glass-bg);
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  background: var(--white);
   font-family: var(--font-secondary);
-  color: var(--primary-dark);
+  font-size: var(--fs-sm);
+  transition: var(--transition-fast);
+}
+
+.newsletter-form input:focus {
+  outline: none;
+  border-color: var(--primary-color);
 }
 
 .newsletter-form button {
-  padding: 0.7rem;
+  padding: 0.875rem 1rem;
   border: none;
-  border-radius: 5px;
-  background-color: var(--primary-color);
-  /* Blue accent */
-  color: var(--bg-dark);
-  font-weight: var(--fw-med);
+  border-radius: var(--radius-md);
+  background: var(--primary-color);
+  color: var(--white);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-sm);
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: var(--transition-base);
 }
 
 .newsletter-form button:hover {
-  background-color: var(--accent-color);
+  background: var(--primary-light);
+  transform: translateY(-2px);
 }
 
-
-/* --- Bottom Bar (Copyright & Socials) --- */
 .footer-bottom {
   display: flex;
-  flex-wrap: wrap;
-  /* Stacks on mobile */
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
-  padding: 1.5rem 0;
-  border-top: 1px solid var(--glass-border);
-  /* Glassy separator */
-  font-size: 0.9rem;
+  padding: 2rem 0;
+  border-top: 1px solid var(--border-light);
+  font-size: var(--fs-sm);
 }
 
 .footer-copyright {
@@ -928,33 +849,26 @@ body {
 }
 
 .footer-socials a {
-  color: var(--primary-dark);
-  font-size: 1.2rem;
-  transition: color 0.3s ease;
+  color: var(--text-secondary);
+  font-size: 1.25rem;
+  transition: var(--transition-fast);
 }
 
 .footer-socials a:hover {
   color: var(--primary-color);
-  /* Blue hover */
+  transform: translateY(-2px);
 }
 
-/* --- Responsive (Mobile) --- */
+/* Footer Responsive */
 @media (max-width: 768px) {
   .footer-main {
-    /* 2 columns for tablets */
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 480px) {
-  .footer-main {
-    /* 1 column for mobile */
     grid-template-columns: 1fr;
+    gap: 2rem;
   }
 
   .footer-bottom {
-    /* Stack copyright and socials */
     flex-direction: column;
+    gap: 1rem;
     text-align: center;
   }
 }
