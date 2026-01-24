@@ -9,12 +9,10 @@
 }
 
 body {
-  background: var(--bg-light);
-  background-image: radial-gradient(#1A1A1A11 1px, transparent 1px);
-  background-size: 30px 30px;
+  background: var(--bg-dark);
   color: var(--primary-dark);
   font-family: var(--font-secondary);
-  min-height: 100vh;
+  min-height: 100vh;;
   position: relative;
   overflow-x: hidden;
   z-index: 1;
@@ -143,8 +141,7 @@ main{
   align-items: center;
   border: 2px solid #000000;
   padding: 0 42px;
-  backdrop-filter: var(--glass-blur);
-  background: var(--glass-bg);
+  background: #dcf5e7;
   border-color: black;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   z-index: 1000;
@@ -181,6 +178,7 @@ main{
   font-family: var(--font-main);
   color: var(--primary-color);
   margin-left: -200px;
+  letter-spacing: 1px;
 
 }
 
@@ -215,7 +213,7 @@ main{
 
 /* Hover States */
 .nav-right .login-btn:hover {
-  color: var(--bg-dark); /* Text color when background fills */
+  color: #99F2D1; /* Text color when background fills */
   transform: scale(1.05);
   border-color: #000000; /* Keeps border black or matches green if preferred */
 }
@@ -248,7 +246,6 @@ main{
 
 /* =============hero================== */
 .hero {
-  min-height: 100vh;
   display: flex;
   margin-bottom: 0px;
   align-items: center;
@@ -278,43 +275,43 @@ main{
   line-height: 1.2;
   margin-bottom: 25px;
   padding-top: 100px;
-  color: var(--primary-dark);
+  color: #F8E9E9;
 }
 
 .hero-content h1 span {
-  color: var(--primary-color);
+  color: #cff8c0;
 }
 
 .hero-content p {
   font-size: var(--fs-md);
   line-height: 1.7;
   margin-bottom: 35px;
-  color: var(--text-muted);
+  color: #F8E9E9;
 }
 
 /* CTA button */
 .hero-btn {
   background: var(--primary-color);
   backdrop-filter: var(--glass-blur);
-  border: 2px solid #000000;
+  border: none;
   padding: 15px 35px;
   border-radius: var(--radius-lg);
   font-weight: var(--fw-bold);
   cursor: pointer;
   transition: 0.3s;
-  color: var(--primary-dark);
+  color: #cff8c0;
   font-size: 1.1rem;
 }
 
 .hero-btn_2 {
   background: transparent;
-  border: 2px solid #ff6663ff;
+  border: 2px solid #cff8c0;
   padding: 15px 35px;
   border-radius: var(--radius-lg);
   font-weight: var(--fw-bold);
   cursor: pointer;
   transition: 0.3s;
-  color: var(--primary-dark);
+  color: #cff8c0;
   backdrop-filter: var(--glass-blur );
   font-size: 1.1rem;
 }
