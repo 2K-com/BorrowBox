@@ -10,6 +10,8 @@
 
 body {
   background: var(--bg-dark);
+  background-image: radial-gradient(#1A1A1A11 1px, transparent 1px);
+  background-size: 30px 30px;
   color: var(--primary-dark);
   font-family: var(--font-secondary);
   min-height: 100vh;
@@ -137,13 +139,15 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border: 2px solid #000000;
   padding: 0 50px;
   backdrop-filter: var(--glass-blur);
   background: var(--glass-bg);
-  border-bottom: 1px solid var(--glass-border);
+  border-color: black;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   z-index: 1000;
   border-radius: var(--radius-lg);
+
 }
 
 /* Left nav links */
@@ -180,21 +184,42 @@ body {
 
 /* Right button */
 .nav-right .login-btn {
-  padding: 8px 20px;
+  position: relative; /* Required for the pseudo-element position */
+  overflow: hidden;   /* Keeps the fill inside the rounded corners */
+  z-index: 1;         /* Ensures text stays above the background */
+  padding: 8px 25px;
   border-radius: var(--radius-lg);
-  background: none;
-  border: 2px solid var(--primary-color);
+  background: transparent;
+  border: 2px solid #000000; /* Your requested black border */
   color: var(--primary-dark);
   cursor: pointer;
   font-weight: var(--fw-med);
-  transition: 0.3s;
+  transition: color 0.4s ease, transform 0.3s ease;
+  font-family: var(--font-secondary); /* Matches your nav links */
 }
 
+/* The Liquid Fill Layer */
+.nav-right .login-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;           /* Starts empty */
+  height: 100%;
+  background-color: var(--primary-color); /* Your emerald green */
+  z-index: -1;        /* Sits behind the text */
+  transition: width 0.4s ease-in-out;
+}
+
+/* Hover States */
 .nav-right .login-btn:hover {
-  background: var(--primary-color);
-  color: var(--bg-dark);
-  transform: scale(1.04);
-  font-weight: var(--fw-med);
+  color: var(--bg-dark); /* Text color when background fills */
+  transform: scale(1.05);
+  border-color: #000000; /* Keeps border black or matches green if preferred */
+}
+
+.nav-right .login-btn:hover::before {
+  width: 100%;        /* Fills from left to right */
 }
 
 /* Mobile responsive navbar */
@@ -269,7 +294,7 @@ body {
 .hero-btn {
   background: var(--primary-color);
   backdrop-filter: var(--glass-blur);
-  border: 2px solid var(--glass-border);
+  border: 2px solid #000000;
   padding: 15px 35px;
   border-radius: var(--radius-lg);
   font-weight: var(--fw-bold);
@@ -297,6 +322,7 @@ body {
   border-color: var(--primary-color);
   color: var(--bg-dark);
   transform: scale(1.04);
+  border: 2px solid #000000;
 }
 
 .hero-btn_2:hover {
@@ -321,6 +347,7 @@ body {
 
 .hero-stats {
   display: grid;
+  border: 2px solid #000000;
   margin-top: 50px;
   backdrop-filter: var(--glass-blur);
   grid-template-columns: repeat(3, 1fr);
@@ -328,7 +355,6 @@ body {
   background: rgba(255, 255, 255, 0.20);
   padding: 32px;
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .stat {
@@ -852,8 +878,6 @@ body {
 
 .footer-column ul li a:hover {
   color: var(--primary-color);
-  /* Blue hover accent */
-  text-decoration: underline;
 }
 
 /* Newsletter Form */

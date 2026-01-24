@@ -1,9 +1,9 @@
 /* css/root.css */
 @import url('https://fonts.googleapis.com/css2?family=Alata&family=Inter:wght@300;400;500;600&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Alata&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 :root {
-    --font-main: 'Alata', sans-serif;
-    --font-secondary: 'Inter', sans-serif;
+    --font-main: 'Plus Jakarta Sans', sans-serif;
+    --font-secondary: 'Plus Jakarta Sans', sans-serif;
     /* Font Sizes */
     --fs-xs: 0.75rem;
     /* 12px - Captions */
@@ -40,7 +40,7 @@
     /* Dark text for contrast on Coral */
     --accent-color: var(--lime-yellow);
     /* Secondary accent */
-    --bg-dark: var(--pale-sky);
+    --bg-light: rgb(255, 255, 255);
     /* Warm light background */
     --text-main: var(--deep-space-blue);
     /* Main text (dark) */
