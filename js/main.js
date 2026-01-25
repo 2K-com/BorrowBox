@@ -269,3 +269,33 @@ function initCategoryCards() {
 
 initCategoryCards();
 
+const container = document.getElementById('ring-container');
+
+function createRing() {
+    const ring = document.createElement('div');
+    ring.className = 'floating-ring';
+
+    // Randomize Size (between 50px and 200px)
+    const size = Math.random() * 150 + 50;
+    ring.style.width = `${size}px`;
+    ring.style.height = `${size}px`;
+
+    // Randomize Position
+    ring.style.left = `${Math.random() * 100}%`;
+    ring.style.top = `${Math.random() * 100}%`;
+
+    // Randomize Animation Speed
+    const duration = Math.random() * 15 + 10;
+    ring.style.animationDuration = `${duration}s`;
+
+    // Randomize Opacity (makes some look further away)
+    ring.style.opacity = Math.random() * 0.4 + 0.1;
+
+    container.appendChild(ring);
+}
+
+// Generate 12 random rings
+for (let i = 0; i < 12; i++) {
+    createRing();
+}
+
