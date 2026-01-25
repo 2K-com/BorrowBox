@@ -316,7 +316,7 @@ body {
   position: relative;
   overflow: relative;
   gap: 4rem;
-  min-height: 110vh;
+  min-height: 100vh;
 }
 
 .hero-content {
@@ -392,32 +392,55 @@ body {
 }
 
 .hero-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 2fr);
-  gap: 1rem;
-  row-gap: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
   margin-top: 3rem;
-  padding: 1rem;
-  column-gap: 1rem;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: var(--glass-blur);
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
   border-radius: var(--radius-lg);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .stat {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: left;
 }
 
 .stat-label {
-  font-size: var(--fs-sm);
-  color: var(--accent-green-light);
-  margin-top: none;
+  font-size: 0.9rem;
+  color: var(--white);
+  font-weight: var(--fw-med);
+  line-height: 1.2;
 }
+
 .icon-image {
   display: flex;
   justify-content: center;
   align-items: center;
+  background: rgba(46, 204, 113, 0.1);
+  /* Light green tint background for icon */
+  padding: 8px;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.icon-image img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  /* If svgs are black, invert them to white or use brightness filter if needed. 
+     Assuming they are colored or appropriate. */
+}
+
+/* Ensure buttons have breathing room */
+.hero-buttons {
+  margin-bottom: 1rem;
 }
 
 .hero-image {
