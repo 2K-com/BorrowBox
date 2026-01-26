@@ -49,6 +49,7 @@
       </div>
     </nav>
     <div class="ring-container" id="ring-container"></div>
+
     <main>
       <!-- Hero Section -->
       <section class="hero" id="Home">
@@ -154,7 +155,7 @@
         </div>
       </section>
 
-      <!-- Carousel Section -->
+      <!-- Carousel Section - Replace the existing carousel section with this -->
       <section class="carousel-section">
         <div class="carousel-header">
           <span>Recently Added Items</span>
@@ -171,30 +172,48 @@
 
           <div class="carousel-container">
             <div class="carousel-slide active">
-              <img
-                src="../static/images/headphone.png"
-                alt="Headphone"
-                class="slide-image"
-              />
-              <div class="slide-content">Premium Wireless Headphones</div>
+              <div class="slide-image-wrapper">
+                <img
+                  src="../static/images/headphone.png"
+                  alt="Headphone"
+                  class="slide-image"
+                />
+              </div>
+              <div class="slide-content">
+                <h3>Premium Wireless Headphones</h3>
+                <p>High-quality audio with noise cancellation</p>
+                <span class="slide-price">₹150 / day</span>
+              </div>
             </div>
 
             <div class="carousel-slide">
-              <img
-                src="../static/images/shoes.png"
-                alt="Shoes"
-                class="slide-image"
-              />
-              <div class="slide-content">Sports Running Shoes</div>
+              <div class="slide-image-wrapper">
+                <img
+                  src="../static/images/shoes.png"
+                  alt="Shoes"
+                  class="slide-image"
+                />
+              </div>
+              <div class="slide-content">
+                <h3>Sports Running Shoes</h3>
+                <p>Comfortable and durable for all terrains</p>
+                <span class="slide-price">₹100 / day</span>
+              </div>
             </div>
 
             <div class="carousel-slide">
-              <img
-                src="../static/images/hoodie.png"
-                alt="Hoodie"
-                class="slide-image"
-              />
-              <div class="slide-content">Comfortable Hoodie</div>
+              <div class="slide-image-wrapper">
+                <img
+                  src="../static/images/hoodie.png"
+                  alt="Hoodie"
+                  class="slide-image"
+                />
+              </div>
+              <div class="slide-content">
+                <h3>Comfortable Hoodie</h3>
+                <p>Perfect for cold weather and casual wear</p>
+                <span class="slide-price">₹80 / day</span>
+              </div>
             </div>
 
             <div class="carousel-dots">
@@ -214,72 +233,147 @@
         </div>
       </section>
 
-      <!-- Featured Products Section -->
+      <!-- Featured Products Section - Replace the existing product grid section with this -->
       <section class="product-grid-section" id="Products">
         <h2>Featured Products</h2>
+        <p class="product-grid-subtitle">
+          Discover the most popular items available for rent
+        </p>
 
         <div class="product-grid">
           <div class="product-card">
-            <div class="card-image-placeholder">Product Image</div>
+            <div class="card-image-wrapper">
+              <div class="card-image-placeholder"></div>
+              <span class="card-badge">Popular</span>
+            </div>
             <div class="card-info">
               <h4>Wireless Mouse</h4>
-              <p>₹50 / day</p>
+              <div class="card-meta">
+                <span class="card-price">₹50 / day</span>
+                <span class="card-rating">4.5</span>
+              </div>
+              <div class="card-action">
+                <button class="card-btn">View Details</button>
+              </div>
             </div>
           </div>
 
           <div class="product-card">
-            <div class="card-image-placeholder">Product Image</div>
+            <div class="card-image-wrapper">
+              <div class="card-image-placeholder"></div>
+              <span class="card-badge">New</span>
+            </div>
             <div class="card-info">
               <h4>Gaming Controller</h4>
-              <p>₹100 / day</p>
+              <div class="card-meta">
+                <span class="card-price">₹100 / day</span>
+                <span class="card-rating">4.8</span>
+              </div>
+              <div class="card-action">
+                <button class="card-btn">View Details</button>
+              </div>
             </div>
           </div>
 
           <div class="product-card">
-            <div class="card-image-placeholder">Product Image</div>
+            <div class="card-image-wrapper">
+              <div class="card-image-placeholder"></div>
+              <span class="card-badge">Featured</span>
+            </div>
             <div class="card-info">
               <h4>DSLR Camera</h4>
-              <p>₹500 / day</p>
+              <div class="card-meta">
+                <span class="card-price">₹500 / day</span>
+                <span class="card-rating">4.9</span>
+              </div>
+              <div class="card-action">
+                <button class="card-btn">View Details</button>
+              </div>
             </div>
           </div>
 
           <div class="product-card">
-            <div class="card-image-placeholder">Product Image</div>
+            <div class="card-image-wrapper">
+              <div class="card-image-placeholder"></div>
+              <span class="card-badge">Popular</span>
+            </div>
             <div class="card-info">
               <h4>Study Lamp</h4>
-              <p>₹30 / day</p>
+              <div class="card-meta">
+                <span class="card-price">₹30 / day</span>
+                <span class="card-rating">4.3</span>
+              </div>
+              <div class="card-action">
+                <button class="card-btn">View Details</button>
+              </div>
             </div>
           </div>
 
           <div class="product-card">
-            <div class="card-image-placeholder">Product Image</div>
+            <div class="card-image-wrapper">
+              <div class="card-image-placeholder"></div>
+              <span class="card-badge">New</span>
+            </div>
             <div class="card-info">
               <h4>Electric Kettle</h4>
-              <p>₹40 / day</p>
+              <div class="card-meta">
+                <span class="card-price">₹40 / day</span>
+                <span class="card-rating">4.6</span>
+              </div>
+              <div class="card-action">
+                <button class="card-btn">View Details</button>
+              </div>
             </div>
           </div>
 
           <div class="product-card">
-            <div class="card-image-placeholder">Product Image</div>
+            <div class="card-image-wrapper">
+              <div class="card-image-placeholder"></div>
+              <span class="card-badge">Popular</span>
+            </div>
             <div class="card-info">
               <h4>Textbook Bundle</h4>
-              <p>₹80 / day</p>
+              <div class="card-meta">
+                <span class="card-price">₹80 / day</span>
+                <span class="card-rating">4.7</span>
+              </div>
+              <div class="card-action">
+                <button class="card-btn">View Details</button>
+              </div>
             </div>
           </div>
 
           <div class="product-card">
-            <div class="card-image-placeholder">Product Image</div>
+            <div class="card-image-wrapper">
+              <div class="card-image-placeholder"></div>
+              <span class="card-badge">Featured</span>
+            </div>
             <div class="card-info">
               <h4>Bluetooth Speaker</h4>
-              <p>₹70 / day</p>
+              <div class="card-meta">
+                <span class="card-price">₹70 / day</span>
+                <span class="card-rating">4.4</span>
+              </div>
+              <div class="card-action">
+                <button class="card-btn">View Details</button>
+              </div>
             </div>
           </div>
 
           <div class="product-card">
-            <div class="card-image-placeholder">Product Image</div>
+            <div class="card-image-wrapper">
+              <div class="card-image-placeholder"></div>
+              <span class="card-badge">New</span>
+            </div>
             <div class="card-info">
               <h4>Camping Tent</h4>
-              <p>₹200 / day</p>
+              <div class="card-meta">
+                <span class="card-price">₹200 / day</span>
+                <span class="card-rating">4.8</span>
+              </div>
+              <div class="card-action">
+                <button class="card-btn">View Details</button>
+              </div>
             </div>
           </div>
         </div>

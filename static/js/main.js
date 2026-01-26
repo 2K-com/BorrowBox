@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initFormHandlers();
 });
 
-// Carousel functionality
+// Enhanced Carousel functionality with improved animations
 function initCarousel() {
     const slides = document.querySelectorAll('.carousel-slide');
     const dots = document.querySelectorAll('.dot');
@@ -59,15 +59,25 @@ function initCarousel() {
         }
     };
 
-    // Button controls
+    // Button controls with haptic feedback
     nextBtn.addEventListener('click', () => {
         showSlide(currentSlide + 1);
         resetAutoPlay();
+        // Add visual feedback
+        nextBtn.style.transform = 'scale(0.9)';
+        setTimeout(() => {
+            nextBtn.style.transform = 'scale(1)';
+        }, 100);
     });
 
     prevBtn.addEventListener('click', () => {
         showSlide(currentSlide - 1);
         resetAutoPlay();
+        // Add visual feedback
+        prevBtn.style.transform = 'scale(0.9)';
+        setTimeout(() => {
+            prevBtn.style.transform = 'scale(1)';
+        }, 100);
     });
 
     // Dot controls
@@ -83,7 +93,7 @@ function initCarousel() {
     function startAutoPlay() {
         autoPlayInterval = setInterval(() => {
             showSlide(currentSlide + 1);
-        }, 5000); // Change slide every 5 seconds
+        }, 5000);
     }
 
     function resetAutoPlay() {
@@ -102,13 +112,33 @@ function initCarousel() {
         }
     });
 
-    // Start carousel
-    showSlide(0);
-    startAutoPlay();
-
-    // Pause on hover
+    // Touch swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
     const carouselContainer = document.querySelector('.carousel-container');
+
     if (carouselContainer) {
+        carouselContainer.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        carouselContainer.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) {
+                showSlide(currentSlide + 1);
+                resetAutoPlay();
+            }
+            if (touchEndX > touchStartX + 50) {
+                showSlide(currentSlide - 1);
+                resetAutoPlay();
+            }
+        }
+
+        // Pause on hover
         carouselContainer.addEventListener('mouseenter', () => {
             clearInterval(autoPlayInterval);
         });
@@ -117,7 +147,103 @@ function initCarousel() {
             startAutoPlay();
         });
     }
+
+    // Start carousel
+    showSlide(0);
+    startAutoPlay();
 }
+
+// Enhanced product card interactions
+function initProductCards() {
+    const productCards = document.querySelectorAll('.product-card');
+
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }, index * 80); // Stagger animation
+            }
+        });
+    }, observerOptions);
+
+    productCards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(card);
+
+        // Add click handler for View Details button
+        const viewBtn = card.querySelector('.card-btn');
+        if (viewBtn) {
+            viewBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const productName = card.querySelector('h4').textContent;
+                console.log(`Viewing details for: ${productName}`);
+                // Add your navigation or modal logic here
+            });
+        }
+
+        // Add hover effect for card
+        card.addEventListener('mouseenter', () => {
+            card.style.zIndex = '10';
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.zIndex = '1';
+        });
+    });
+}
+
+// Add smooth parallax effect to carousel images
+function initParallaxEffect() {
+    const slides = document.querySelectorAll('.carousel-slide');
+
+    slides.forEach(slide => {
+        slide.addEventListener('mousemove', (e) => {
+            if (!slide.classList.contains('active')) return;
+
+            const image = slide.querySelector('.slide-image');
+            if (!image) return;
+
+            const rect = slide.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            const deltaX = (x - centerX) / centerX;
+            const deltaY = (y - centerY) / centerY;
+
+            const moveX = deltaX * 10;
+            const moveY = deltaY * 10;
+
+            image.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.05)`;
+        });
+
+        slide.addEventListener('mouseleave', () => {
+            const image = slide.querySelector('.slide-image');
+            if (image) {
+                image.style.transform = 'translate(0, 0) scale(1)';
+            }
+        });
+    });
+}
+
+// Initialize all enhanced features
+document.addEventListener('DOMContentLoaded', () => {
+    initCarousel();
+    initProductCards();
+    initParallaxEffect();
+});
+
 
 // Smooth scrolling for navigation links
 function initSmoothScroll() {
