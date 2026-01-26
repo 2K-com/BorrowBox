@@ -712,6 +712,7 @@ body {
 }
 
 .step:hover .step-number::before {
+  animation-play-state: running;
   animation: pulse 2s;
 }
 
@@ -801,8 +802,9 @@ body {
   font-weight: var(--fw-semibold);
   font-family: var(--font-main);
   color: var(--white);
-  background: linear-gradient(135deg, var(--tertiary-color), var(--accent-blue-dark));
-  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: var(--glass-blur);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: var(--radius-full);
   text-decoration: none;
   transition: all var(--transition-base);
