@@ -292,9 +292,10 @@ body {
 
 /* Hover States */
 .nav-right .login-btn:hover {
-  color: var(--accent-blue-light);
+  color: var(--tertiary-light);
   /* Text color when background fills */
   transform: scale(1.05);
+  border: none;
   border-color: var(--primary-color);
   /* Keeps border matched */
 }
@@ -357,7 +358,7 @@ body {
 }
 
 .hero-content h1 span {
-  color: var(--accent-blue-dark);
+  color: var(--primary-color);
   position: relative;
   display: inline-block;
 }
@@ -442,7 +443,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: var(--accent-blue-light);
+  background: var(--tertiary-color);
   /* Light blue tint background for icon */
   padding: 8px;
   border-radius: 50%;
@@ -813,6 +814,7 @@ body {
 .slide-price {
   display: inline-block;
   padding: 0.5rem 1.5rem;
+  margin-bottom:1rem;
   background: linear-gradient(135deg, #3685B5, #93beee);
   color: white;
   border-radius: var(--radius-full);
@@ -828,6 +830,7 @@ body {
   display: flex;
   gap: 0.75rem;
   z-index: 10;
+  padding-top:2rem;
 }
 
 .dot {
@@ -1170,7 +1173,122 @@ body {
   }
 }
 
+.cta-container {
+    padding: var(--space-xxl) var(--container-padding);
+    display: flex;
+    justify-content: center;
+}
 
+.cta-card {
+    position: relative;
+    width: 100%;
+    max-width: 90%;
+    background: var(--bg-gradient); /* Using your blue gradient */
+    border-radius: var(--radius-xl);
+    padding: var(--space-xxxl);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+}
+
+.cta-content {
+    position: relative;
+    z-index: 2;
+    max-width: 600px;
+}
+
+.cta-title {
+    font-family: var(--font-main);
+    font-size: var(--fs-xxl);
+    font-weight: var(--fw-bold);
+    color: var(--charcoal);
+    margin-bottom: var(--space-md);
+}
+
+.cta-description {
+    font-family: var(--font-secondary);
+    font-size: var(--fs-md);
+    color: var(--tertiary-light);
+    margin-bottom: var(--space-xl);
+    line-height: 1.6;
+}
+
+.cta-actions {
+    display: flex;
+    gap: var(--space-md);
+} 
+
+.btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-sm) var(--space-lg);
+    border-radius: var(--radius-full);
+    font-family: var(--font-main);
+    font-weight: var(--fw-semibold);
+    cursor: pointer;
+    transition: var(--transition-base);
+    border: none;
+    font-size: var(--fs-base);
+}
+
+.btn-primary {
+    background: var(--charcoal);
+    color: var(--tertiary-color);
+}
+
+.btn-secondary {
+    background: var(--charcoal);
+    color: var(--tertiary-color);
+}
+
+.btn-dot {
+    width: 12px;
+    height: 12px;
+    background: var(--white);
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    opacity: 0.9;
+}
+
+/* Ripple Positioning */
+.ripple-wrapper {
+    position: absolute;
+    right: -150px; /* Adjust to move the center of the circles */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 800px;
+    height: 800px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+}
+
+.ripple {
+    position: absolute;
+    border-radius: var(--radius-full);
+    background: var(--white);
+    transition: var(--transition-slow);
+}
+
+/* Decreasing Opacity & Increasing Size */
+.r1 { width: 100%; height: 100%; opacity: 0.05; }
+.r2 { width: 75%;  height: 75%;  opacity: 0.10; }
+.r3 { width: 50%;  height: 50%;  opacity: 0.15; }
+.r4 { width: 25%;  height: 25%;  opacity: 0.25; }
+
+/* Optional: Add a glass effect to the innermost circle */
+.r4 {
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+}
 
 /* ========== FOOTER ========== */
 .site-footer {
