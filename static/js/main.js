@@ -304,8 +304,8 @@ function createRing() {
     container.appendChild(ring);
 }
 
-// Generate 12 random rings
-for (let i = 0; i < 12; i++) {
+// Generate 8 random rings
+for (let i = 0; i < 8; i++) {
     createRing();
 }
 

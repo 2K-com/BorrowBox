@@ -98,7 +98,7 @@ body {
 .floating-ring {
   position: absolute;
   border-radius: 50%;
-  border: 2px solid rgba(46, 204, 113, 0.2);
+  border: 2px solid rgb(211, 231, 255);
   /* Emerald Green */
   box-shadow: 0 0 15px rgba(46, 204, 113, 0.1),
     inset 0 0 10px rgba(46, 204, 113, 0.1);
@@ -186,7 +186,7 @@ body {
     transform 0.45s ease,
     box-shadow 0.45s ease;
 
-  transform: scale(0.99);
+  transform: scale(0.97);
   margin-inline: auto;
 
 }
@@ -292,10 +292,10 @@ body {
 
 /* Hover States */
 .nav-right .login-btn:hover {
-  color: #99F2D1;
+  color: var(--tertiary-color);
   /* Text color when background fills */
   transform: scale(1.05);
-  border-color: #000000;
+  border:none;
   /* Keeps border black or matches green if preferred */
 }
 
@@ -352,7 +352,7 @@ body {
   font-family: var(--font-main);
   line-height: 1.15;
   margin-bottom: 1.5rem;
-  color: var(--white);
+  color: var(--tertiary-light);
   letter-spacing: -1px;
 }
 
@@ -377,7 +377,7 @@ body {
 }
 
 .hero-btn {
-  background: var(--white);
+  background: var(--tertiary-light);
   color: var(--primary-color);
   border: none;
   padding: 1rem 2.5rem;
@@ -433,7 +433,7 @@ body {
 
 .stat-label {
   font-size: 0.9rem;
-  color: var(--white);
+  color: var(--primary-color);
   font-weight: var(--fw-med);
   line-height: 1.2;
 }
@@ -442,7 +442,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(46, 204, 113, 0.1);
+  background: var(--tertiary-color);
   /* Light green tint background for icon */
   padding: 8px;
   border-radius: 50%;

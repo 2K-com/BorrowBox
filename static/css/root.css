@@ -31,6 +31,7 @@
     --secondary-color: #D04049;
     --secondary-light: #d68489;
     --tertiary-color: #FFCC95;
+    --tertiary-light: #fff2e6;
     --quaternary-color: #6D90B9;
 
 
@@ -47,7 +48,7 @@
     --charcoal: #212529;
 
     /* Semantic Colors */
-    --bg-gradient: linear-gradient(90deg, #93beee, #BBC7DC);
+    --bg-gradient: linear-gradient(90deg, #618fc4, #BBC7DC);
     --text-primary: #212529;
     --text-secondary: #495057;
     --text-muted: #6C757D;
