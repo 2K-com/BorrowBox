@@ -26,7 +26,159 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ========== FORM HANDLERS ==========
     initFormHandlers();
+
+    // ==========HOW IT WORKS ==============
+    initHowItWorks();
 });
+
+// How It Works Section - Enhanced Interactions
+function initHowItWorks() {
+    const steps = document.querySelectorAll('.step');
+    const connectionLine = document.getElementById('connectionLine');
+
+    if (!connectionLine) return;
+
+    // Observer for scroll animation
+    const observerOptions = {
+        threshold: 0.3,
+        rootMargin: '0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Animate connection line
+                connectionLine.classList.add('active');
+
+                // Stagger step animations
+                steps.forEach((step, index) => {
+                    setTimeout(() => {
+                        step.style.opacity = '1';
+                        step.style.transform = 'translateY(0)';
+                    }, index * 200);
+                });
+            }
+        });
+    }, observerOptions);
+
+    // Initial setup
+    steps.forEach(step => {
+        step.style.opacity = '0';
+        step.style.transform = 'translateY(30px)';
+        step.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    });
+
+    // Observe the workflow container
+    const workflowContainer = document.querySelector('.workflow-container');
+    if (workflowContainer) {
+        observer.observe(workflowContainer);
+    }
+
+    // Progressive line fill on step hover
+    let currentHoveredIndex = -1;
+
+    steps.forEach((step, index) => {
+        step.addEventListener('mouseenter', () => {
+            currentHoveredIndex = index;
+            updateLineFill(index);
+
+            // Add glow effect to previous steps
+            steps.forEach((s, i) => {
+                if (i <= index) {
+                    s.style.borderColor = 'var(--tertiary-color)';
+                } else {
+                    s.style.borderColor = 'transparent';
+                }
+            });
+        });
+
+        step.addEventListener('mouseleave', () => {
+            currentHoveredIndex = -1;
+            // Reset to full line after a delay
+            setTimeout(() => {
+                if (currentHoveredIndex === -1) {
+                    updateLineFill(steps.length - 1);
+                    steps.forEach(s => {
+                        s.style.borderColor = 'transparent';
+                    });
+                }
+            }, 300);
+        });
+    });
+
+    function updateLineFill(stepIndex) {
+        const lineFill = connectionLine.querySelector('.connection-line-fill');
+        const percentage = ((stepIndex + 1) / steps.length) * 100;
+        lineFill.style.width = `${percentage}%`;
+    }
+
+    // Keyboard navigation
+    let currentFocusIndex = -1;
+
+    document.addEventListener('keydown', (e) => {
+        const workflowInView = isElementInViewport(workflowContainer);
+        if (!workflowInView) return;
+
+        if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            currentFocusIndex = Math.min(currentFocusIndex + 1, steps.length - 1);
+            focusStep(currentFocusIndex);
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            currentFocusIndex = Math.max(currentFocusIndex - 1, 0);
+            focusStep(currentFocusIndex);
+        }
+    });
+
+    function focusStep(index) {
+        steps.forEach(s => s.classList.remove('focused'));
+        if (index >= 0 && index < steps.length) {
+            steps[index].classList.add('focused');
+            steps[index].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            updateLineFill(index);
+        }
+    }
+
+    function isElementInViewport(el) {
+        if (!el) return false;
+        const rect = el.getBoundingClientRect();
+        return (
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+        );
+    }
+
+    // Click handler for steps
+    steps.forEach((step, index) => {
+        step.addEventListener('click', () => {
+            const stepNumber = step.getAttribute('data-step');
+            console.log(`Clicked on step ${stepNumber}`);
+            // Add your navigation or detailed view logic here
+        });
+    });
+
+    // Parallax effect on scroll
+    window.addEventListener('scroll', () => {
+        if (!workflowContainer) return;
+
+        const rect = workflowContainer.getBoundingClientRect();
+        const scrollPercent = Math.max(0, Math.min(1,
+            (window.innerHeight - rect.top) / (window.innerHeight + rect.height)
+        ));
+
+        steps.forEach((step, index) => {
+            const delay = index * 0.1;
+            const adjustedPercent = Math.max(0, Math.min(1, scrollPercent - delay));
+            const translateY = (1 - adjustedPercent) * 20;
+
+            if (rect.top < window.innerHeight && rect.bottom > 0) {
+                step.style.transform = `translateY(${translateY}px)`;
+            }
+        });
+    });
+}
 
 // Enhanced Carousel functionality with improved animations
 function initCarousel() {
@@ -438,7 +590,7 @@ for (let i = 0; i < 8; i++) {
 document.addEventListener('mousemove', (e) => {
     const ripples = document.querySelectorAll('.ripple');
     const card = document.querySelector('.cta-card');
-    
+
     if (!card) return;
 
     const rect = card.getBoundingClientRect();
@@ -452,7 +604,7 @@ document.addEventListener('mousemove', (e) => {
             const depth = (index + 1) * 10;
             const moveX = (x - rect.width / 2) / depth;
             const moveY = (y - rect.height / 2) / depth;
-            
+
             ripple.style.transform = `translate(${moveX}px, ${moveY}px)`;
         });
     }
