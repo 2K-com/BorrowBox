@@ -98,7 +98,7 @@ body {
 .floating-ring {
   position: absolute;
   border-radius: 50%;
-  border: 2px solid rgba(124, 155, 208, 0.2);
+  border: 2px solid rgba(205, 223, 255, 0.573);
   /* Accent Blue Dark */
   box-shadow: 0 0 15px rgba(124, 155, 208, 0.1),
     inset 0 0 10px rgba(124, 155, 208, 0.1);
