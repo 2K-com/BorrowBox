@@ -661,7 +661,6 @@ body {
 }
 
 .step:hover {
-  transform: translateY(-8px);
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
   border-color: var(--accent-blue-dark);
 }
@@ -710,11 +709,10 @@ body {
   border-radius: 50%;
   border: 2px solid var(--accent-blue-dark);
   opacity: 0;
-  animation: pulse 2s infinite;
 }
 
 .step:hover .step-number::before {
-  animation-play-state: running;
+  animation: pulse 2s;
 }
 
 @keyframes pulse {
@@ -803,7 +801,7 @@ body {
   font-weight: var(--fw-semibold);
   font-family: var(--font-main);
   color: var(--white);
-  background: linear-gradient(135deg, var(--accent-blue-dark), var(--accent-blue-light));
+  background: linear-gradient(135deg, var(--tertiary-color), var(--accent-blue-dark));
   border: none;
   border-radius: var(--radius-full);
   text-decoration: none;
