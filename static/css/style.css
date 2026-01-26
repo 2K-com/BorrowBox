@@ -295,7 +295,7 @@ body {
   color: var(--accent-blue-light);
   /* Text color when background fills */
   transform: scale(1.05);
-  border-color: var(--primary-color);
+  border: none;
   /* Keeps border matched */
 }
 
@@ -357,7 +357,7 @@ body {
 }
 
 .hero-content h1 span {
-  color: var(--accent-blue-dark);
+  color: var(--primary-color);
   position: relative;
   display: inline-block;
 }
@@ -535,6 +535,155 @@ body {
   }
 }
 
+/* How It Works Section */
+
+/* How It Works Section */
+
+.how-it-works {
+  background-color: none;
+  padding: var(--space-xxl) 0;
+  font-family: var(--font-main);
+}
+
+.how-it-works .container {
+  max-width: var(--container-max);
+  padding: 0 var(--container-padding);
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* Section Heading */
+
+.how-it-works h2 {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.how-it-works .subtitle {
+  font-size: var(--fs-base);
+  font-family: var(--font-secondary);
+  color: var(--text-secondary);
+  max-width: 560px;
+  margin: 0 auto var(--space-xl);
+  line-height: 1.6;
+}
+
+/* Steps Layout */
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-lg);
+}
+
+/* Step Card */
+
+.step {
+  background-color: var(--white);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-card);
+  text-align: left;
+  transition: transform var(--transition-base),
+    box-shadow var(--transition-base);
+}
+
+.step:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* Step Number */
+
+.step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background-color: var(--accent-blue-light);
+  color: var(--quaternary-color);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  margin-bottom: var(--space-sm);
+}
+
+/* Step Title */
+
+.step h3 {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+/* Step Description */
+
+.step p {
+  font-size: var(--fs-xs);
+  font-family: var(--font-secondary);
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* CTA BELOW STEPS */
+
+.how-it-works-cta {
+  margin-top: var(--space-xl);
+}
+
+/* Secondary Button */
+
+.btn-secondary {
+  display: inline-block;
+  padding: 0.65rem 1.5rem;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  font-family: var(--font-main);
+  color: var(--primary-color);
+  background-color: transparent;
+  border: 1.5px solid var(--border-medium);
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  transition: background-color var(--transition-base),
+    color var(--transition-base),
+    border-color var(--transition-base),
+    transform var(--transition-fast);
+}
+
+.btn-secondary:hover {
+  background-color: var(--primary-color);
+  color: var(--white);
+  border-color: var(--primary-color);
+  transform: translateY(-1px);
+}
+
+/* Responsive Adjustments */
+
+@media (max-width: 1024px) {
+  .steps {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .steps {
+    grid-template-columns: 1fr;
+  }
+
+  .how-it-works {
+    padding: var(--space-xl) 0;
+  }
+
+  .how-it-works h2 {
+    font-size: var(--fs-lg);
+  }
+}
+
+
 /* ========== CATEGORIES SECTION ========== */
 .browse-section {
   padding: 2rem 2rem;
@@ -563,7 +712,7 @@ body {
   position: relative;
   width: 190px;
   height: 254px;
-  background-image: linear-gradient(163deg, var(--accent-blue-dark) 0%, var(--accent-blue-light) 100%);
+  background-image: linear-gradient(163deg, var(--secondary-light) 0%, var(--secondary-light) 50%, var(--tertiary-color) 100%);
   border-radius: 20px;
   cursor: pointer;
   transition: all .3s;
