@@ -54,7 +54,6 @@ function initHowItWorks() {
                 steps.forEach((step, index) => {
                     setTimeout(() => {
                         step.style.opacity = '1';
-                        step.style.transform = 'translateY(0)';
                     }, index * 200);
                 });
             }
@@ -64,8 +63,7 @@ function initHowItWorks() {
     // Initial setup
     steps.forEach(step => {
         step.style.opacity = '0';
-        step.style.transform = 'translateY(30px)';
-        step.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        step.style.transition = 'opacity 0.6s ease';
     });
 
     // Observe the workflow container
@@ -170,12 +168,6 @@ function initHowItWorks() {
 
         steps.forEach((step, index) => {
             const delay = index * 0.1;
-            const adjustedPercent = Math.max(0, Math.min(1, scrollPercent - delay));
-            const translateY = (1 - adjustedPercent) * 20;
-
-            if (rect.top < window.innerHeight && rect.bottom > 0) {
-                step.style.transform = `translateY(${translateY}px)`;
-            }
         });
     });
 }
