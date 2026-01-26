@@ -25,18 +25,18 @@
     --fw-extrabold: 800;
 
     /* Color Palette - Keeping your primary colors */
-    --primary-color: #1C3E35;
-    --primary-light: #2A5A4D;
-    --primary-dark: #0F2821;
-    --secondary-color: #C17C74;
-    --secondary-light: #f1b4ac;
-    --tertiary-color: #3D0C11;
-    --quaternary-color: #F8E9E9;
+    --primary-color: #393E41;
+    --primary-light: #646c71;
+    --primary-dark: #2b2f31;
+    --secondary-color: #D04049;
+    --secondary-light: #d68489;
+    --tertiary-color: #FFCC95;
+    --quaternary-color: #6D90B9;
 
 
-    --accent-green: #99F2D1;
-    --accent-green-light: #C5F7E5;
-    --accent-green-dark: #6FE0BC;
+    --accent-blue: #BBC7DC;
+    --accent-blue-light: #e4eeff;
+    --accent-blue-dark: #7c9bd0;
 
     /* Neutral Colors */
     --white: #FFFFFF;
@@ -47,7 +47,7 @@
     --charcoal: #212529;
 
     /* Semantic Colors */
-    --bg-gradient: linear-gradient(90deg, #EBF4F5, #B5C6E0);
+    --bg-gradient: linear-gradient(90deg, #93beee, #BBC7DC);
     --text-primary: #212529;
     --text-secondary: #495057;
     --text-muted: #6C757D;
