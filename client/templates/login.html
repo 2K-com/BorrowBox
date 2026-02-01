@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login / Signup - BorrowBox</title>
 
-    <!-- Font Awesome (for navbar icon) -->
+    <!-- Font Awesome -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
 
-    <!-- Link to your EXISTING style.css file -->
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../static/css/root.css" />
     <link rel="stylesheet" href="../static/css/login.css" />
   </head>
   <body>
@@ -19,9 +20,9 @@
     <nav class="navbar">
       <ul class="nav-left">
         <li><a href="index.html">Home</a></li>
-        <li><a href="index.html">Categories</a></li>
-        <li><a href="index.html">Products</a></li>
-        <li><a href="index.html">Contact</a></li>
+        <li><a href="index.html#categories">Categories</a></li>
+        <li><a href="index.html#products">Products</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
       </ul>
 
       <div class="nav-center">
@@ -29,97 +30,375 @@
       </div>
 
       <div class="nav-right">
-        <a href="login.html" class="login-btn">Login</a>
+        <button class="login-btn active">Login</button>
       </div>
     </nav>
 
     <!-- ======== AUTHENTICATION MAIN ======== -->
     <main class="login-page-main">
       <div class="auth-container">
-        <!-- ======== LOGIN FORM (Visible by default) ======== -->
-        <form class="auth-form" id="login-form">
-          <h2>Welcome Back!</h2>
+        
+        <!-- Campus Verification Notice -->
+        <div class="campus-notice">
+          <div class="notice-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <div class="notice-content">
+            <h3>Campus-Verified Community</h3>
+            <p>Only official college email IDs are allowed to ensure a safe, trusted rental experience within your campus.</p>
+            <a href="#workflow" class="workflow-link">
+              <i class="fas fa-info-circle"></i> View complete workflow & rules
+            </a>
+          </div>
+        </div>
 
-          <div class="form-group">
-            <label for="login-email">Email</label>
-            <input type="email" id="login-email" name="email" required />
+        <!-- ======== SIGN IN FORM (Default View) ======== -->
+        <form class="auth-form active" id="signin-form">
+          <div class="form-header">
+            <h2>Welcome Back</h2>
+            <p class="form-subtitle">Sign in to your BorrowBox account</p>
           </div>
 
           <div class="form-group">
-            <label for="login-password">Password</label>
-            <input
-              type="password"
-              id="login-password"
-              name="password"
-              required
-            />
+            <label for="signin-email">College Email</label>
+            <div class="input-wrapper">
+              <i class="fas fa-envelope"></i>
+              <input 
+                type="email" 
+                id="signin-email" 
+                name="email" 
+                placeholder="yourname@college.edu"
+                required 
+              />
+            </div>
+            <span class="input-hint">Use your official college email only</span>
           </div>
 
-          <button type="submit" class="form-submit-btn">Login</button>
+          <div class="form-group">
+            <label for="signin-password">Password</label>
+            <div class="input-wrapper">
+              <i class="fas fa-lock"></i>
+              <input
+                type="password"
+                id="signin-password"
+                name="password"
+                placeholder="Enter your password"
+                required
+              />
+              <button type="button" class="toggle-password" data-target="signin-password">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+          </div>
 
-          <div class="auth-links">
-            <a href="#">Forgot Password?</a>
+          <div class="form-footer-links">
+            <a href="#forgot-password" class="forgot-link">Forgot Password?</a>
+          </div>
+
+          <button type="submit" class="form-submit-btn">
+            <span>Sign In</span>
+            <i class="fas fa-arrow-right"></i>
+          </button>
+
+          <div class="form-divider">
+            <span>or</span>
           </div>
 
           <div class="toggle-link">
-            <p>
-              Don't have an account? <a href="#" id="show-signup">Sign Up</a>
-            </p>
+            <p>Don't have an account? <a href="#" id="show-signup" class="switch-link">Create Account</a></p>
           </div>
         </form>
 
-        <!-- ======== SIGNUP FORM (Hidden by default) ======== -->
+        <!-- ======== SIGN UP FORM (Hidden by default) ======== -->
         <form class="auth-form" id="signup-form">
-          <h2>Create Account</h2>
-
-          <div class="form-group">
-            <label for="signup-name">Full Name</label>
-            <input type="text" id="signup-name" name="name" required />
+          <div class="form-header">
+            <h2>Create Account</h2>
+            <p class="form-subtitle">Join your campus rental community</p>
           </div>
 
-          <div class="form-group">
-            <label for="signup-email">Email</label>
-            <input type="email" id="signup-email" name="email" required />
+          <!-- Step Indicator -->
+          <div class="step-indicator">
+            <div class="step active" data-step="1">
+              <div class="step-number">1</div>
+              <span>Details</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" data-step="2">
+              <div class="step-number">2</div>
+              <span>Verify</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" data-step="3">
+              <div class="step-number">3</div>
+              <span>Complete</span>
+            </div>
           </div>
 
-          <div class="form-group">
-            <label for="signup-password">Password</label>
-            <input
-              type="password"
-              id="signup-password"
-              name="password"
-              required
-            />
+          <!-- Step 1: Basic Details -->
+          <div class="form-step active" data-step="1">
+            <div class="form-group">
+              <label for="signup-name">Full Name</label>
+              <div class="input-wrapper">
+                <i class="fas fa-user"></i>
+                <input 
+                  type="text" 
+                  id="signup-name" 
+                  name="name"
+                  placeholder="John Doe"
+                  required 
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="signup-email">College Email</label>
+              <div class="input-wrapper">
+                <i class="fas fa-envelope"></i>
+                <input 
+                  type="email" 
+                  id="signup-email" 
+                  name="email"
+                  placeholder="yourname@college.edu"
+                  required 
+                />
+              </div>
+              <span class="input-hint">
+                <i class="fas fa-info-circle"></i> 
+                Must be an official college email address
+              </span>
+            </div>
+
+            <div class="form-group">
+              <label for="signup-phone">Phone Number</label>
+              <div class="input-wrapper">
+                <i class="fas fa-phone"></i>
+                <input 
+                  type="tel" 
+                  id="signup-phone" 
+                  name="phone"
+                  placeholder="+1 (555) 000-0000"
+                  required 
+                />
+              </div>
+            </div>
+
+            <button type="button" class="form-submit-btn" id="next-step-1">
+              <span>Continue</span>
+              <i class="fas fa-arrow-right"></i>
+            </button>
           </div>
 
-          <button type="submit" class="form-submit-btn">Create Account</button>
+          <!-- Step 2: OTP Verification -->
+          <div class="form-step" data-step="2">
+            <div class="verification-notice">
+              <i class="fas fa-envelope-open-text"></i>
+              <h3>Verify Your Email</h3>
+              <p>We've sent a verification code to <strong id="verify-email-display"></strong></p>
+            </div>
+
+            <div class="form-group">
+              <label for="otp-input">Enter OTP</label>
+              <div class="otp-input-group">
+                <input type="text" maxlength="1" class="otp-digit" data-index="0" />
+                <input type="text" maxlength="1" class="otp-digit" data-index="1" />
+                <input type="text" maxlength="1" class="otp-digit" data-index="2" />
+                <input type="text" maxlength="1" class="otp-digit" data-index="3" />
+                <input type="text" maxlength="1" class="otp-digit" data-index="4" />
+                <input type="text" maxlength="1" class="otp-digit" data-index="5" />
+              </div>
+              <span class="input-hint">
+                Didn't receive code? <a href="#" class="resend-otp">Resend OTP</a>
+              </span>
+            </div>
+
+            <div class="button-group">
+              <button type="button" class="form-submit-btn secondary" id="back-step-2">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back</span>
+              </button>
+              <button type="button" class="form-submit-btn" id="verify-otp">
+                <span>Verify</span>
+                <i class="fas fa-check"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 3: Password & Agreement -->
+          <div class="form-step" data-step="3">
+            <div class="form-group">
+              <label for="signup-password">Password</label>
+              <div class="input-wrapper">
+                <i class="fas fa-lock"></i>
+                <input
+                  type="password"
+                  id="signup-password"
+                  name="password"
+                  placeholder="Create a strong password"
+                  required
+                />
+                <button type="button" class="toggle-password" data-target="signup-password">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+              <div class="password-strength">
+                <div class="strength-bar">
+                  <div class="strength-progress"></div>
+                </div>
+                <span class="strength-text">Password strength: <strong>-</strong></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="signup-confirm-password">Confirm Password</label>
+              <div class="input-wrapper">
+                <i class="fas fa-lock"></i>
+                <input
+                  type="password"
+                  id="signup-confirm-password"
+                  name="confirm-password"
+                  placeholder="Re-enter your password"
+                  required
+                />
+                <button type="button" class="toggle-password" data-target="signup-confirm-password">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-group checkbox-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="terms-agreement" required />
+                <span class="checkbox-custom"></span>
+                <span class="checkbox-text">
+                  I agree to BorrowBox's <a href="#terms" target="_blank">Terms of Service</a> 
+                  and <a href="#rules" target="_blank">Community Rules</a>
+                </span>
+              </label>
+            </div>
+
+            <div class="button-group">
+              <button type="button" class="form-submit-btn secondary" id="back-step-3">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back</span>
+              </button>
+              <button type="submit" class="form-submit-btn">
+                <span>Create Account</span>
+                <i class="fas fa-check-circle"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-divider">
+            <span>or</span>
+          </div>
 
           <div class="toggle-link">
-            <p>
-              Already have an account? <a href="#" id="show-login">Login</a>
-            </p>
+            <p>Already have an account? <a href="#" id="show-signin" class="switch-link">Sign In</a></p>
           </div>
         </form>
+
       </div>
     </main>
-    <footer class="site-footer">
+
+    <!-- Footer -->
+    <footer class="site-footer" id="Contact">
       <div class="footer-container">
         <div class="footer-main">
           <div class="footer-column">
             <h4>BorrowBox</h4>
             <p>
               The easiest way for college students to rent or borrow items from
-              fellow students. Save money, reduce waste.
+              fellow students. Save money, reduce waste, build community.
             </p>
+            <div
+              id="SocailIcons"
+              style="justify-content: flex-start; margin-top: 1rem"
+            >
+              <div class="icons instaIcon">
+                <div class="icon insta">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    height=""
+                    width="35"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                    class="w-6 h-6 text-gray-800 dark:text-white"
+                  >
+                    <path
+                      clip-rule="evenodd"
+                      d="M3 8a5 5 0 0 1 5-5h8a5 5 0 0 1 5 5v8a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V8Zm5-3a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3H8Zm7.597 2.214a1 1 0 0 1 1-1h.01a1 1 0 1 1 0 2h-.01a1 1 0 0 1-1-1ZM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm-5 3a5 5 0 1 1 10 0 5 5 0 0 1-10 0Z"
+                      fill-rule="evenodd"
+                      fill="currentColor"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="icons linkedin">
+                <div class="icon link">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="35"
+                    height=""
+                    viewBox="0 0 24 24"
+                    style="fill: rgba(0, 0, 0, 1)"
+                  >
+                    <circle
+                      cx="4.983"
+                      cy="5.009"
+                      r="2.188"
+                      fill="currentColor"
+                    ></circle>
+                    <path
+                      d="M9.237 8.855v12.139h3.769v-6.003c0-1.584.298-3.118 2.262-3.118 1.937 0 1.961 1.811 1.961 3.218v5.904H21v-6.657c0-3.27-.704-5.783-4.526-5.783-1.835 0-3.065 1.007-3.568 1.96h-.051v-1.66H9.237zm-6.142 0H6.87v12.139H3.095z"
+                      fill="currentColor"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="icons whatsapp">
+                <div class="icon whats">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="35"
+                    height=""
+                    viewBox="0 0 24 24"
+                    style="fill: rgba(0, 0, 0, 1)"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M18.403 5.633A8.919 8.919 0 0 0 12.053 3c-4.948 0-8.976 4.027-8.978 8.977 0 1.582.413 3.126 1.198 4.488L3 21.116l4.759-1.249a8.981 8.981 0 0 0 4.29 1.093h.004c4.947 0 8.975-4.027 8.977-8.977a8.926 8.926 0 0 0-2.627-6.35m-6.35 13.812h-.003a7.446 7.446 0 0 1-3.798-1.041l-.272-.162-2.824.741.753-2.753-.177-.282a7.448 7.448 0 0 1-1.141-3.971c.002-4.114 3.349-7.461 7.465-7.461a7.413 7.413 0 0 1 5.275 2.188 7.42 7.42 0 0 1 2.183 5.279c-.002 4.114-3.349 7.462-7.461 7.462m4.093-5.589c-.225-.113-1.327-.655-1.533-.73-.205-.075-.354-.112-.504.112s-.58.729-.711.879-.262.168-.486.056-.947-.349-1.804-1.113c-.667-.595-1.117-1.329-1.248-1.554s-.014-.346.099-.458c.101-.1.224-.262.336-.393.112-.131.149-.224.224-.374s.038-.281-.019-.393c-.056-.113-.505-1.217-.692-1.666-.181-.435-.366-.377-.504-.383a9.65 9.65 0 0 0-.429-.008.826.826 0 0 0-.599.28c-.206.225-.785.767-.785 1.871s.804 2.171.916 2.321c.112.15 1.582 2.415 3.832 3.387.536.231.954.369 1.279.473.537.171 1.026.146 1.413.089.431-.064 1.327-.542 1.514-1.066.187-.524.187-.973.131-1.067-.056-.094-.207-.151-.43-.263"
+                      fill="currentColor"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="icons youtube">
+                <div class="icon tube">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="35"
+                    height=""
+                    viewBox="0 0 24 24"
+                    style="fill: rgba(0, 0, 0, 1)"
+                  >
+                    <path
+                      d="M21.593 7.203a2.506 2.506 0 0 0-1.762-1.766C18.265 5.007 12 5 12 5s-6.264-.007-7.831.404a2.56 2.56 0 0 0-1.766 1.778c-.413 1.566-.417 4.814-.417 4.814s-.004 3.264.406 4.814c.23.857.905 1.534 1.763 1.765 1.582.43 7.83.437 7.83.437s6.265.007 7.831-.403a2.515 2.515 0 0 0 1.767-1.763c.414-1.565.417-4.812.417-4.812s.02-3.265-.407-4.831zM9.996 15.005l.005-6 5.207 3.005-5.212 2.995z"
+                      fill="currentColor"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="footer-column">
             <h4>Quick Links</h4>
             <ul>
-              <li><a href="#">Categories</a></li>
-              <li><a href="#">Featured Products</a></li>
+              <li><a href="#Categories">Categories</a></li>
+              <li><a href="#Products">Featured Products</a></li>
               <li><a href="#">How It Works</a></li>
-              <li><a href="#">My Account</a></li>
             </ul>
           </div>
 
@@ -127,7 +406,6 @@
             <h4>Support</h4>
             <ul>
               <li><a href="#">Contact Us</a></li>
-              <li><a href="#">FAQ</a></li>
               <li><a href="#">Terms of Service</a></li>
               <li><a href="#">Privacy Policy</a></li>
             </ul>
@@ -135,9 +413,9 @@
 
           <div class="footer-column">
             <h4>Stay Updated</h4>
-            <p>Get news and updates about new items.</p>
+            <p>Get news and updates about new items and features.</p>
             <form class="newsletter-form">
-              <input type="email" placeholder="Enter your email" />
+              <input type="email" placeholder="Enter your email" required />
               <button type="submit">Subscribe</button>
             </form>
           </div>
@@ -145,22 +423,13 @@
 
         <div class="footer-bottom">
           <div class="footer-copyright">
-            &copy; 2025 BorrowBox. All rights reserved.
-          </div>
-          <div class="footer-socials">
-            <a href="#" aria-label="Facebook"
-              ><i class="fab fa-facebook-f"></i
-            ></a>
-            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-            <a href="#" aria-label="Instagram"
-              ><i class="fab fa-instagram"></i
-            ></a>
+            &copy; 2026 BorrowBox. All rights reserved.
           </div>
         </div>
       </div>
     </footer>
 
-    <!-- Link to your EXISTING main.js file -->
-    <script src="../static/js/main.js"></script>
+    <!-- JavaScript -->
+    <script src="../static/js/login.js"></script>
   </body>
 </html>
