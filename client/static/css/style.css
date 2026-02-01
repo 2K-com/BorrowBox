@@ -173,8 +173,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 0 42px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: var(--glass-blur);
+  background: rgba(225, 225, 225, 0.98);
   border: 1px solid var(--border-light);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   border-radius: var(--radius-xl);
@@ -185,11 +184,10 @@ body {
     border-radius 0.45s ease,
     transform 0.45s ease,
     box-shadow 0.45s ease;
-
   transform: scale(0.97);
   margin-inline: auto;
-
 }
+
 
 .navbar.navbar-scrolled {
   top: 0;
@@ -199,7 +197,10 @@ body {
   /* subtle softness */
   transform: scale(1);
   box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15);
-  background: rgba(255, 255, 255, 0.98);
+  background:none;
+  border:none;
+  backdrop-filter: var(--glass-blur);
+  padding-left:60px;
 }
 
 
@@ -717,6 +718,7 @@ body {
 }
 
 .step:hover .step-number::before {
+  animation-play-state: running;
   animation: pulse 2s;
 }
 
@@ -810,8 +812,9 @@ body {
   font-weight: var(--fw-semibold);
   font-family: var(--font-main);
   color: var(--white);
-  background: linear-gradient(135deg, var(--tertiary-color), var(--accent-blue-dark));
-  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: var(--glass-blur);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: var(--radius-full);
   text-decoration: none;
   transition: all var(--transition-base);
