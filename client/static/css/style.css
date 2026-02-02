@@ -336,10 +336,14 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 0 6%;
+  margin:5%;
   position: relative;
   overflow: relative;
   gap: 4rem;
   min-height: 100vh;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  backdrop-filter: var(--glass-blur);
 }
 
 .hero-content {
