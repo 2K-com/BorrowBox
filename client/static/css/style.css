@@ -525,13 +525,12 @@ body {
 
 /* ========== REDESIGNED HOW IT WORKS SECTION ========== */
 .how-it-works {
-  backdrop-filter: var(--glass-blur);
+  background: transparent;
   padding: var(--space-xxxl) 0;
   font-family: var(--font-main);
   position: relative;
   overflow: hidden;
   padding-top: 10px;
-  border-top: 2px solid black;
 }
 
 .how-it-works .container {
@@ -544,13 +543,13 @@ body {
 .how-it-works-header {
   text-align: center;
   margin-bottom: var(--space-xxxl);
-  color:var(--accent-blue-dark);
+  color: var(--white);
 }
 
 .how-it-works h2 {
   font-size: var(--fs-xl);
   font-weight: var(--fw-bold);
-  color: var(--accent-blue-dark);
+  color: var(--white);
   margin-bottom: var(--space-sm);
   letter-spacing: -0.5px;
   position: relative;
@@ -625,7 +624,7 @@ body {
 
 /* Step Card */
 .step {
-  background: var(--bg-gradient);
+  background: rgba(255, 255, 255, 0.95);
   border-radius: var(--radius-lg);
   padding: 2rem 1.5rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
