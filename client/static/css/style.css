@@ -189,19 +189,7 @@ body {
 }
 
 
-.navbar.navbar-scrolled {
-  top: 0;
-  left: 0;
-  width: 100%;
-  border-radius: 0;
-  /* subtle softness */
-  transform: scale(1);
-  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15);
-  background:none;
-  border:none;
-  backdrop-filter: var(--glass-blur);
-  padding-left:60px;
-}
+
 
 
 .navbar:hover {
