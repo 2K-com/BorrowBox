@@ -1,0 +1,314 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg-gradient);
+  color: var(--text-primary);
+  font-family: var(--font-secondary);
+  font-size: var(--fs-base);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ========== FLOATING BACKGROUND ========== */
+.floating-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.shape {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.08;
+  background: var(--white);
+  animation: float 25s infinite ease-in-out;
+}
+
+.shape-1 {
+  width: 300px;
+  height: 300px;
+  top: 10%;
+  left: -100px;
+  animation-duration: 30s;
+}
+
+.shape-2 {
+  width: 200px;
+  height: 200px;
+  top: 60%;
+  right: -50px;
+  animation-duration: 35s;
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+}
+
+.shape-3 {
+  width: 150px;
+  height: 150px;
+  top: 35%;
+  right: 15%;
+  animation-duration: 40s;
+}
+
+.shape-4 {
+  width: 100px;
+  height: 100px;
+  bottom: 15%;
+  left: 25%;
+  animation-duration: 28s;
+}
+
+.shape-5 {
+  width: 400px;
+  height: 400px;
+  top: -150px;
+  right: -150px;
+  background: radial-gradient(circle, var(--white) 0%, transparent 70%);
+  opacity: 0.06;
+  animation: floatReverse 45s infinite ease-in-out;
+}
+
+.ring-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  /* Behind everything */
+  overflow: hidden;
+  pointer-events: none;
+  /* Won't block clicks on buttons */
+}
+
+.floating-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid rgba(205, 223, 255, 0.573);
+  /* Accent Blue Dark */
+  box-shadow: 0 0 15px rgba(124, 155, 208, 0.1),
+    inset 0 0 10px rgba(124, 155, 208, 0.1);
+  background: transparent;
+  animation: float-around linear infinite;
+}
+
+/* Glassy Inner Ring (Optional detail) */
+.floating-ring::after {
+  content: '';
+  position: absolute;
+  inset: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  backdrop-filter: blur(2px);
+}
+
+@keyframes float-around {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-30px) rotate(180deg);
+  }
+
+  100% {
+    transform: translateY(0) rotate(360deg);
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  33% {
+    transform: translate(40px, -60px) rotate(15deg);
+  }
+
+  66% {
+    transform: translate(-30px, 30px) rotate(-10deg);
+  }
+}
+
+@keyframes floatReverse {
+
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  33% {
+    transform: translate(-40px, 60px) rotate(-15deg);
+  }
+
+  66% {
+    transform: translate(30px, -30px) rotate(10deg);
+  }
+}
+
+.navbar {
+  position: sticky;
+  top: 20px;
+  left: 50px;
+  width: 94%;
+  height: 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 42px;
+  background: rgba(225, 225, 225, 0.98);
+  border: 1px solid var(--border-light);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border-radius: var(--radius-xl);
+  z-index: 1000;
+  transition:
+    top 0.45s ease,
+    width 0.45s ease,
+    border-radius 0.45s ease,
+    transform 0.45s ease,
+    box-shadow 0.45s ease;
+  transform: scale(0.97);
+  margin-inline: auto;
+}
+
+.navbar:hover {
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.12);
+}
+
+.nav-left {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.nav-left li a {
+  text-decoration: none;
+  color: var(--text-primary);
+  font-weight: var(--fw-med);
+  font-size: var(--fs-base);
+  position: relative;
+  padding: 0.5rem 0;
+  transition: var(--transition-base);
+}
+
+.nav-left li a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primary-color);
+  transition: width var(--transition-base);
+}
+
+.nav-left li a:hover {
+  color: var(--primary-color);
+}
+
+.nav-left li a:hover::after {
+  width: 100%;
+}
+
+.nav-center {
+  margin-right: 230px;
+}
+
+.nav-center h1 {
+  font-size: 1.75rem;
+  font-weight: var(--fw-bold);
+  font-family: var(--font-main);
+  color: var(--primary-color);
+  letter-spacing: -0.5px;
+}
+
+.nav-right .login-btn {
+  position: relative;
+  /* Required for the pseudo-element position */
+  overflow: hidden;
+  /* Keeps the fill inside the rounded corners */
+  z-index: 1;
+  /* Ensures text stays above the background */
+  padding: 8px 25px;
+  border-radius: var(--radius-lg);
+  background: transparent;
+  border: 2px solid var(--primary-color);
+  /* Using primary color */
+  color: var(--primary-dark);
+  cursor: pointer;
+  font-weight: var(--fw-med);
+  transition: color 0.4s ease, transform 0.3s ease;
+  font-family: var(--font-secondary);
+  /* Matches your nav links */
+}
+
+.nav-right .login-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  /* Starts empty */
+  height: 100%;
+  background-color: var(--primary-color);
+  /* Your emerald green */
+  z-index: -1;
+  /* Sits behind the text */
+  transition: width 0.4s ease-in-out;
+}
+
+/* Hover States */
+.nav-right .login-btn:hover {
+  color: var(--tertiary-light);
+  /* Text color when background fills */
+  transform: scale(1.05);
+  border: none;
+  border-color: var(--primary-color);
+  /* Keeps border matched */
+}
+
+.nav-right .login-btn:hover::before {
+  width: 100%;
+  /* Fills from left to right */
+}
+
+
+
+/* Mobile Navbar */
+@media (max-width: 768px) {
+  .navbar {
+    width: calc(100% - 2rem);
+    padding: 0 1.5rem;
+    height: 60px;
+  }
+
+  .nav-left {
+    display: none;
+  }
+
+  .nav-center h1 {
+    font-size: 1.4rem;
+  }
+
+  .nav-right .login-btn {
+    padding: 0.6rem 1.5rem;
+    font-size: 0.85rem;
+  }
+}

@@ -188,10 +188,6 @@ body {
   margin-inline: auto;
 }
 
-
-
-
-
 .navbar:hover {
   box-shadow: 0 6px 30px rgba(0, 0, 0, 0.12);
 }
@@ -323,15 +319,15 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 6%;
-  margin:5%;
+  padding: 0 2%;
+  margin-left:4%;
+  margin-right:4%;
+  margin-bottom:0%;
+  margin-top:none;
   position: relative;
   overflow: relative;
   gap: 4rem;
   min-height: 100vh;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 20px;
-  backdrop-filter: var(--glass-blur);
 }
 
 .hero-content {
@@ -531,12 +527,13 @@ body {
 
 /* ========== REDESIGNED HOW IT WORKS SECTION ========== */
 .how-it-works {
-  background: transparent;
+  backdrop-filter: var(--glass-blur);
   padding: var(--space-xxxl) 0;
   font-family: var(--font-main);
   position: relative;
   overflow: hidden;
   padding-top: 10px;
+  border-top: 2px solid black;
 }
 
 .how-it-works .container {
@@ -549,12 +546,13 @@ body {
 .how-it-works-header {
   text-align: center;
   margin-bottom: var(--space-xxxl);
+  color:var(--accent-blue-dark);
 }
 
 .how-it-works h2 {
   font-size: var(--fs-xl);
   font-weight: var(--fw-bold);
-  color: var(--white);
+  color: var(--accent-blue-dark);
   margin-bottom: var(--space-sm);
   letter-spacing: -0.5px;
   position: relative;
@@ -629,14 +627,13 @@ body {
 
 /* Step Card */
 .step {
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--bg-gradient);
   border-radius: var(--radius-lg);
   padding: 2rem 1.5rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   text-align: center;
   transition: all var(--transition-base);
   position: relative;
-  border: 2px solid transparent;
   cursor: pointer;
   display: flex;
   flex-direction: column;
