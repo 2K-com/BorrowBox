@@ -1003,7 +1003,7 @@ body {
 }
 
 .category-card:hover .category-icon-wrapper {
-  transform: scale(1.1) rotate(-5deg);
+  transform: scale(1.1);
   box-shadow: 0 8px 20px rgba(109, 144, 185, 0.3);
 }
 
@@ -1041,6 +1041,7 @@ body {
 
 .category-card:hover h3 {
   color: var(--quaternary-color);
+
 }
 
 .category-description {
@@ -1097,8 +1098,29 @@ body {
 /* Featured Category Styling */
 .category-card.featured {
   grid-column: span 2;
-  background: linear-gradient(135deg, rgba(109, 144, 185, 0.1), rgba(187, 199, 220, 0.1));
+  background: linear-gradient(135deg, rgba(109, 144, 185, 0.5), rgba(188, 199, 220, 0.3)), url('../images/electronicsBg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   border: 2px solid var(--accent-blue);
+  color: var(--white);
+}
+
+.category-card.featured h3,
+.category-card.featured .category-description,
+.category-card.featured .category-count,
+.category-card.featured .category-arrow {
+  color: var(--white);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.category-card.featured .category-icon-wrapper {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+}
+
+.category-card.featured .category-footer {
+  border-top-color: rgba(255, 255, 255, 0.3);
 }
 
 .category-card.featured .category-icon-wrapper {
