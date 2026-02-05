@@ -172,178 +172,148 @@ function initHowItWorks() {
     });
 }
 
-// Enhanced Carousel functionality with improved animations
-function initCarousel() {
-    const slides = document.querySelectorAll('.carousel-slide');
-    const dots = document.querySelectorAll('.dot');
-    const prevBtn = document.getElementById('carousel-prev');
-    const nextBtn = document.getElementById('carousel-next');
 
-    if (slides.length === 0 || !prevBtn || !nextBtn) return;
+// ========== RECENTLY ADDED ITEMS RAIL SCROLL ==========
+function initRecentlyAddedRail() {
+    const itemsRail = document.getElementById('itemsRail');
+    const scrollLeftBtn = document.getElementById('scrollLeft');
+    const scrollRightBtn = document.getElementById('scrollRight');
 
-    let currentSlide = 0;
-    const slideCount = slides.length;
-    let autoPlayInterval;
+    if (!itemsRail || !scrollLeftBtn || !scrollRightBtn) return;
 
-    const showSlide = (n) => {
-        if (n >= slideCount) {
-            currentSlide = 0;
-        } else if (n < 0) {
-            currentSlide = slideCount - 1;
+    const scrollAmount = 300; // Pixels to scroll on button click
+    const autoSlideInterval = 2000; // Auto-slide every 2 seconds
+    let autoSlideTimer;
+    let isUserInteracting = false;
+
+    // Update button states based on scroll position
+    function updateScrollButtons() {
+        const maxScroll = itemsRail.scrollWidth - itemsRail.clientWidth;
+        const currentScroll = itemsRail.scrollLeft;
+
+        scrollLeftBtn.disabled = currentScroll <= 0;
+        scrollRightBtn.disabled = currentScroll >= maxScroll - 1;
+    }
+
+    // Auto-slide function
+    function autoSlide() {
+        if (isUserInteracting) return;
+
+        const maxScroll = itemsRail.scrollWidth - itemsRail.clientWidth;
+        const currentScroll = itemsRail.scrollLeft;
+
+        // If at the end, scroll back to start
+        if (currentScroll >= maxScroll - 1) {
+            itemsRail.scrollTo({
+                left: 0,
+                behavior: 'smooth'
+            });
         } else {
-            currentSlide = n;
-        }
-
-        slides.forEach(slide => slide.classList.remove('active'));
-        dots.forEach(dot => dot.classList.remove('active'));
-
-        slides[currentSlide].classList.add('active');
-        if (dots[currentSlide]) {
-            dots[currentSlide].classList.add('active');
-        }
-    };
-
-    // Button controls with haptic feedback
-    nextBtn.addEventListener('click', () => {
-        showSlide(currentSlide + 1);
-        resetAutoPlay();
-        // Add visual feedback
-        nextBtn.style.transform = 'scale(0.9)';
-        setTimeout(() => {
-            nextBtn.style.transform = 'scale(1)';
-        }, 100);
-    });
-
-    prevBtn.addEventListener('click', () => {
-        showSlide(currentSlide - 1);
-        resetAutoPlay();
-        // Add visual feedback
-        prevBtn.style.transform = 'scale(0.9)';
-        setTimeout(() => {
-            prevBtn.style.transform = 'scale(1)';
-        }, 100);
-    });
-
-    // Dot controls
-    dots.forEach(dot => {
-        dot.addEventListener('click', () => {
-            const slideIndex = parseInt(dot.getAttribute('data-slide'));
-            showSlide(slideIndex);
-            resetAutoPlay();
-        });
-    });
-
-    // Auto-play functionality
-    function startAutoPlay() {
-        autoPlayInterval = setInterval(() => {
-            showSlide(currentSlide + 1);
-        }, 5000);
-    }
-
-    function resetAutoPlay() {
-        clearInterval(autoPlayInterval);
-        startAutoPlay();
-    }
-
-    // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowLeft') {
-            showSlide(currentSlide - 1);
-            resetAutoPlay();
-        } else if (e.key === 'ArrowRight') {
-            showSlide(currentSlide + 1);
-            resetAutoPlay();
-        }
-    });
-
-    // Touch swipe support
-    let touchStartX = 0;
-    let touchEndX = 0;
-    const carouselContainer = document.querySelector('.carousel-container');
-
-    if (carouselContainer) {
-        carouselContainer.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches[0].screenX;
-        });
-
-        carouselContainer.addEventListener('touchend', (e) => {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        });
-
-        function handleSwipe() {
-            if (touchEndX < touchStartX - 50) {
-                showSlide(currentSlide + 1);
-                resetAutoPlay();
-            }
-            if (touchEndX > touchStartX + 50) {
-                showSlide(currentSlide - 1);
-                resetAutoPlay();
-            }
-        }
-
-        // Pause on hover
-        carouselContainer.addEventListener('mouseenter', () => {
-            clearInterval(autoPlayInterval);
-        });
-
-        carouselContainer.addEventListener('mouseleave', () => {
-            startAutoPlay();
-        });
-    }
-
-    // Start carousel
-    showSlide(0);
-    startAutoPlay();
-}
-
-// Enhanced product card interactions
-function initProductCards() {
-    const productCards = document.querySelectorAll('.product-card');
-
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry, index) => {
-            if (entry.isIntersecting) {
-                setTimeout(() => {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }, index * 80); // Stagger animation
-            }
-        });
-    }, observerOptions);
-
-    productCards.forEach(card => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(30px)';
-        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        observer.observe(card);
-
-        // Add click handler for View Details button
-        const viewBtn = card.querySelector('.card-btn');
-        if (viewBtn) {
-            viewBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const productName = card.querySelector('h4').textContent;
-                console.log(`Viewing details for: ${productName}`);
-                // Add your navigation or modal logic here
+            // Otherwise, scroll forward
+            itemsRail.scrollBy({
+                left: scrollAmount,
+                behavior: 'smooth'
             });
         }
+    }
 
-        // Add hover effect for card
-        card.addEventListener('mouseenter', () => {
-            card.style.zIndex = '10';
+    // Start auto-slide
+    function startAutoSlide() {
+        stopAutoSlide();
+        autoSlideTimer = setInterval(autoSlide, autoSlideInterval);
+    }
+
+    // Stop auto-slide
+    function stopAutoSlide() {
+        if (autoSlideTimer) {
+            clearInterval(autoSlideTimer);
+            autoSlideTimer = null;
+        }
+    }
+
+    // Reset auto-slide timer
+    function resetAutoSlide() {
+        isUserInteracting = true;
+        stopAutoSlide();
+
+        // Resume auto-slide after 2 seconds of no interaction
+        setTimeout(() => {
+            isUserInteracting = false;
+            startAutoSlide();
+        }, 2000);
+    }
+
+    // Scroll left
+    scrollLeftBtn.addEventListener('click', () => {
+        itemsRail.scrollBy({
+            left: -scrollAmount,
+            behavior: 'smooth'
         });
+        resetAutoSlide();
+    });
 
-        card.addEventListener('mouseleave', () => {
-            card.style.zIndex = '1';
+    // Scroll right
+    scrollRightBtn.addEventListener('click', () => {
+        itemsRail.scrollBy({
+            left: scrollAmount,
+            behavior: 'smooth'
+        });
+        resetAutoSlide();
+    });
+
+    // Pause auto-slide on hover
+    itemsRail.addEventListener('mouseenter', () => {
+        isUserInteracting = true;
+        stopAutoSlide();
+    });
+
+    // Resume auto-slide when mouse leaves
+    itemsRail.addEventListener('mouseleave', () => {
+        isUserInteracting = false;
+        startAutoSlide();
+    });
+
+    // Pause auto-slide on manual scroll
+    itemsRail.addEventListener('scroll', () => {
+        updateScrollButtons();
+
+        // If user manually scrolled, reset the timer
+        if (isUserInteracting) {
+            resetAutoSlide();
+        }
+    });
+
+    // Pause auto-slide on touch
+    itemsRail.addEventListener('touchstart', () => {
+        resetAutoSlide();
+    });
+
+    // Initial button state
+    updateScrollButtons();
+
+    // Update on window resize
+    window.addEventListener('resize', updateScrollButtons);
+
+    // Start auto-slide
+    startAutoSlide();
+
+    // Click handler for item cards
+    const itemCards = itemsRail.querySelectorAll('.rail-item-card');
+    itemCards.forEach(card => {
+        card.addEventListener('click', () => {
+            const itemName = card.querySelector('.rail-item-name').textContent;
+            console.log(`Clicked on: ${itemName}`);
+            // Add your navigation logic here
+            // Example: window.location.href = '/item-details?name=' + encodeURIComponent(itemName);
         });
     });
 }
+
+// Initialize on DOM load
+document.addEventListener('DOMContentLoaded', () => {
+    initRecentlyAddedRail();
+});
+
 
 // Add smooth parallax effect to carousel images
 function initParallaxEffect() {
