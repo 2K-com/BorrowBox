@@ -54,6 +54,7 @@ function initHowItWorks() {
                 steps.forEach((step, index) => {
                     setTimeout(() => {
                         step.style.opacity = '1';
+                        step.style.transform = 'translateY(0)';
                     }, index * 200);
                 });
             }
@@ -63,7 +64,8 @@ function initHowItWorks() {
     // Initial setup
     steps.forEach(step => {
         step.style.opacity = '0';
-        step.style.transition = 'opacity 0.6s ease';
+        step.style.transform = 'translateY(40px)';
+        step.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
     });
 
     // Observe the workflow container

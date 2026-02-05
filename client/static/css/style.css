@@ -539,7 +539,7 @@ body {
 
 /* ========== REDESIGNED HOW IT WORKS SECTION ========== */
 .how-it-works {
-  background: var(--white);
+  background: linear-gradient(180deg, var(--white) 0%, var(--accent-blue-light) 100%);
   padding: var(--space-xxxl) 0;
   font-family: var(--font-main);
   position: relative;
@@ -672,6 +672,7 @@ body {
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
   border-color: var(--accent-blue);
   transform: translateY(-5px);
+
 }
 
 .step:hover::before {
