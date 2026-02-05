@@ -958,7 +958,7 @@ body {
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, var(--quaternary-color), var(--accent-blue));
+  background: var(--tertiary-color);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -971,13 +971,13 @@ body {
 .category-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
-  border-color: var(--accent-blue);
+  border-color: var(--tertiary-color);
   background: var(--white);
 }
 
 .category-icon-wrapper {
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
   background: linear-gradient(135deg, var(--accent-blue-light), var(--accent-blue));
   border-radius: var(--radius-md);
   display: flex;
@@ -1012,11 +1012,10 @@ body {
 }
 
 .category-card img {
-  width: 45px;
-  height: 45px;
+  width: 80px;
+  height: 80px;
   object-fit: contain;
   transition: var(--transition-base);
-  filter: brightness(0) invert(1);
   position: relative;
   z-index: 1;
 }
@@ -1123,14 +1122,15 @@ body {
 }
 
 .category-card.featured .category-icon-wrapper {
-  width: 100px;
-  height: 100px;
+  width: 130px;
+  height: 130px;
   background: linear-gradient(135deg, var(--quaternary-color), var(--accent-blue-dark));
 }
 
 .category-card.featured img {
-  width: 55px;
-  height: 55px;
+  width: 100px;
+  height: 100px;
+  transform: rotate(-1deg);
 }
 
 .category-card.featured h3 {
