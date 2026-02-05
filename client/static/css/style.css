@@ -531,6 +531,7 @@ body {
   position: relative;
   overflow: hidden;
   padding-top: 10px;
+  padding-top: 10px;
 }
 
 .how-it-works .container {
@@ -544,11 +545,13 @@ body {
   text-align: center;
   margin-bottom: var(--space-xxxl);
   color: var(--white);
+  color: var(--white);
 }
 
 .how-it-works h2 {
   font-size: var(--fs-xl);
   font-weight: var(--fw-bold);
+  color: var(--white);
   color: var(--white);
   margin-bottom: var(--space-sm);
   letter-spacing: -0.5px;
@@ -565,12 +568,14 @@ body {
   width: 60px;
   height: 4px;
   background: linear-gradient(90deg, var(--accent-blue-dark), var(--accent-blue-light));
+  background: linear-gradient(90deg, var(--accent-blue-dark), var(--accent-blue-light));
   border-radius: 2px;
 }
 
 .how-it-works .subtitle {
   font-size: var(--fs-base);
   font-family: var(--font-secondary);
+  color: rgba(255, 255, 255, 0.85);
   color: rgba(255, 255, 255, 0.85);
   max-width: 600px;
   margin: 1.5rem auto 0;
@@ -592,6 +597,7 @@ body {
   right: 5%;
   height: 4px;
   background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.15);
   transform: translateY(-50%);
   z-index: 1;
   border-radius: var(--radius-full);
@@ -604,8 +610,10 @@ body {
   height: 100%;
   width: 0%;
   background: linear-gradient(90deg, var(--tertiary-color), var(--tertiary-light));
+  background: linear-gradient(90deg, var(--tertiary-color), var(--tertiary-light));
   border-radius: var(--radius-full);
   transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 20px rgba(124, 155, 208, 0.5);
   box-shadow: 0 0 20px rgba(124, 155, 208, 0.5);
 }
 
@@ -625,8 +633,10 @@ body {
 /* Step Card */
 .step {
   background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.95);
   border-radius: var(--radius-lg);
   padding: 2rem 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   text-align: center;
   transition: all var(--transition-base);
@@ -647,6 +657,7 @@ body {
   bottom: 0;
   border-radius: var(--radius-lg);
   background: linear-gradient(135deg, var(--accent-blue-dark), var(--accent-blue-light));
+  background: linear-gradient(135deg, var(--accent-blue-dark), var(--accent-blue-light));
   opacity: 0;
   transition: opacity var(--transition-base);
   z-index: -1;
@@ -661,6 +672,7 @@ body {
 }
 
 .step:hover::before {
+  opacity: 0.1;
   opacity: 0.1;
 }
 
@@ -681,15 +693,19 @@ body {
   border-radius: 50%;
   background: linear-gradient(135deg, var(--accent-blue-dark), var(--accent-blue-light));
   color: var(--white);
+  background: linear-gradient(135deg, var(--accent-blue-dark), var(--accent-blue-light));
+  color: var(--white);
   font-size: var(--fs-lg);
   font-weight: var(--fw-bold);
   position: relative;
+  box-shadow: 0 4px 16px rgba(124, 155, 208, 0.3);
   box-shadow: 0 4px 16px rgba(124, 155, 208, 0.3);
   transition: all var(--transition-base);
 }
 
 .step:hover .step-number {
   transform: scale(1.1);
+  box-shadow: 0 8px 24px rgba(124, 155, 208, 0.5);
   box-shadow: 0 8px 24px rgba(124, 155, 208, 0.5);
 }
 
@@ -701,7 +717,12 @@ body {
   left: -8px;
   right: -8px;
   bottom: -8px;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
   border-radius: 50%;
+  border: 2px solid var(--accent-blue-dark);
   border: 2px solid var(--accent-blue-dark);
   opacity: 0;
 }
@@ -770,6 +791,7 @@ body {
   width: 12px;
   height: 12px;
   background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.3);
   border-radius: 50%;
   transform: translateY(-50%);
   z-index: 3;
@@ -777,6 +799,9 @@ body {
 }
 
 .step:hover .connection-dot {
+  background: var(--accent-blue-dark);
+  box-shadow: 0 0 20px var(--accent-blue-dark);
+  transform: translateY(-50%) scale(1.5);
   background: var(--accent-blue-dark);
   box-shadow: 0 0 20px var(--accent-blue-dark);
   transform: translateY(-50%) scale(1.5);
@@ -804,9 +829,13 @@ body {
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: var(--glass-blur);
   border: 2px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: var(--glass-blur);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: var(--radius-full);
   text-decoration: none;
   transition: all var(--transition-base);
+  box-shadow: 0 4px 16px rgba(124, 155, 208, 0.3);
   box-shadow: 0 4px 16px rgba(124, 155, 208, 0.3);
   position: relative;
   overflow: hidden;
@@ -820,6 +849,7 @@ body {
   width: 100%;
   height: 100%;
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
   transition: 0.5s;
 }
 
@@ -829,6 +859,7 @@ body {
 
 .btn-workflow:hover {
   transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(124, 155, 208, 0.5);
   box-shadow: 0 8px 24px rgba(124, 155, 208, 0.5);
 }
 
