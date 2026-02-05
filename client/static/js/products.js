@@ -197,16 +197,16 @@ class Pagination {
     }
     
     init() {
-        // Render initial state
-        this.render();
-        
-        // Event listeners
-        this.prevBtn.addEventListener('click', () => this.goToPrevious());
-        this.nextBtn.addEventListener('click', () => this.goToNext());
-        
+        // Attach event listeners safely (elements may be missing)
+        if (this.prevBtn) this.prevBtn.addEventListener('click', () => this.goToPrevious());
+        if (this.nextBtn) this.nextBtn.addEventListener('click', () => this.goToNext());
+
         // Keyboard navigation
         document.addEventListener('keydown', (e) => this.handleKeyboard(e));
-        
+
+        // Render initial state
+        this.render();
+
         console.log('✓ Pagination initialized');
         console.log(`- Total pages: ${this.totalPages}`);
         console.log(`- Current page: ${this.currentPage}`);
@@ -328,8 +328,10 @@ class Pagination {
     updateInfo() {
         const start = (this.currentPage - 1) * this.itemsPerPage + 1;
         const end = Math.min(this.currentPage * this.itemsPerPage, this.totalItems);
-        
-        this.paginationText.textContent = `Showing ${start}-${end} of ${this.totalItems} items`;
+        // Guard in case the info container isn't present in the DOM
+        if (this.paginationText) {
+            this.paginationText.textContent = `Showing ${start}-${end} of ${this.totalItems} items`;
+        }
     }
     
     // Navigate to specific page
