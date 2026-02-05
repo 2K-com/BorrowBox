@@ -132,3 +132,41 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+const productGrid = document.getElementById('productGrid');
+
+const productData = {
+  name: "Nike Airforce1 Premium",
+  subtitle: "Own the Airforce",
+  desc: "Step back into classic hoops style with a durable leather.",
+  price: "$111",
+  img: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=500" // High quality sneaker image
+};
+
+function createCards() {
+  for (let i = 0; i < 20; i++) {
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    
+    card.innerHTML = `
+      <div class="image-container">
+        <span class="badge">Best Seller</span>
+        <img src="${productData.img}" alt="Product Image">
+      </div>
+      <div class="product-info">
+        <h3>${productData.name}</h3>
+        <p class="subtitle">${productData.subtitle}</p>
+        <p class="description">${productData.desc}</p>
+      </div>
+      <div class="card-footer">
+        <div class="price-tag">${productData.price}</div>
+        <button class="rent-btn">
+          Rent Now <i class="fas fa-external-link-alt"></i>
+        </button>
+      </div>
+    `;
+    productGrid.appendChild(card);
+  }
+}
+
+createCards();
