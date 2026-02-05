@@ -277,80 +277,204 @@
       </section>
 
       <!-- Carousel Section - Replace the existing carousel section with this -->
-      <section class="carousel-section">
-        <div class="carousel-header">
-          <span>Recently Added Items</span>
+      <!-- Recently Added Items Section - REDESIGNED -->
+      <section class="recently-added-section">
+        <div class="recently-added-header">
+          <div class="recently-added-title-group">
+            <h2>Recently Added Items</h2>
+            <p class="recently-added-subtitle">
+              Fresh arrivals from your campus community
+            </p>
+          </div>
+          <div class="recently-added-controls">
+            <button
+              class="scroll-arrow-btn scroll-left"
+              id="scrollLeft"
+              aria-label="Scroll left"
+            >
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <button
+              class="scroll-arrow-btn scroll-right"
+              id="scrollRight"
+              aria-label="Scroll right"
+            >
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
         </div>
 
-        <div class="carousel-wrapper">
-          <button
-            class="carousel-btn prev"
-            id="carousel-prev"
-            aria-label="Previous slide"
-          >
-            <i class="fas fa-chevron-left"></i>
-          </button>
-
-          <div class="carousel-container">
-            <div class="carousel-slide active">
-              <div class="slide-image-wrapper">
+        <div class="items-rail-container">
+          <div class="items-rail" id="itemsRail">
+            <!-- Item Card 1 -->
+            <div class="rail-item-card">
+              <div class="rail-item-image-wrapper">
+                <span class="rail-item-category">Electronics</span>
                 <img
                   src="../static/images/headphone.png"
-                  alt="Headphone"
-                  class="slide-image"
+                  alt="Premium Wireless Headphones"
+                  class="rail-item-image"
                 />
               </div>
-              <div class="slide-content">
-                <h3>Premium Wireless Headphones</h3>
-                <p>High-quality audio with noise cancellation</p>
-                <span class="slide-price">₹150 / day</span>
+              <div class="rail-item-info">
+                <h3 class="rail-item-name">Premium Wireless Headphones</h3>
+                <div class="rail-item-price">
+                  ₹150<span class="rail-item-price-label">/ day</span>
+                </div>
+                <div class="rail-item-footer">
+                  <span class="rail-item-availability">
+                    <span class="availability-dot"></span>
+                    Available
+                  </span>
+                  <span class="rail-item-cta">
+                    Rent <i class="fas fa-arrow-right"></i>
+                  </span>
+                </div>
               </div>
             </div>
 
-            <div class="carousel-slide">
-              <div class="slide-image-wrapper">
+            <!-- Item Card 2 -->
+            <div class="rail-item-card">
+              <div class="rail-item-image-wrapper">
+                <span class="rail-item-category">Clothing</span>
                 <img
                   src="../static/images/shoes.png"
-                  alt="Shoes"
-                  class="slide-image"
+                  alt="Sports Running Shoes"
+                  class="rail-item-image"
                 />
               </div>
-              <div class="slide-content">
-                <h3>Sports Running Shoes</h3>
-                <p>Comfortable and durable for all terrains</p>
-                <span class="slide-price">₹100 / day</span>
+              <div class="rail-item-info">
+                <h3 class="rail-item-name">Sports Running Shoes</h3>
+                <div class="rail-item-price">
+                  ₹100<span class="rail-item-price-label">/ day</span>
+                </div>
+                <div class="rail-item-footer">
+                  <span class="rail-item-availability">
+                    <span class="availability-dot"></span>
+                    Available
+                  </span>
+                  <span class="rail-item-cta">
+                    Rent <i class="fas fa-arrow-right"></i>
+                  </span>
+                </div>
               </div>
             </div>
 
-            <div class="carousel-slide">
-              <div class="slide-image-wrapper">
+            <!-- Item Card 3 -->
+            <div class="rail-item-card">
+              <div class="rail-item-image-wrapper">
+                <span class="rail-item-category">Clothing</span>
                 <img
                   src="../static/images/hoodie.png"
-                  alt="Hoodie"
-                  class="slide-image"
+                  alt="Comfortable Hoodie"
+                  class="rail-item-image"
                 />
               </div>
-              <div class="slide-content">
-                <h3>Comfortable Hoodie</h3>
-                <p>Perfect for cold weather and casual wear</p>
-                <span class="slide-price">₹80 / day</span>
+              <div class="rail-item-info">
+                <h3 class="rail-item-name">Comfortable Hoodie</h3>
+                <div class="rail-item-price">
+                  ₹80<span class="rail-item-price-label">/ day</span>
+                </div>
+                <div class="rail-item-footer">
+                  <span class="rail-item-availability">
+                    <span class="availability-dot"></span>
+                    Available
+                  </span>
+                  <span class="rail-item-cta">
+                    Rent <i class="fas fa-arrow-right"></i>
+                  </span>
+                </div>
               </div>
             </div>
 
-            <div class="carousel-dots">
-              <span class="dot active" data-slide="0"></span>
-              <span class="dot" data-slide="1"></span>
-              <span class="dot" data-slide="2"></span>
+            <!-- Item Card 4 -->
+            <div class="rail-item-card">
+              <div class="rail-item-image-wrapper">
+                <span class="rail-item-category">Electronics</span>
+                <img
+                  src="../static/images/headphone.png"
+                  alt="Bluetooth Speaker"
+                  class="rail-item-image"
+                />
+              </div>
+              <div class="rail-item-info">
+                <h3 class="rail-item-name">Bluetooth Speaker</h3>
+                <div class="rail-item-price">
+                  ₹70<span class="rail-item-price-label">/ day</span>
+                </div>
+                <div class="rail-item-footer">
+                  <span class="rail-item-availability">
+                    <span class="availability-dot"></span>
+                    Available
+                  </span>
+                  <span class="rail-item-cta">
+                    Rent <i class="fas fa-arrow-right"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Item Card 5 -->
+            <div class="rail-item-card">
+              <div class="rail-item-image-wrapper">
+                <span class="rail-item-category">Study Essentials</span>
+                <img
+                  src="../static/images/books.png"
+                  alt="Textbook Bundle"
+                  class="rail-item-image"
+                />
+              </div>
+              <div class="rail-item-info">
+                <h3 class="rail-item-name">Textbook Bundle</h3>
+                <div class="rail-item-price">
+                  ₹80<span class="rail-item-price-label">/ day</span>
+                </div>
+                <div class="rail-item-footer">
+                  <span class="rail-item-availability">
+                    <span class="availability-dot"></span>
+                    Available
+                  </span>
+                  <span class="rail-item-cta">
+                    Rent <i class="fas fa-arrow-right"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Item Card 6 -->
+            <div class="rail-item-card">
+              <div class="rail-item-image-wrapper">
+                <span class="rail-item-category">Appliances</span>
+                <img
+                  src="../static/images/appliances.png"
+                  alt="Electric Kettle"
+                  class="rail-item-image"
+                />
+              </div>
+              <div class="rail-item-info">
+                <h3 class="rail-item-name">Electric Kettle</h3>
+                <div class="rail-item-price">
+                  ₹40<span class="rail-item-price-label">/ day</span>
+                </div>
+                <div class="rail-item-footer">
+                  <span class="rail-item-availability">
+                    <span class="availability-dot"></span>
+                    Available
+                  </span>
+                  <span class="rail-item-cta">
+                    Rent <i class="fas fa-arrow-right"></i>
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
+        </div>
 
-          <button
-            class="carousel-btn next"
-            id="carousel-next"
-            aria-label="Next slide"
-          >
-            <i class="fas fa-chevron-right"></i>
-          </button>
+        <div class="recently-added-view-all">
+          <a href="#" class="view-all-items-btn">
+            View All Recent Items
+            <i class="fas fa-arrow-right"></i>
+          </a>
         </div>
       </section>
 
