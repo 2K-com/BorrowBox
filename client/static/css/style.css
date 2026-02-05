@@ -1164,6 +1164,24 @@ body {
   font-size: var(--fs-lg);
 }
 
+.study {
+  background: linear-gradient(135deg, rgba(109, 144, 185, 0.5), rgba(188, 199, 220, 0.3)), url('../images/booksBg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 2px solid var(--accent-blue);
+  color: var(--white);
+}
+
+.appliances {
+  background: linear-gradient(135deg, rgba(109, 144, 185, 0.5), rgba(188, 199, 220, 0.3)), url('../images/appliancesBg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 2px solid var(--accent-blue);
+  color: var(--white);
+}
+
 .view-button {
   display: flex;
   justify-content: center;
