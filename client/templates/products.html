@@ -28,6 +28,620 @@
       <div class="shape shape-4"></div>
       <div class="shape shape-5"></div>
     </div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+      <ul class="nav-left">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="#Categories">Categories</a></li>
+        <li><a href="products.html" class="active">Products</a></li>
+        <li><a href="#Contact">Contact</a></li>
+      </ul>
+
+      <div class="nav-center">
+        <h1>BorrowBox</h1>
+      </div>
+
+      <div class="nav-right">
+        <a href="login.html">
+          <button class="login-btn">Get Started</button>
+        </a>
+      </div>
+    </nav>
+
+    <div class="ring-container" id="ring-container"></div>
+
+    <main class="products-main">
+      <!-- Search and Filter Section -->
+      <section class="search-section">
+        <div class="search-container">
+          <div class="search-wrapper">
+            <!-- Filter Button -->
+            <button class="filter-toggle-btn" id="filterToggleBtn">
+              <i class="fas fa-sliders-h"></i>
+              <span>Filters</span>
+              <i class="fas fa-chevron-down toggle-icon"></i>
+            </button>
+
+            <!-- Search Bar -->
+            <div class="search-bar">
+              <i class="fas fa-search search-icon"></i>
+              <input
+                type="text"
+                placeholder="Search for items, categories, or keywords..."
+                class="search-input"
+                id="searchInput"
+              />
+              <button class="search-btn" id="searchBtn">Search</button>
+            </div>
+          </div>
+
+          <!-- Filter Dropdown -->
+          <div class="filter-dropdown" id="filterDropdown">
+            <div class="filter-content">
+              <!-- Category Filter -->
+              <div class="filter-group">
+                <h4 class="filter-title">
+                  <i class="fas fa-th-large"></i>
+                  Category
+                </h4>
+                <div class="filter-options">
+                  <label class="filter-option">
+                    <input
+                      type="checkbox"
+                      name="category"
+                      value="electronics"
+                    />
+                    <span class="checkmark"></span>
+                    <span class="option-label">Electronics</span>
+                  </label>
+                  <label class="filter-option">
+                    <input type="checkbox" name="category" value="appliances" />
+                    <span class="checkmark"></span>
+                    <span class="option-label">Appliances</span>
+                  </label>
+                  <label class="filter-option">
+                    <input type="checkbox" name="category" value="study" />
+                    <span class="checkmark"></span>
+                    <span class="option-label">Study Essentials</span>
+                  </label>
+                  <label class="filter-option">
+                    <input
+                      type="checkbox"
+                      name="category"
+                      value="accessories"
+                    />
+                    <span class="checkmark"></span>
+                    <span class="option-label">Accessories</span>
+                  </label>
+                  <label class="filter-option">
+                    <input type="checkbox" name="category" value="furniture" />
+                    <span class="checkmark"></span>
+                    <span class="option-label">Furniture</span>
+                  </label>
+                  <label class="filter-option">
+                    <input type="checkbox" name="category" value="clothing" />
+                    <span class="checkmark"></span>
+                    <span class="option-label">Clothing</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Price Range Filter -->
+              <div class="filter-group">
+                <h4 class="filter-title">
+                  <i class="fas fa-rupee-sign"></i>
+                  Price Range (per day)
+                </h4>
+                <div class="filter-options">
+                  <label class="filter-option">
+                    <input type="checkbox" name="price" value="0-50" />
+                    <span class="checkmark"></span>
+                    <span class="option-label">₹0 - ₹50</span>
+                  </label>
+                  <label class="filter-option">
+                    <input type="checkbox" name="price" value="51-100" />
+                    <span class="checkmark"></span>
+                    <span class="option-label">₹51 - ₹100</span>
+                  </label>
+                  <label class="filter-option">
+                    <input type="checkbox" name="price" value="101-200" />
+                    <span class="checkmark"></span>
+                    <span class="option-label">₹101 - ₹200</span>
+                  </label>
+                  <label class="filter-option">
+                    <input type="checkbox" name="price" value="201+" />
+                    <span class="checkmark"></span>
+                    <span class="option-label">₹201+</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Availability Filter -->
+              <div class="filter-group">
+                <h4 class="filter-title">
+                  <i class="fas fa-calendar-check"></i>
+                  Availability
+                </h4>
+                <div class="filter-options">
+                  <label class="filter-option">
+                    <input type="checkbox" name="availability" value="today" />
+                    <span class="checkmark"></span>
+                    <span class="option-label">Available Today</span>
+                  </label>
+                  <label class="filter-option">
+                    <input type="checkbox" name="availability" value="week" />
+                    <span class="checkmark"></span>
+                    <span class="option-label">This Week</span>
+                  </label>
+                  <label class="filter-option">
+                    <input type="checkbox" name="availability" value="month" />
+                    <span class="checkmark"></span>
+                    <span class="option-label">This Month</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Rating Filter -->
+              <div class="filter-group">
+                <h4 class="filter-title">
+                  <i class="fas fa-star"></i>
+                  Rating
+                </h4>
+                <div class="filter-options">
+                  <label class="filter-option">
+                    <input type="checkbox" name="rating" value="4+" />
+                    <span class="checkmark"></span>
+                    <span class="option-label">4+ Stars</span>
+                  </label>
+                  <label class="filter-option">
+                    <input type="checkbox" name="rating" value="3+" />
+                    <span class="checkmark"></span>
+                    <span class="option-label">3+ Stars</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Filter Actions -->
+              <div class="filter-actions">
+                <button class="clear-filters-btn" id="clearFiltersBtn">
+                  <i class="fas fa-times"></i>
+                  Clear All
+                </button>
+                <button class="apply-filters-btn" id="applyFiltersBtn">
+                  <i class="fas fa-check"></i>
+                  Apply Filters
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Active Filters Display -->
+      <section class="active-filters" id="activeFilters">
+        <!-- Active filter chips will be added here dynamically -->
+      </section>
+
+      <!-- Products Grid Section -->
+      <section class="products-grid-section">
+        <div class="products-header">
+          <h2>Available Products</h2>
+          <div class="sort-options">
+            <label for="sortSelect">Sort by:</label>
+            <select id="sortSelect" class="sort-select">
+              <option value="featured">Featured</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+              <option value="rating">Highest Rated</option>
+              <option value="newest">Newest First</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="products-grid" id="productsGrid">
+          <!-- Product Card 1 -->
+          <div
+            class="product-card"
+            data-category="electronics"
+            data-price="150"
+          >
+            <div class="card-image-wrapper">
+              <div class="card-image-placeholder"></div>
+              <span class="card-badge">Popular</span>
+              <button class="wishlist-btn">
+                <i class="far fa-heart"></i>
+              </button>
+            </div>
+            <div class="card-info">
+              <h4>Wireless Mouse</h4>
+              <p class="card-description">
+                Ergonomic design, perfect for long study sessions
+              </p>
+              <div class="card-meta">
+                <span class="card-price">₹50 / day</span>
+                <span class="card-rating">4.5 ⭐</span>
+              </div>
+              <div class="card-owner">
+                <img
+                  src="https://ui-avatars.com/api/?name=John+Doe&background=3685B5&color=fff"
+                  alt="Owner"
+                  class="owner-avatar"
+                />
+                <span class="owner-name">John Doe</span>
+              </div>
+              <div class="card-action">
+                <button class="card-btn">View Details</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card 2 -->
+          <div
+            class="product-card"
+            data-category="electronics"
+            data-price="100"
+          >
+            <div class="card-image-wrapper">
+              <div class="card-image-placeholder"></div>
+              <span class="card-badge badge-new">New</span>
+              <button class="wishlist-btn">
+                <i class="far fa-heart"></i>
+              </button>
+            </div>
+            <div class="card-info">
+              <h4>Gaming Controller</h4>
+              <p class="card-description">Compatible with PC and console</p>
+              <div class="card-meta">
+                <span class="card-price">₹100 / day</span>
+                <span class="card-rating">4.8 ⭐</span>
+              </div>
+              <div class="card-owner">
+                <img
+                  src="https://ui-avatars.com/api/?name=Sarah+Smith&background=6D90B9&color=fff"
+                  alt="Owner"
+                  class="owner-avatar"
+                />
+                <span class="owner-name">Sarah Smith</span>
+              </div>
+              <div class="card-action">
+                <button class="card-btn">View Details</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card 3 -->
+          <div
+            class="product-card"
+            data-category="electronics"
+            data-price="500"
+          >
+            <div class="card-image-wrapper">
+              <div class="card-image-placeholder"></div>
+              <span class="card-badge badge-featured">Featured</span>
+              <button class="wishlist-btn">
+                <i class="far fa-heart"></i>
+              </button>
+            </div>
+            <div class="card-info">
+              <h4>DSLR Camera</h4>
+              <p class="card-description">
+                Professional photography, events ready
+              </p>
+              <div class="card-meta">
+                <span class="card-price">₹500 / day</span>
+                <span class="card-rating">4.9 ⭐</span>
+              </div>
+              <div class="card-owner">
+                <img
+                  src="https://ui-avatars.com/api/?name=Mike+Wilson&background=D04049&color=fff"
+                  alt="Owner"
+                  class="owner-avatar"
+                />
+                <span class="owner-name">Mike Wilson</span>
+              </div>
+              <div class="card-action">
+                <button class="card-btn">View Details</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card 4 -->
+          <div class="product-card" data-category="study" data-price="30">
+            <div class="card-image-wrapper">
+              <div class="card-image-placeholder"></div>
+              <span class="card-badge">Popular</span>
+              <button class="wishlist-btn">
+                <i class="far fa-heart"></i>
+              </button>
+            </div>
+            <div class="card-info">
+              <h4>Study Lamp</h4>
+              <p class="card-description">
+                Adjustable brightness, eye-friendly
+              </p>
+              <div class="card-meta">
+                <span class="card-price">₹30 / day</span>
+                <span class="card-rating">4.3 ⭐</span>
+              </div>
+              <div class="card-owner">
+                <img
+                  src="https://ui-avatars.com/api/?name=Emma+Brown&background=FFCC95&color=393E41"
+                  alt="Owner"
+                  class="owner-avatar"
+                />
+                <span class="owner-name">Emma Brown</span>
+              </div>
+              <div class="card-action">
+                <button class="card-btn">View Details</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card 5 -->
+          <div class="product-card" data-category="appliances" data-price="40">
+            <div class="card-image-wrapper">
+              <div class="card-image-placeholder"></div>
+              <span class="card-badge badge-new">New</span>
+              <button class="wishlist-btn">
+                <i class="far fa-heart"></i>
+              </button>
+            </div>
+            <div class="card-info">
+              <h4>Electric Kettle</h4>
+              <p class="card-description">Quick boil, auto shut-off</p>
+              <div class="card-meta">
+                <span class="card-price">₹40 / day</span>
+                <span class="card-rating">4.6 ⭐</span>
+              </div>
+              <div class="card-owner">
+                <img
+                  src="https://ui-avatars.com/api/?name=Tom+Lee&background=393E41&color=FFCC95"
+                  alt="Owner"
+                  class="owner-avatar"
+                />
+                <span class="owner-name">Tom Lee</span>
+              </div>
+              <div class="card-action">
+                <button class="card-btn">View Details</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card 6 -->
+          <div class="product-card" data-category="study" data-price="80">
+            <div class="card-image-wrapper">
+              <div class="card-image-placeholder"></div>
+              <span class="card-badge">Popular</span>
+              <button class="wishlist-btn">
+                <i class="far fa-heart"></i>
+              </button>
+            </div>
+            <div class="card-info">
+              <h4>Textbook Bundle</h4>
+              <p class="card-description">Engineering semester books set</p>
+              <div class="card-meta">
+                <span class="card-price">₹80 / day</span>
+                <span class="card-rating">4.7 ⭐</span>
+              </div>
+              <div class="card-owner">
+                <img
+                  src="https://ui-avatars.com/api/?name=Lisa+Chen&background=BBC7DC&color=393E41"
+                  alt="Owner"
+                  class="owner-avatar"
+                />
+                <span class="owner-name">Lisa Chen</span>
+              </div>
+              <div class="card-action">
+                <button class="card-btn">View Details</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card 7 -->
+          <div class="product-card" data-category="electronics" data-price="70">
+            <div class="card-image-wrapper">
+              <div class="card-image-placeholder"></div>
+              <span class="card-badge badge-featured">Featured</span>
+              <button class="wishlist-btn">
+                <i class="far fa-heart"></i>
+              </button>
+            </div>
+            <div class="card-info">
+              <h4>Bluetooth Speaker</h4>
+              <p class="card-description">Portable, waterproof, 12hr battery</p>
+              <div class="card-meta">
+                <span class="card-price">₹70 / day</span>
+                <span class="card-rating">4.4 ⭐</span>
+              </div>
+              <div class="card-owner">
+                <img
+                  src="https://ui-avatars.com/api/?name=Alex+Kumar&background=6D90B9&color=fff"
+                  alt="Owner"
+                  class="owner-avatar"
+                />
+                <span class="owner-name">Alex Kumar</span>
+              </div>
+              <div class="card-action">
+                <button class="card-btn">View Details</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card 8 -->
+          <div
+            class="product-card"
+            data-category="accessories"
+            data-price="200"
+          >
+            <div class="card-image-wrapper">
+              <div class="card-image-placeholder"></div>
+              <span class="card-badge badge-new">New</span>
+              <button class="wishlist-btn">
+                <i class="far fa-heart"></i>
+              </button>
+            </div>
+            <div class="card-info">
+              <h4>Camping Tent</h4>
+              <p class="card-description">4-person, waterproof, easy setup</p>
+              <div class="card-meta">
+                <span class="card-price">₹200 / day</span>
+                <span class="card-rating">4.8 ⭐</span>
+              </div>
+              <div class="card-owner">
+                <img
+                  src="https://ui-avatars.com/api/?name=Ryan+Patel&background=D04049&color=fff"
+                  alt="Owner"
+                  class="owner-avatar"
+                />
+                <span class="owner-name">Ryan Patel</span>
+              </div>
+              <div class="card-action">
+                <button class="card-btn">View Details</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card 9 -->
+          <div
+            class="product-card"
+            data-category="electronics"
+            data-price="120"
+          >
+            <div class="card-image-wrapper">
+              <div class="card-image-placeholder"></div>
+              <span class="card-badge">Popular</span>
+              <button class="wishlist-btn">
+                <i class="far fa-heart"></i>
+              </button>
+            </div>
+            <div class="card-info">
+              <h4>Headphones</h4>
+              <p class="card-description">Noise-cancelling, premium sound</p>
+              <div class="card-meta">
+                <span class="card-price">₹120 / day</span>
+                <span class="card-rating">4.6 ⭐</span>
+              </div>
+              <div class="card-owner">
+                <img
+                  src="https://ui-avatars.com/api/?name=Nina+Shah&background=FFCC95&color=393E41"
+                  alt="Owner"
+                  class="owner-avatar"
+                />
+                <span class="owner-name">Nina Shah</span>
+              </div>
+              <div class="card-action">
+                <button class="card-btn">View Details</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card 10 -->
+          <div class="product-card" data-category="furniture" data-price="90">
+            <div class="card-image-wrapper">
+              <div class="card-image-placeholder"></div>
+              <span class="card-badge badge-featured">Featured</span>
+              <button class="wishlist-btn">
+                <i class="far fa-heart"></i>
+              </button>
+            </div>
+            <div class="card-info">
+              <h4>Study Desk</h4>
+              <p class="card-description">Compact, with storage drawer</p>
+              <div class="card-meta">
+                <span class="card-price">₹90 / day</span>
+                <span class="card-rating">4.5 ⭐</span>
+              </div>
+              <div class="card-owner">
+                <img
+                  src="https://ui-avatars.com/api/?name=Chris+Wong&background=3685B5&color=fff"
+                  alt="Owner"
+                  class="owner-avatar"
+                />
+                <span class="owner-name">Chris Wong</span>
+              </div>
+              <div class="card-action">
+                <button class="card-btn">View Details</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card 11 -->
+          <div class="product-card" data-category="clothing" data-price="60">
+            <div class="card-image-wrapper">
+              <div class="card-image-placeholder"></div>
+              <span class="card-badge badge-new">New</span>
+              <button class="wishlist-btn">
+                <i class="far fa-heart"></i>
+              </button>
+            </div>
+            <div class="card-info">
+              <h4>Winter Jacket</h4>
+              <p class="card-description">Warm, stylish, size M</p>
+              <div class="card-meta">
+                <span class="card-price">₹60 / day</span>
+                <span class="card-rating">4.7 ⭐</span>
+              </div>
+              <div class="card-owner">
+                <img
+                  src="https://ui-avatars.com/api/?name=Sophia+Lee&background=BBC7DC&color=393E41"
+                  alt="Owner"
+                  class="owner-avatar"
+                />
+                <span class="owner-name">Sophia Lee</span>
+              </div>
+              <div class="card-action">
+                <button class="card-btn">View Details</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card 12 -->
+          <div class="product-card" data-category="accessories" data-price="45">
+            <div class="card-image-wrapper">
+              <div class="card-image-placeholder"></div>
+              <span class="card-badge">Popular</span>
+              <button class="wishlist-btn">
+                <i class="far fa-heart"></i>
+              </button>
+            </div>
+            <div class="card-info">
+              <h4>Backpack</h4>
+              <p class="card-description">
+                Laptop compartment, water-resistant
+              </p>
+              <div class="card-meta">
+                <span class="card-price">₹45 / day</span>
+                <span class="card-rating">4.5 ⭐</span>
+              </div>
+              <div class="card-owner">
+                <img
+                  src="https://ui-avatars.com/api/?name=David+Kim&background=6D90B9&color=fff"
+                  alt="Owner"
+                  class="owner-avatar"
+                />
+                <span class="owner-name">David Kim</span>
+              </div>
+              <div class="card-action">
+                <button class="card-btn">View Details</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Load More Button -->
+        <div class="load-more-container">
+          <button class="load-more-btn" id="loadMoreBtn">
+            <span>Load More Products</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <!-- JavaScript -->
+    <script src="../static/js/main.js"></script>
+    =======
     <div class="ring-container" id="ring-container"></div>
 
     <!-- Navigation Bar -->
@@ -86,6 +700,7 @@
       </div>
     </nav>
 
+    >>>>>>> e5c5e2912eb03f88ab6561ba1535db5b9865f318
     <script src="../static/js/products.js"></script>
   </body>
 </html>
