@@ -192,6 +192,21 @@ body {
   box-shadow: 0 6px 30px rgba(0, 0, 0, 0.12);
 }
 
+.navbar.navbar-scrolled {
+  top: 0;
+  left: 0;
+  width: 100%;
+  border-radius: 0;
+  /* subtle softness */
+  transform: scale(1);
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15);
+  background: none;
+  border: none;
+  backdrop-filter: var(--glass-blur);
+  padding-left: 60px;
+}
+
+
 .nav-left {
   list-style: none;
   display: flex;
@@ -530,8 +545,6 @@ body {
   font-family: var(--font-main);
   position: relative;
   overflow: hidden;
-  padding-top: 10px;
-  padding-top: 10px;
 }
 
 .how-it-works .container {
@@ -544,15 +557,13 @@ body {
 .how-it-works-header {
   text-align: center;
   margin-bottom: var(--space-xxxl);
-  color: var(--white);
-  color: var(--white);
+  color: var(--text-primary);
 }
 
 .how-it-works h2 {
   font-size: var(--fs-xl);
   font-weight: var(--fw-bold);
-  color: var(--white);
-  color: var(--white);
+  color: var(--primary-dark);
   margin-bottom: var(--space-sm);
   letter-spacing: -0.5px;
   position: relative;
@@ -568,15 +579,13 @@ body {
   width: 60px;
   height: 4px;
   background: linear-gradient(90deg, var(--accent-blue-dark), var(--accent-blue-light));
-  background: linear-gradient(90deg, var(--accent-blue-dark), var(--accent-blue-light));
   border-radius: 2px;
 }
 
 .how-it-works .subtitle {
   font-size: var(--fs-base);
   font-family: var(--font-secondary);
-  color: rgba(255, 255, 255, 0.85);
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--text-secondary);
   max-width: 600px;
   margin: 1.5rem auto 0;
   line-height: 1.6;
@@ -596,8 +605,7 @@ body {
   left: 5%;
   right: 5%;
   height: 4px;
-  background: rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--border-light);
   transform: translateY(-50%);
   z-index: 1;
   border-radius: var(--radius-full);
@@ -610,10 +618,8 @@ body {
   height: 100%;
   width: 0%;
   background: linear-gradient(90deg, var(--tertiary-color), var(--tertiary-light));
-  background: linear-gradient(90deg, var(--tertiary-color), var(--tertiary-light));
   border-radius: var(--radius-full);
   transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 0 20px rgba(124, 155, 208, 0.5);
   box-shadow: 0 0 20px rgba(124, 155, 208, 0.5);
 }
 
@@ -632,12 +638,11 @@ body {
 
 /* Step Card */
 .step {
-  background: rgba(255, 255, 255, 0.95);
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--accent-blue-light);
+  border: 1px solid var(--border-light);
   border-radius: var(--radius-lg);
   padding: 2rem 1.5rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
   text-align: center;
   transition: all var(--transition-base);
   position: relative;
@@ -657,7 +662,6 @@ body {
   bottom: 0;
   border-radius: var(--radius-lg);
   background: linear-gradient(135deg, var(--accent-blue-dark), var(--accent-blue-light));
-  background: linear-gradient(135deg, var(--accent-blue-dark), var(--accent-blue-light));
   opacity: 0;
   transition: opacity var(--transition-base);
   z-index: -1;
@@ -672,7 +676,6 @@ body {
 }
 
 .step:hover::before {
-  opacity: 0.1;
   opacity: 0.1;
 }
 
@@ -691,21 +694,18 @@ body {
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent-blue-dark), var(--accent-blue-light));
-  color: var(--white);
-  background: linear-gradient(135deg, var(--accent-blue-dark), var(--accent-blue-light));
-  color: var(--white);
+  background: var(--white);
+  color: var(--quaternary-color);
+  border: 2px solid var(--accent-blue);
   font-size: var(--fs-lg);
   font-weight: var(--fw-bold);
   position: relative;
-  box-shadow: 0 4px 16px rgba(124, 155, 208, 0.3);
   box-shadow: 0 4px 16px rgba(124, 155, 208, 0.3);
   transition: all var(--transition-base);
 }
 
 .step:hover .step-number {
   transform: scale(1.1);
-  box-shadow: 0 8px 24px rgba(124, 155, 208, 0.5);
   box-shadow: 0 8px 24px rgba(124, 155, 208, 0.5);
 }
 
@@ -826,16 +826,11 @@ body {
   font-weight: var(--fw-semibold);
   font-family: var(--font-main);
   color: var(--white);
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: var(--glass-blur);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: var(--glass-blur);
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: var(--quaternary-color);
+  border: 2px solid transparent;
   border-radius: var(--radius-full);
   text-decoration: none;
   transition: all var(--transition-base);
-  box-shadow: 0 4px 16px rgba(124, 155, 208, 0.3);
   box-shadow: 0 4px 16px rgba(124, 155, 208, 0.3);
   position: relative;
   overflow: hidden;
@@ -849,7 +844,6 @@ body {
   width: 100%;
   height: 100%;
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
   transition: 0.5s;
 }
 
@@ -859,7 +853,6 @@ body {
 
 .btn-workflow:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(124, 155, 208, 0.5);
   box-shadow: 0 8px 24px rgba(124, 155, 208, 0.5);
 }
 
