@@ -40,7 +40,7 @@ function initHowItWorks() {
 
     // Observer for scroll animation
     const observerOptions = {
-        threshold: 0.3,
+        threshold: 0.1,
         rootMargin: '0px'
     };
 
@@ -48,12 +48,18 @@ function initHowItWorks() {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 // Animate connection line
-                connectionLine.classList.add('active');
+                if (connectionLine) {
+                    connectionLine.classList.add('active');
+                    // Force width calculation
+                    const fill = connectionLine.querySelector('.connection-line-fill');
+                    if (fill) fill.style.width = '100%';
+                }
 
                 // Stagger step animations
                 steps.forEach((step, index) => {
                     setTimeout(() => {
                         step.style.opacity = '1';
+                        step.style.transform = 'translateY(0)';
                     }, index * 200);
                 });
             }
@@ -63,8 +69,15 @@ function initHowItWorks() {
     // Initial setup
     steps.forEach(step => {
         step.style.opacity = '0';
-        step.style.transition = 'opacity 0.6s ease';
+        step.style.transform = 'translateY(40px)';
+        step.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
     });
+
+    // Initialize line width to 0 via JS (so it defaults to 100% if JS fails)
+    if (connectionLine) {
+        const fill = connectionLine.querySelector('.connection-line-fill');
+        if (fill) fill.style.width = '0%';
+    }
 
     // Observe the workflow container
     const workflowContainer = document.querySelector('.workflow-container');
