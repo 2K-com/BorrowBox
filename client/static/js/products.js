@@ -133,6 +133,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// ========== CATEGORY TABS - NEW! ==========
+const categoryTabs = document.querySelectorAll('.category-tab');
+
+categoryTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+        // Remove active class from all tabs
+        categoryTabs.forEach(t => t.classList.remove('active'));
+        
+        // Add active class to clicked tab
+        tab.classList.add('active');
+        
+        const category = tab.dataset.category;
+        console.log(`Filtering by category: ${category}`);
+        
+        // Filter products would go here
+        // filterProducts(category);
+    });
+});
+
+
 const productGrid = document.getElementById('productGrid');
 
 const productData = {
