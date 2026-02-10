@@ -29,126 +29,55 @@ for (let i = 0; i < 8; i++) {
     createRing();
 }
 
-// ========== EXPANDABLE SEARCH NAVBAR ==========
-document.addEventListener('DOMContentLoaded', () => {
-    const searchToggleBtn = document.getElementById('searchToggleBtn');
-    const searchContainer = document.getElementById('searchContainer');
-    const mainNavbar = document.getElementById('mainNavbar');
-    const searchInput = document.getElementById('searchInput');
-    const clearSearchBtn = document.getElementById('clearSearchBtn');
-    const filterBtn = document.getElementById('filterBtn');
+// Navbar scroll effect removed as per request
 
-    let isSearchExpanded = false;
 
-    // Toggle search container
-    searchToggleBtn.addEventListener('click', () => {
-        isSearchExpanded = !isSearchExpanded;
 
-        if (isSearchExpanded) {
-            // Expand search
-            searchContainer.classList.add('expanded');
-            mainNavbar.classList.add('search-expanded');
-            searchToggleBtn.classList.add('active');
-            
-            // Focus on search input after animation
-            setTimeout(() => {
-                searchInput.focus();
-            }, 400);
-        } else {
-            // Retract search
-            searchContainer.classList.remove('expanded');
-            mainNavbar.classList.remove('search-expanded');
-            searchToggleBtn.classList.remove('active');
-            
-            // Clear search input when closing
-            searchInput.value = '';
-            clearSearchBtn.classList.remove('visible');
-        }
-    });
-
-    // Show/hide clear button based on input
-    searchInput.addEventListener('input', (e) => {
-        if (e.target.value.length > 0) {
-            clearSearchBtn.classList.add('visible');
-        } else {
-            clearSearchBtn.classList.remove('visible');
-        }
-    });
-
-    // Clear search input
-    clearSearchBtn.addEventListener('click', () => {
-        searchInput.value = '';
-        clearSearchBtn.classList.remove('visible');
-        searchInput.focus();
-    });
-
-    // Handle search submission (Enter key)
-    searchInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            const searchQuery = searchInput.value.trim();
-            if (searchQuery) {
-                console.log('Searching for:', searchQuery);
-                // Add your search logic here
-                // Example: window.location.href = `/search?q=${encodeURIComponent(searchQuery)}`;
-            }
-        }
-    });
-
-    // Filter button click handler
-    filterBtn.addEventListener('click', () => {
-        console.log('Filter button clicked');
-        // Add your filter modal/dropdown logic here
-        // Example: openFilterModal();
-    });
-
-    // Close search when clicking outside
-    document.addEventListener('click', (e) => {
-        const isClickInsideNavbar = mainNavbar.contains(e.target);
-        
-        if (!isClickInsideNavbar && isSearchExpanded) {
-            isSearchExpanded = false;
-            searchContainer.classList.remove('expanded');
-            mainNavbar.classList.remove('search-expanded');
-            searchToggleBtn.classList.remove('active');
-            searchInput.value = '';
-            clearSearchBtn.classList.remove('visible');
-        }
-    });
-
-    // Prevent closing when clicking inside search container
-    searchContainer.addEventListener('click', (e) => {
-        e.stopPropagation();
-    });
-
-    // Escape key to close search
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && isSearchExpanded) {
-            isSearchExpanded = false;
-            searchContainer.classList.remove('expanded');
-            mainNavbar.classList.remove('search-expanded');
-            searchToggleBtn.classList.remove('active');
-            searchInput.value = '';
-            clearSearchBtn.classList.remove('visible');
-        }
-    });
-});
 
 // ========== CATEGORY TABS - NEW! ==========
-const categoryTabs = document.querySelectorAll('.category-tab');
+// ========== CATEGORY FILTERS (CUSTOM DROPDOWN) ==========
+const allItemsBtn = document.getElementById('all-items-btn');
+const categoryRadios = document.querySelectorAll('input[name="category"]');
+const selectedTextSpan = document.querySelector('.selected-text');
 
-categoryTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-        // Remove active class from all tabs
-        categoryTabs.forEach(t => t.classList.remove('active'));
-        
-        // Add active class to clicked tab
-        tab.classList.add('active');
-        
-        const category = tab.dataset.category;
-        console.log(`Filtering by category: ${category}`);
-        
-        // Filter products would go here
-        // filterProducts(category);
+// Helper to update displayed text
+function updateSelectedText(text) {
+    if (selectedTextSpan) {
+        selectedTextSpan.textContent = text;
+    }
+}
+
+// "All Items" Button Click
+if (allItemsBtn) {
+    allItemsBtn.addEventListener('click', () => {
+        // Reset Radio Buttons
+        categoryRadios.forEach(radio => radio.checked = false);
+
+        // Reset Display Text
+        updateSelectedText("Select Category");
+
+        // Highlight Button
+        allItemsBtn.classList.add('active');
+
+        console.log('Filtering by category: all');
+        // filterProducts('all');
+    });
+}
+
+// Radio Button Change
+categoryRadios.forEach(radio => {
+    radio.addEventListener('change', (e) => {
+        const selectedCategory = e.target.value;
+        const selectedLabel = e.target.nextElementSibling.getAttribute('data-txt');
+
+        // Unhighlight "All Items" button
+        if (allItemsBtn) allItemsBtn.classList.remove('active');
+
+        // Update Display Text
+        updateSelectedText(selectedLabel);
+
+        console.log(`Filtering by category: ${selectedCategory}`);
+        // filterProducts(selectedCategory);
     });
 });
 
@@ -156,19 +85,19 @@ categoryTabs.forEach(tab => {
 const productGrid = document.getElementById('productGrid');
 
 const productData = {
-  name: "Nike Airforce1 Premium",
-  subtitle: "Own the Airforce",
-  desc: "Step back into classic hoops style with a durable leather.",
-  price: "$111",
-  img: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=500" // High quality sneaker image
+    name: "Nike Airforce1 Premium",
+    subtitle: "Own the Airforce",
+    desc: "Step back into classic hoops style with a durable leather.",
+    price: "$111",
+    img: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=500" // High quality sneaker image
 };
 
 function createCards() {
-  for (let i = 0; i < 20; i++) {
-    const card = document.createElement('div');
-    card.className = 'product-card';
-    
-    card.innerHTML = `
+    for (let i = 0; i < 20; i++) {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+
+        card.innerHTML = `
       <div class="image-container">
         <span class="badge">Best Seller</span>
         <img src="${productData.img}" alt="Product Image">
@@ -185,8 +114,8 @@ function createCards() {
         </button>
       </div>
     `;
-    productGrid.appendChild(card);
-  }
+        productGrid.appendChild(card);
+    }
 }
 
 createCards();
@@ -205,17 +134,17 @@ class Pagination {
         this.totalItems = options.totalItems || 100;
         this.maxVisiblePages = options.maxVisiblePages || 5;
         this.onPageChange = options.onPageChange || null;
-        
+
         // DOM Elements
         this.prevBtn = document.getElementById('prev-btn');
         this.nextBtn = document.getElementById('next-btn');
         this.numbersContainer = document.getElementById('pagination-numbers');
         this.paginationText = document.getElementById('pagination-text');
-        
+
         // Initialize
         this.init();
     }
-    
+
     init() {
         // Attach event listeners safely (elements may be missing)
         if (this.prevBtn) this.prevBtn.addEventListener('click', () => this.goToPrevious());
@@ -232,20 +161,20 @@ class Pagination {
         console.log(`- Current page: ${this.currentPage}`);
         console.log('- Use Arrow Left/Right keys to navigate');
     }
-    
+
     // Render pagination UI
     render() {
         this.renderPageNumbers();
         this.updateButtons();
         this.updateInfo();
     }
-    
+
     // Render page number buttons
     renderPageNumbers() {
         this.numbersContainer.innerHTML = '';
-        
+
         const pages = this.getPageNumbers();
-        
+
         pages.forEach((page) => {
             if (page === '...') {
                 // Create ellipsis
@@ -259,25 +188,25 @@ class Pagination {
                 button.className = 'page-number';
                 button.textContent = page;
                 button.setAttribute('aria-label', `Go to page ${page}`);
-                
+
                 if (page === this.currentPage) {
                     button.classList.add('active');
                     button.setAttribute('aria-current', 'page');
                 }
-                
+
                 button.addEventListener('click', () => this.goToPage(page));
                 this.numbersContainer.appendChild(button);
             }
         });
     }
-    
+
     // Calculate which page numbers to show with ellipsis
     getPageNumbers() {
         const pages = [];
         const totalPages = this.totalPages;
         const current = this.currentPage;
         const maxVisible = this.maxVisiblePages;
-        
+
         if (totalPages <= maxVisible + 2) {
             // Show all pages if total is small
             for (let i = 1; i <= totalPages; i++) {
@@ -286,9 +215,9 @@ class Pagination {
         } else {
             // Always show first page
             pages.push(1);
-            
+
             let startPage, endPage;
-            
+
             if (current <= 3) {
                 // Near the start
                 startPage = 2;
@@ -315,14 +244,14 @@ class Pagination {
                 }
                 pages.push('...');
             }
-            
+
             // Always show last page
             pages.push(totalPages);
         }
-        
+
         return pages;
     }
-    
+
     // Update Previous/Next buttons (Freeze when needed)
     updateButtons() {
         // FREEZE Previous button on first page
@@ -333,7 +262,7 @@ class Pagination {
             this.prevBtn.disabled = false;
             this.prevBtn.setAttribute('aria-disabled', 'false');
         }
-        
+
         // FREEZE Next button on last page
         if (this.currentPage === this.totalPages) {
             this.nextBtn.disabled = true;
@@ -343,7 +272,7 @@ class Pagination {
             this.nextBtn.setAttribute('aria-disabled', 'false');
         }
     }
-    
+
     // Update pagination info text
     updateInfo() {
         const start = (this.currentPage - 1) * this.itemsPerPage + 1;
@@ -353,41 +282,41 @@ class Pagination {
             this.paginationText.textContent = `Showing ${start}-${end} of ${this.totalItems} items`;
         }
     }
-    
+
     // Navigate to specific page
     goToPage(pageNumber) {
         if (pageNumber === this.currentPage) return;
         if (pageNumber < 1 || pageNumber > this.totalPages) return;
-        
+
         this.currentPage = pageNumber;
         this.render();
-        
+
         // Callback
         if (this.onPageChange) {
             this.onPageChange(this.currentPage);
         }
-        
+
         // Show notification
         this.showNotification(`Page ${pageNumber}`);
-        
+
         // Log to console
         console.log(`✓ Navigated to page ${pageNumber}`);
     }
-    
+
     // Go to previous page
     goToPrevious() {
         if (this.currentPage > 1) {
             this.goToPage(this.currentPage - 1);
         }
     }
-    
+
     // Go to next page
     goToNext() {
         if (this.currentPage < this.totalPages) {
             this.goToPage(this.currentPage + 1);
         }
     }
-    
+
     // Keyboard navigation
     handleKeyboard(e) {
         if (e.key === 'ArrowLeft') {
@@ -396,7 +325,7 @@ class Pagination {
             this.goToNext();
         }
     }
-    
+
     // Show notification
     showNotification(message) {
         // Remove existing notification
@@ -404,47 +333,47 @@ class Pagination {
         if (existing) {
             existing.remove();
         }
-        
+
         const notification = document.createElement('div');
         notification.className = 'pagination-notification';
         notification.innerHTML = `
             <i class="fas fa-check-circle"></i>
             <span>${message}</span>
         `;
-        
+
         document.body.appendChild(notification);
-        
+
         // Trigger animation
         setTimeout(() => notification.classList.add('show'), 10);
-        
+
         // Auto remove after 2 seconds
         setTimeout(() => {
             notification.classList.remove('show');
             setTimeout(() => notification.remove(), 300);
         }, 2000);
     }
-    
+
     // Public methods to update pagination
     setTotalItems(total) {
         this.totalItems = total;
         this.totalPages = Math.ceil(total / this.itemsPerPage);
-        
+
         // Reset to page 1 if current page exceeds new total
         if (this.currentPage > this.totalPages) {
             this.currentPage = 1;
         }
-        
+
         this.render();
     }
-    
+
     setItemsPerPage(perPage) {
         this.itemsPerPage = perPage;
         this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
         this.currentPage = 1;
-        
+
         this.render();
     }
-    
+
     getCurrentPage() {
         return this.currentPage;
     }
@@ -465,21 +394,21 @@ document.addEventListener('DOMContentLoaded', () => {
         onPageChange: (page) => {
             // Your custom logic when page changes
             console.log(`Page changed to: ${page}`);
-            
+
             // Example: Fetch data for new page
             // fetchData(page);
-            
+
             // Example: Update URL
             // window.history.pushState({}, '', `?page=${page}`);
-            
+
             // Example: Scroll to top
             // window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     });
-    
+
     // Make pagination accessible globally
     window.paginationInstance = pagination;
-    
+
     // Example usage in console:
     // paginationInstance.goToPage(5)
     // paginationInstance.setTotalItems(150)
@@ -526,3 +455,19 @@ notificationStyles.textContent = `
     }
 `;
 document.head.appendChild(notificationStyles);
+
+// ========== SEARCH FUNCTIONALITY ==========
+const searchInput = document.getElementById('searchInput');
+
+if (searchInput) {
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            const searchQuery = searchInput.value.trim();
+            if (searchQuery) {
+                console.log('Searching for:', searchQuery);
+                // Add your search logic here
+                // Example: window.location.href = `/search?q=${encodeURIComponent(searchQuery)}`;
+            }
+        }
+    });
+}

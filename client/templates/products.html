@@ -31,121 +31,129 @@
     <div class="ring-container" id="ring-container"></div>
 
     <!-- Navigation Bar -->
-    <nav class="navbar" id="mainNavbar">
-      <div class="navbar-top">
-        <ul class="nav-left">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="#Categories">Categories</a></li>
-          <li><a href="#Products">Products</a></li>
-          <li><a href="#Contact">Contact</a></li>
-        </ul>
+    <nav class="navbar">
+      <ul class="nav-left">
+        <li><a href="#Home">Home</a></li>
+        <li><a href="#Categories">Categories</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="#Contact">Contact</a></li>
+      </ul>
 
-        <div class="nav-center">
-          <h1>BorrowBox</h1>
-        </div>
-
-        <div class="nav-right">
-          <button
-            class="search-icon-btn"
-            id="searchToggleBtn"
-            aria-label="Toggle search"
-          >
-            <i class="fas fa-search"></i>
-          </button>
-        </div>
+      <div class="nav-center">
+        <h1>BorrowBox</h1>
       </div>
 
-      <!-- Expandable Search Container -->
-      <div class="navbar-search-container" id="searchContainer">
-        <div class="search-wrapper">
-          <button class="filter-btn" id="filterBtn">
-            <i class="fas fa-filter"></i>
-            <span>Filters</span>
-          </button>
-          <div class="search-input-wrapper">
-            <i class="fas fa-search search-input-icon"></i>
-            <input
-              type="text"
-              class="search-input"
-              id="searchInput"
-              placeholder="Search for items, categories, or keywords..."
-              aria-label="Search items"
-            />
-            <button
-              class="clear-search-btn"
-              id="clearSearchBtn"
-              aria-label="Clear search"
-            >
-              <i class="fas fa-times"></i>
-            </button>
-          </div>
-        </div>
+      <div class="nav-right">
+        <a href="login.html">
+          <button class="login-btn">Login</button>
+        </a>
       </div>
     </nav>
-
-    <!-- Hero Banner Section - NEW! -->
-    <section class="hero-banner">
-      <div class="banner-content">
-        <div class="banner-inner">
-          <h2>Discover Campus Rentals 🎓</h2>
-          <p>
-            Browse through thousands of items available for rent from fellow
-            students. Save money, reduce waste, and build community—all in one
-            place.
-          </p>
-          <div class="banner-stats">
-            <div class="stat-item">
-              <div class="stat-number">500+</div>
-              <div class="stat-label">Items Available</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-number">1,200+</div>
-              <div class="stat-label">Happy Students</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-number">₹50K+</div>
-              <div class="stat-label">Money Saved</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
 
     <!-- Category Tabs Section - NEW! -->
     <section class="category-section" id="Categories">
       <div class="category-tabs">
-        <button class="category-tab active" data-category="all">
+        <button
+          class="category-tab active"
+          id="all-items-btn"
+          data-category="all"
+        >
           <i class="fas fa-th"></i>
           All Items
         </button>
-        <button class="category-tab" data-category="electronics">
-          <i class="fas fa-laptop"></i>
-          Electronics
-        </button>
-        <button class="category-tab" data-category="books">
-          <i class="fas fa-book"></i>
-          Books & Study
-        </button>
-        <button class="category-tab" data-category="sports">
-          <i class="fas fa-basketball-ball"></i>
-          Sports
-        </button>
-        <button class="category-tab" data-category="furniture">
-          <i class="fas fa-couch"></i>
-          Furniture
-        </button>
-        <button class="category-tab" data-category="kitchen">
-          <i class="fas fa-utensils"></i>
-          Kitchen
-        </button>
-        <button class="category-tab" data-category="fashion">
-          <i class="fas fa-tshirt"></i>
-          Fashion
-        </button>
-        <button class="category-tab" data-category="music">
-          <i class="fas fa-music"></i>
-          Music
-        </button>
+
+        <div class="custom-select">
+          <div
+            class="select-selected"
+            data-default="Select Category"
+            data-electronics="Electronics"
+            data-books="Books & Study"
+            data-sports="Sports"
+            data-kitchen="Kitchen"
+            data-fashion="Fashion"
+          >
+            <span class="selected-text">Select Category</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="1em"
+              viewBox="0 0 512 512"
+              class="arrow"
+            >
+              <path
+                d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+              ></path>
+            </svg>
+          </div>
+          <div class="select-options">
+            <div title="electronics">
+              <input
+                id="electronics"
+                name="category"
+                type="radio"
+                value="electronics"
+              />
+              <label
+                class="option"
+                for="electronics"
+                data-txt="Electronics"
+              ></label>
+            </div>
+            <div title="books">
+              <input id="books" name="category" type="radio" value="books" />
+              <label
+                class="option"
+                for="books"
+                data-txt="Books & Study"
+              ></label>
+            </div>
+            <div title="sports">
+              <input id="sports" name="category" type="radio" value="sports" />
+              <label class="option" for="sports" data-txt="Sports"></label>
+            </div>
+            <div title="kitchen">
+              <input
+                id="kitchen"
+                name="category"
+                type="radio"
+                value="kitchen"
+              />
+              <label class="option" for="kitchen" data-txt="Kitchen"></label>
+            </div>
+            <div title="fashion">
+              <input
+                id="fashion"
+                name="category"
+                type="radio"
+                value="fashion"
+              />
+              <label class="option" for="fashion" data-txt="Fashion"></label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="search-container-relative">
+        <input
+          placeholder="Search..."
+          class="search-input-new"
+          name="search"
+          type="search"
+          id="searchInput"
+        />
+        <svg
+          class="search-icon-new"
+          stroke="currentColor"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+            stroke-linejoin="round"
+            stroke-linecap="round"
+          ></path>
+        </svg>
       </div>
     </section>
 
