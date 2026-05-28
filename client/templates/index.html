@@ -3,766 +3,255 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="BorrowBox - Borrow anything, anytime. The smart way to rent items from fellow students."
+    <title>BorrowBox | Secure Campus Rentals</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
     />
-    <title>BorrowBox - Smart Student Borrowing Platform</title>
-
-    <!-- CSS Files -->
-    <link rel="stylesheet" href="../static/css/root.css" />
-    <link rel="stylesheet" href="../static/css/style.css" />
-
-    <!-- Font Awesome for Icons -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+    <link rel="stylesheet" href="../static/css/style.css" />
   </head>
   <body>
-    <!-- Floating Background Shapes -->
-    <div class="floating-background">
-      <div class="shape shape-1"></div>
-      <div class="shape shape-2"></div>
-      <div class="shape shape-3"></div>
-      <div class="shape shape-4"></div>
-      <div class="shape shape-5"></div>
-    </div>
-
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-      <ul class="nav-left">
-        <li><a href="#Home">Home</a></li>
-        <li><a href="#Categories">Categories</a></li>
-        <li><a href="products.html">Products</a></li>
-        <li><a href="dashboard.html">Contact</a></li>
-      </ul>
-
-      <div class="nav-center">
-        <h1>BorrowBox</h1>
-      </div>
-
-      <div class="nav-right">
-        <a href="login.html">
-          <button class="login-btn">Get Started</button>
-        </a>
+    <nav class="navbar" id="mainNavbar">
+      <div class="nav-container">
+        <a href="#" class="brand-logo"
+          ><i class="fas fa-layer-group"></i> BorrowBox</a
+        >
+        <div class="nav-links">
+          <a href="#how-it-works">Protocol</a>
+          <a href="products.html">Catalog</a>
+          <a href="#mission">Mission</a>
+          <a href="login.html" class="btn-nav-primary">Sign In</a>
+        </div>
       </div>
     </nav>
-    <div class="ring-container" id="ring-container"></div>
 
-    <main>
-      <!-- Hero Section -->
-      <section class="hero" id="Home">
-        <div class="hero-content">
-          <h1>
-            Borrow Anything, Anytime — The Smart Way with <span>BorrowBox</span>
-          </h1>
-          <p>
-            From electronics to books, tools to accessories — borrow or lend
-            items easily and securely in one convenient platform.
-          </p>
-          <div class="hero-buttons">
-            <button class="hero-btn">Start Borrowing</button>
-            <button class="hero-btn_2">Browse Items</button>
-          </div>
+    <header class="hero-console-section">
+      <div class="hero-pattern-backdrop"></div>
+      <div class="hero-mask-overlay"></div>
 
-          <!-- Stats Section -->
-          <div class="hero-stats">
-            <div class="stat">
-              <div class="icon-image">
-                <img
-                  src="../static/images/seal-check.svg"
-                  alt="Campus-verified"
-                />
-              </div>
-              <span class="stat-label">Campus Verified</span>
-            </div>
-            <div class="stat">
-              <div class="icon-image">
-                <img
-                  src="../static/images/users-three.svg"
-                  alt="Peer powered"
-                />
-              </div>
-              <span class="stat-label">Peer Powered</span>
-            </div>
-            <div class="stat">
-              <div class="icon-image">
-                <img src="../static/images/wallet.svg" alt="Wallet-smart" />
-              </div>
-              <span class="stat-label">Wallet smart</span>
-            </div>
-          </div>
+      <div class="hero-container-engine">
+        <div class="badge-pill-status">
+          <i class="fas fa-shield-alt"></i> Exclusive to Verified University
+          Communities
         </div>
-
-        <div class="hero-image">
-          <img
-            src="../static/images/hero.png"
-            alt="BorrowBox Platform Illustration"
-          />
-        </div>
-      </section>
-
-      <!--how it works-->
-      <section id="how-it-works" class="how-it-works">
-        <div class="container">
-          <div class="how-it-works-header">
-            <h2>How BorrowBox Works</h2>
-            <p class="subtitle">
-              A simple, structured process designed for secure campus-only
-              rentals
-            </p>
-          </div>
-
-          <div class="workflow-container">
-            <!-- Connection Line -->
-            <div class="connection-line" id="connectionLine">
-              <div class="connection-line-fill"></div>
-            </div>
-
-            <!-- Steps -->
-            <div class="steps">
-              <div class="step" data-step="1">
-                <div class="step-number-wrapper">
-                  <div class="step-number">1</div>
-                </div>
-                <h3>Verify Your College Email</h3>
-                <p>
-                  Only verified students can access BorrowBox for secure
-                  transactions
-                </p>
-              </div>
-
-              <div class="step" data-step="2">
-                <div class="step-number-wrapper">
-                  <div class="step-number">2</div>
-                </div>
-                <h3>Book or List Items Hassle Free</h3>
-                <p>Browse items or list your own with fixed rental dates</p>
-              </div>
-
-              <div class="step" data-step="3">
-                <div class="step-number-wrapper">
-                  <div class="step-number">3</div>
-                </div>
-                <h3>Pay Rent & Exchange Deposit</h3>
-                <p>Rent paid online, deposit handled securely at handover</p>
-              </div>
-
-              <div class="step" data-step="4">
-                <div class="step-number-wrapper">
-                  <div class="step-number">4</div>
-                </div>
-                <h3>Return on Time & Get Rated</h3>
-                <p>Build trust through ratings that ensure accountability</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="how-it-works-cta">
-            <a href="#" class="btn-workflow">
-              View Complete Workflow
-              <i class="fas fa-arrow-right"></i>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <!-- Categories Section - REDESIGNED -->
-      <section class="browse-section" id="Categories">
-        <h2>Browse by Category</h2>
-        <p class="category-subtitle">
-          Find exactly what you need from our curated collections
+        <h1 class="hero-main-title">
+          Platform for peer-to-peer campus rentals.
+        </h1>
+        <p class="hero-context-lead">
+          Turn idle gear into passive earnings, or access high-value tools
+          instantly. Secured by official institutional verification, built
+          entirely on mutual student accountability.
         </p>
+        <div class="hero-action-row">
+          <a
+            href="#catalog"
+            class="btn-console btn-console-primary btn-console-lg"
+            >Explore Catalog</a
+          >
+          <a
+            href="#how-it-works"
+            class="btn-console btn-console-secondary btn-console-lg"
+            >Verification Protocol</a
+          >
+        </div>
+      </div>
+    </header>
 
-        <div class="categories">
-          <!-- Electronics - Featured -->
-          <div class="category-card featured">
-            <div class="category-icon-wrapper">
-              <img src="../static/images/electronics.png" alt="Electronics" />
-            </div>
-            <div class="category-content">
-              <h3>Electronics</h3>
-              <p class="category-description">
-                Laptops, speakers, cameras, and gadgets
-              </p>
-              <div class="category-footer">
-                <span class="category-count">120+ items</span>
-                <span class="category-arrow"
-                  >Browse <i class="fas fa-arrow-right"></i
-                ></span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Study Essentials -->
-          <div class="category-card" id="study-essentials">
-            <div class="category-icon-wrapper">
-              <img src="../static/images/books.png" alt="Study" />
-            </div>
-            <div class="category-content">
-              <h3>Study Essentials</h3>
-              <p class="category-description">
-                Books, notes, and learning materials
-              </p>
-              <div class="category-footer">
-                <span class="category-count">85+ items</span>
-                <span class="category-arrow"
-                  >Browse <i class="fas fa-arrow-right"></i
-                ></span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Appliances -->
-          <div class="category-card" id="Appliances">
-            <div class="category-icon-wrapper">
-              <img src="../static/images/appliances.png" alt="Appliances" />
-            </div>
-            <div class="category-content">
-              <h3>Appliances</h3>
-              <p class="category-description">Kitchen and home appliances</p>
-              <div class="category-footer">
-                <span class="category-count">45+ items</span>
-                <span class="category-arrow"
-                  >Browse <i class="fas fa-arrow-right"></i
-                ></span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Accessories -->
-          <div class="category-card">
-            <div class="category-icon-wrapper">
-              <img src="../static/images/accessories.png" alt="Accessories" />
-            </div>
-            <div class="category-content">
-              <h3>Accessories</h3>
-              <p class="category-description">
-                Bags, watches, and personal items
-              </p>
-              <div class="category-footer">
-                <span class="category-count">95+ items</span>
-                <span class="category-arrow"
-                  >Browse <i class="fas fa-arrow-right"></i
-                ></span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Clothing -->
-          <div class="category-card">
-            <div class="category-icon-wrapper">
-              <img src="../static/images/cloths.png" alt="Clothing" />
-            </div>
-            <div class="category-content">
-              <h3>Clothing</h3>
-              <p class="category-description">Formal wear and casual outfits</p>
-              <div class="category-footer">
-                <span class="category-count">110+ items</span>
-                <span class="category-arrow"
-                  >Browse <i class="fas fa-arrow-right"></i
-                ></span>
-              </div>
-            </div>
-          </div>
+    <section id="how-it-works" class="workflow-container">
+      <div class="workflow-max-width">
+        <div class="workflow-header-text">
+          <h2>Security Protocol</h2>
+          <p>A completely trustless, verified handover system.</p>
         </div>
 
-        <div class="view-button">
-          <a href="#" class="view-btn">
-            View All Categories
-            <i class="fas fa-arrow-right"></i>
-          </a>
-        </div>
-      </section>
-
-      <!-- Recently Added Items Section - REDESIGNED -->
-      <section class="recently-added-section">
-        <div class="recently-added-header">
-          <div class="recently-added-title-group">
-            <h2>Recently Added Items</h2>
-            <p class="recently-added-subtitle">
-              Fresh arrivals from your campus community
-            </p>
-          </div>
-          <div class="recently-added-controls">
-            <button
-              class="scroll-arrow-btn scroll-left"
-              id="scrollLeft"
-              aria-label="Scroll left"
-            >
-              <i class="fas fa-chevron-left"></i>
-            </button>
-            <button
-              class="scroll-arrow-btn scroll-right"
-              id="scrollRight"
-              aria-label="Scroll right"
-            >
-              <i class="fas fa-chevron-right"></i>
-            </button>
-          </div>
-        </div>
-
-        <div class="items-rail-container">
-          <div class="items-rail" id="itemsRail">
-            <!-- Item Card 1 -->
-            <div class="rail-item-card">
-              <div class="rail-item-image-wrapper">
-                <span class="rail-item-category">Electronics</span>
-                <img
-                  src="../static/images/headphone.png"
-                  alt="Premium Wireless Headphones"
-                  class="rail-item-image"
-                />
-              </div>
-              <div class="rail-item-info">
-                <h3 class="rail-item-name">Premium Wireless Headphones</h3>
-                <div class="rail-item-price">
-                  ₹150<span class="rail-item-price-label">/ day</span>
-                </div>
-                <div class="rail-item-footer">
-                  <span class="rail-item-availability">
-                    <span class="availability-dot"></span>
-                    Available
-                  </span>
-                  <span class="rail-item-cta">
-                    Rent <i class="fas fa-arrow-right"></i>
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Item Card 2 -->
-            <div class="rail-item-card">
-              <div class="rail-item-image-wrapper">
-                <span class="rail-item-category">Clothing</span>
-                <img
-                  src="../static/images/shoes.png"
-                  alt="Sports Running Shoes"
-                  class="rail-item-image"
-                />
-              </div>
-              <div class="rail-item-info">
-                <h3 class="rail-item-name">Sports Running Shoes</h3>
-                <div class="rail-item-price">
-                  ₹100<span class="rail-item-price-label">/ day</span>
-                </div>
-                <div class="rail-item-footer">
-                  <span class="rail-item-availability">
-                    <span class="availability-dot"></span>
-                    Available
-                  </span>
-                  <span class="rail-item-cta">
-                    Rent <i class="fas fa-arrow-right"></i>
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Item Card 3 -->
-            <div class="rail-item-card">
-              <div class="rail-item-image-wrapper">
-                <span class="rail-item-category">Clothing</span>
-                <img
-                  src="../static/images/hoodie.png"
-                  alt="Comfortable Hoodie"
-                  class="rail-item-image"
-                />
-              </div>
-              <div class="rail-item-info">
-                <h3 class="rail-item-name">Comfortable Hoodie</h3>
-                <div class="rail-item-price">
-                  ₹80<span class="rail-item-price-label">/ day</span>
-                </div>
-                <div class="rail-item-footer">
-                  <span class="rail-item-availability">
-                    <span class="availability-dot"></span>
-                    Available
-                  </span>
-                  <span class="rail-item-cta">
-                    Rent <i class="fas fa-arrow-right"></i>
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Item Card 4 -->
-            <div class="rail-item-card">
-              <div class="rail-item-image-wrapper">
-                <span class="rail-item-category">Electronics</span>
-                <img
-                  src="../static/images/headphone.png"
-                  alt="Bluetooth Speaker"
-                  class="rail-item-image"
-                />
-              </div>
-              <div class="rail-item-info">
-                <h3 class="rail-item-name">Bluetooth Speaker</h3>
-                <div class="rail-item-price">
-                  ₹70<span class="rail-item-price-label">/ day</span>
-                </div>
-                <div class="rail-item-footer">
-                  <span class="rail-item-availability">
-                    <span class="availability-dot"></span>
-                    Available
-                  </span>
-                  <span class="rail-item-cta">
-                    Rent <i class="fas fa-arrow-right"></i>
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Item Card 5 -->
-            <div class="rail-item-card">
-              <div class="rail-item-image-wrapper">
-                <span class="rail-item-category">Study Essentials</span>
-                <img
-                  src="../static/images/books.png"
-                  alt="Textbook Bundle"
-                  class="rail-item-image"
-                />
-              </div>
-              <div class="rail-item-info">
-                <h3 class="rail-item-name">Textbook Bundle</h3>
-                <div class="rail-item-price">
-                  ₹80<span class="rail-item-price-label">/ day</span>
-                </div>
-                <div class="rail-item-footer">
-                  <span class="rail-item-availability">
-                    <span class="availability-dot"></span>
-                    Available
-                  </span>
-                  <span class="rail-item-cta">
-                    Rent <i class="fas fa-arrow-right"></i>
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Item Card 6 -->
-            <div class="rail-item-card">
-              <div class="rail-item-image-wrapper">
-                <span class="rail-item-category">Appliances</span>
-                <img
-                  src="../static/images/appliances.png"
-                  alt="Electric Kettle"
-                  class="rail-item-image"
-                />
-              </div>
-              <div class="rail-item-info">
-                <h3 class="rail-item-name">Electric Kettle</h3>
-                <div class="rail-item-price">
-                  ₹40<span class="rail-item-price-label">/ day</span>
-                </div>
-                <div class="rail-item-footer">
-                  <span class="rail-item-availability">
-                    <span class="availability-dot"></span>
-                    Available
-                  </span>
-                  <span class="rail-item-cta">
-                    Rent <i class="fas fa-arrow-right"></i>
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="recently-added-view-all">
-          <a href="#" class="view-all-items-btn">
-            View All Recent Items
-            <i class="fas fa-arrow-right"></i>
-          </a>
-        </div>
-      </section>
-
-      <!-- Featured Products Section - Replace the existing product grid section with this -->
-      <section class="product-grid-section" id="Products">
-        <h2>Featured Products</h2>
-        <p class="product-grid-subtitle">
-          Discover the most popular items available for rent
-        </p>
-
-        <div class="product-grid">
-          <div class="product-card">
-            <div class="card-image-wrapper">
-              <div class="card-image-placeholder"></div>
-              <span class="card-badge">Popular</span>
-            </div>
-            <div class="card-info">
-              <h4>Wireless Mouse</h4>
-              <div class="card-meta">
-                <span class="card-price">₹50 / day</span>
-                <span class="card-rating">4.5</span>
-              </div>
-              <div class="card-action">
-                <button class="card-btn">View Details</button>
-              </div>
-            </div>
+        <div class="workflow-steps-wrapper">
+          <div id="connectionLine">
+            <div class="connection-line-fill"></div>
           </div>
 
-          <div class="product-card">
-            <div class="card-image-wrapper">
-              <div class="card-image-placeholder"></div>
-              <span class="card-badge">New</span>
-            </div>
-            <div class="card-info">
-              <h4>Gaming Controller</h4>
-              <div class="card-meta">
-                <span class="card-price">₹100 / day</span>
-                <span class="card-rating">4.8</span>
-              </div>
-              <div class="card-action">
-                <button class="card-btn">View Details</button>
-              </div>
-            </div>
+          <div class="step" data-step="1">
+            <div class="step-number">01</div>
+            <h3>Verify .edu</h3>
+            <p>Exclusive access via university email verification.</p>
           </div>
-
-          <div class="product-card">
-            <div class="card-image-wrapper">
-              <div class="card-image-placeholder"></div>
-              <span class="card-badge">Featured</span>
-            </div>
-            <div class="card-info">
-              <h4>DSLR Camera</h4>
-              <div class="card-meta">
-                <span class="card-price">₹500 / day</span>
-                <span class="card-rating">4.9</span>
-              </div>
-              <div class="card-action">
-                <button class="card-btn">View Details</button>
-              </div>
-            </div>
+          <div class="step" data-step="2">
+            <div class="step-number">02</div>
+            <h3>Book Asset</h3>
+            <p>Smart contract enabled deposits hold funds safely.</p>
           </div>
-
-          <div class="product-card">
-            <div class="card-image-wrapper">
-              <div class="card-image-placeholder"></div>
-              <span class="card-badge">Popular</span>
-            </div>
-            <div class="card-info">
-              <h4>Study Lamp</h4>
-              <div class="card-meta">
-                <span class="card-price">₹30 / day</span>
-                <span class="card-rating">4.3</span>
-              </div>
-              <div class="card-action">
-                <button class="card-btn">View Details</button>
-              </div>
-            </div>
+          <div class="step" data-step="3">
+            <div class="step-number">03</div>
+            <h3>Campus Handover</h3>
+            <p>Meet safely on campus to inspect the gear.</p>
           </div>
-
-          <div class="product-card">
-            <div class="card-image-wrapper">
-              <div class="card-image-placeholder"></div>
-              <span class="card-badge">New</span>
-            </div>
-            <div class="card-info">
-              <h4>Electric Kettle</h4>
-              <div class="card-meta">
-                <span class="card-price">₹40 / day</span>
-                <span class="card-rating">4.6</span>
-              </div>
-              <div class="card-action">
-                <button class="card-btn">View Details</button>
-              </div>
-            </div>
+          <div class="step" data-step="4">
+            <div class="step-number">04</div>
+            <h3>Return & Rate</h3>
+            <p>Mutual accountability scoring protects the community.</p>
           </div>
-
-          <div class="product-card">
-            <div class="card-image-wrapper">
-              <div class="card-image-placeholder"></div>
-              <span class="card-badge">Popular</span>
-            </div>
-            <div class="card-info">
-              <h4>Textbook Bundle</h4>
-              <div class="card-meta">
-                <span class="card-price">₹80 / day</span>
-                <span class="card-rating">4.7</span>
-              </div>
-              <div class="card-action">
-                <button class="card-btn">View Details</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="view-all-container">
-          <a href="#" class="view-all-btn">View All Products</a>
-        </div>
-      </section>
-    </main>
-
-    <section class="cta-container">
-      <div class="cta-card">
-        <div class="cta-content">
-          <h2 class="cta-title">Join the Circle.</h2>
-          <p class="cta-description">
-            Experience
-            <bold
-              style="font-weight: var(--fw-bold); color: var(--primary-color)"
-              >Campus-Verified</bold
-            >
-            sharing. Borrow what you need, lend what you don't—all within a
-            <bold
-              style="font-weight: var(--fw-bold); color: var(--primary-color)"
-              >Budget-Safe</bold
-            >
-            ecosystem.
-          </p>
-
-          <div class="cta-actions">
-            <button class="btn btn-primary" id="borrowBtn">
-              Find an Item
-              <span class="btn-dot"></span>
-            </button>
-            <button class="btn btn-secondary" id="lendBtn">
-              List Your Gear
-              <span class="btn-dot"></span>
-            </button>
-          </div>
-        </div>
-
-        <div class="ripple-wrapper">
-          <div class="ripple r1"></div>
-          <div class="ripple r2"></div>
-          <div class="ripple r3"></div>
-          <div class="ripple r4"></div>
         </div>
       </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="site-footer" id="Contact">
-      <div class="footer-container">
-        <div class="footer-main">
-          <div class="footer-column">
-            <h4>BorrowBox</h4>
-            <p>
-              The easiest way for college students to rent or borrow items from
-              fellow students. Save money, reduce waste, build community.
-            </p>
-            <div
-              id="SocailIcons"
-              style="justify-content: flex-start; margin-top: 1rem"
-            >
-              <div class="icons instaIcon">
-                <div class="icon insta">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    height=""
-                    width="35"
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
-                    class="w-6 h-6 text-gray-800 dark:text-white"
-                  >
-                    <path
-                      clip-rule="evenodd"
-                      d="M3 8a5 5 0 0 1 5-5h8a5 5 0 0 1 5 5v8a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V8Zm5-3a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3H8Zm7.597 2.214a1 1 0 0 1 1-1h.01a1 1 0 1 1 0 2h-.01a1 1 0 0 1-1-1ZM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm-5 3a5 5 0 1 1 10 0 5 5 0 0 1-10 0Z"
-                      fill-rule="evenodd"
-                      fill="currentColor"
-                    ></path>
-                  </svg>
-                </div>
+    <section class="inventory-structured-section" id="catalog">
+      <div class="structured-max-container">
+        <div class="structured-header">
+          <span class="structured-pill">Live Network</span>
+          <h2>Active Campus Listings</h2>
+          <p class="structured-lead">
+            Instantly reserve peer-verified gear currently available on your
+            campus.
+          </p>
+        </div>
+
+        <div class="structured-layout-engine">
+          <aside class="structured-sidebar-panel">
+            <div class="sidebar-content-wrap">
+              <nav class="structured-category-nav">
+                <button class="structured-tab active" data-target="electronics">
+                  <div class="tab-icon"><i class="fas fa-microchip"></i></div>
+                  <div class="tab-meta">
+                    <span class="tab-title">Electronics</span>
+                    <span class="tab-count">34 items</span>
+                  </div>
+                </button>
+                <button class="structured-tab" data-target="textbooks">
+                  <div class="tab-icon"><i class="fas fa-book-open"></i></div>
+                  <div class="tab-meta">
+                    <span class="tab-title">Textbooks</span>
+                    <span class="tab-count">112 items</span>
+                  </div>
+                </button>
+                <button class="structured-tab" data-target="photography">
+                  <div class="tab-icon">
+                    <i class="fas fa-camera-retro"></i>
+                  </div>
+                  <div class="tab-meta">
+                    <span class="tab-title">Photography</span>
+                    <span class="tab-count">12 items</span>
+                  </div>
+                </button>
+                <button class="structured-tab" data-target="sports">
+                  <div class="tab-icon"><i class="fas fa-running"></i></div>
+                  <div class="tab-meta">
+                    <span class="tab-title">Sports & Gear</span>
+                    <span class="tab-count">19 items</span>
+                  </div>
+                </button>
+                <button class="structured-tab" data-target="music">
+                  <div class="tab-icon"><i class="fas fa-sliders-h"></i></div>
+                  <div class="tab-meta">
+                    <span class="tab-title">Instruments</span>
+                    <span class="tab-count">8 items</span>
+                  </div>
+                </button>
+              </nav>
+              <div class="sidebar-routing-footer">
+                <div class="divider-line"></div>
+                <a href="#" class="btn-explore-all"
+                  >View All Directory <i class="fas fa-arrow-right"></i
+                ></a>
               </div>
-              <div class="icons linkedin">
-                <div class="icon link">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="35"
-                    height=""
-                    viewBox="0 0 24 24"
-                    style="fill: rgba(0, 0, 0, 1)"
-                  >
-                    <circle
-                      cx="4.983"
-                      cy="5.009"
-                      r="2.188"
-                      fill="currentColor"
-                    ></circle>
-                    <path
-                      d="M9.237 8.855v12.139h3.769v-6.003c0-1.584.298-3.118 2.262-3.118 1.937 0 1.961 1.811 1.961 3.218v5.904H21v-6.657c0-3.27-.704-5.783-4.526-5.783-1.835 0-3.065 1.007-3.568 1.96h-.051v-1.66H9.237zm-6.142 0H6.87v12.139H3.095z"
-                      fill="currentColor"
-                    ></path>
-                  </svg>
-                </div>
+            </div>
+          </aside>
+
+          <main class="grid-3x2-matrix" id="structuredProductGrid"></main>
+        </div>
+      </div>
+    </section>
+
+    <div class="merged-terminal-block" id="mission">
+      <section class="manifesto-content">
+        <div class="terminal-max-container">
+          <span class="manifesto-pill">Our Mission</span>
+          <h2 class="manifesto-headline">
+            Stop buying gear you only need for
+            <span class="highlight-emerald">48 hours.</span>
+          </h2>
+          <div class="manifesto-divider"></div>
+          <p class="manifesto-lead">
+            Every semester, hundreds of electronics, tools, and textbooks are
+            bought, used twice, and abandoned in dorms. We are building a
+            closed-loop economy for the university campus. Share the load.
+            Reduce e-waste. <strong>Rent smarter.</strong>
+          </p>
+          <div class="manifesto-metrics-grid">
+            <div class="manifesto-metric">
+              <div class="metric-value">
+                <span class="counter-number" data-target="85">0</span
+                ><span class="metric-symbol">%</span>
               </div>
-              <div class="icons whatsapp">
-                <div class="icon whats">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="35"
-                    height=""
-                    viewBox="0 0 24 24"
-                    style="fill: rgba(0, 0, 0, 1)"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M18.403 5.633A8.919 8.919 0 0 0 12.053 3c-4.948 0-8.976 4.027-8.978 8.977 0 1.582.413 3.126 1.198 4.488L3 21.116l4.759-1.249a8.981 8.981 0 0 0 4.29 1.093h.004c4.947 0 8.975-4.027 8.977-8.977a8.926 8.926 0 0 0-2.627-6.35m-6.35 13.812h-.003a7.446 7.446 0 0 1-3.798-1.041l-.272-.162-2.824.741.753-2.753-.177-.282a7.448 7.448 0 0 1-1.141-3.971c.002-4.114 3.349-7.461 7.465-7.461a7.413 7.413 0 0 1 5.275 2.188 7.42 7.42 0 0 1 2.183 5.279c-.002 4.114-3.349 7.462-7.461 7.462m4.093-5.589c-.225-.113-1.327-.655-1.533-.73-.205-.075-.354-.112-.504.112s-.58.729-.711.879-.262.168-.486.056-.947-.349-1.804-1.113c-.667-.595-1.117-1.329-1.248-1.554s-.014-.346.099-.458c.101-.1.224-.262.336-.393.112-.131.149-.224.224-.374s.038-.281-.019-.393c-.056-.113-.505-1.217-.692-1.666-.181-.435-.366-.377-.504-.383a9.65 9.65 0 0 0-.429-.008.826.826 0 0 0-.599.28c-.206.225-.785.767-.785 1.871s.804 2.171.916 2.321c.112.15 1.582 2.415 3.832 3.387.536.231.954.369 1.279.473.537.171 1.026.146 1.413.089.431-.064 1.327-.542 1.514-1.066.187-.524.187-.973.131-1.067-.056-.094-.207-.151-.43-.263"
-                      fill="currentColor"
-                    ></path>
-                  </svg>
-                </div>
+              <div class="metric-label">
+                Target reduction in idle campus gear
               </div>
-              <div class="icons youtube">
-                <div class="icon tube">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="35"
-                    height=""
-                    viewBox="0 0 24 24"
-                    style="fill: rgba(0, 0, 0, 1)"
-                  >
-                    <path
-                      d="M21.593 7.203a2.506 2.506 0 0 0-1.762-1.766C18.265 5.007 12 5 12 5s-6.264-.007-7.831.404a2.56 2.56 0 0 0-1.766 1.778c-.413 1.566-.417 4.814-.417 4.814s-.004 3.264.406 4.814c.23.857.905 1.534 1.763 1.765 1.582.43 7.83.437 7.83.437s6.265.007 7.831-.403a2.515 2.515 0 0 0 1.767-1.763c.414-1.565.417-4.812.417-4.812s.02-3.265-.407-4.831zM9.996 15.005l.005-6 5.207 3.005-5.212 2.995z"
-                      fill="currentColor"
-                    ></path>
-                  </svg>
-                </div>
+            </div>
+            <div class="manifesto-metric">
+              <div class="metric-icon"><i class="fas fa-link"></i></div>
+              <div class="metric-label">Decentralized Peer Trust Protocol</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="interactive-marquee-bridge">
+        <div class="marquee-track" id="marqueeTrack">
+          <span class="marquee-text"
+            >VERIFIED CAMPUS COMMUNITY • ZERO E-WASTE • DECENTRALIZED PROTOCOL •
+          </span>
+        </div>
+      </div>
+
+      <footer class="terminal-footer">
+        <div class="terminal-max-container">
+          <div class="footer-matrix">
+            <div class="footer-col brand-col">
+              <a href="#" class="footer-logo"
+                ><i class="fas fa-layer-group"></i> BorrowBox</a
+              >
+              <p class="footer-brand-text">
+                The smartest way to track, borrow, and lend within your campus
+                community.
+              </p>
+            </div>
+            <div class="footer-col">
+              <h4>Platform</h4>
+              <ul class="footer-links">
+                <li><a href="#catalog">Explore Catalog</a></li>
+                <li><a href="#how-it-works">Verification Protocol</a></li>
+                <li><a href="#">List an Asset</a></li>
+              </ul>
+            </div>
+            <div class="footer-col">
+              <h4>Resources</h4>
+              <ul class="footer-links">
+                <li><a href="#">Security & Escrow</a></li>
+                <li><a href="#">Campus Guidelines</a></li>
+                <li><a href="#">LearnIT Partnerships</a></li>
+              </ul>
+            </div>
+            <div class="footer-col">
+              <h4>Connect</h4>
+              <div class="footer-socials">
+                <a href="#"><i class="fab fa-github"></i> Github Registry</a>
+                <a href="#"><i class="fas fa-envelope"></i> Campus Support</a>
               </div>
             </div>
           </div>
-
-          <div class="footer-column">
-            <h4>Quick Links</h4>
-            <ul>
-              <li><a href="#Categories">Categories</a></li>
-              <li><a href="#Products">Featured Products</a></li>
-              <li><a href="#">How It Works</a></li>
-            </ul>
-          </div>
-
-          <div class="footer-column">
-            <h4>Support</h4>
-            <ul>
-              <li><a href="#">Contact Us</a></li>
-              <li><a href="#">Terms of Service</a></li>
-              <li><a href="#">Privacy Policy</a></li>
-            </ul>
-          </div>
-
-          <div class="footer-column">
-            <h4>Stay Updated</h4>
-            <p>Get news and updates about new items and features.</p>
-            <form class="newsletter-form">
-              <input type="email" placeholder="Enter your email" required />
-              <button type="submit">Subscribe</button>
-            </form>
+          <div class="footer-baseline">
+            <p>&copy; 2026 BorrowBox. Built for secure peer-to-peer sharing.</p>
+            <div class="baseline-links">
+              <a href="#">Privacy Protocol</a>
+              <a href="#">Terms of Service</a>
+            </div>
           </div>
         </div>
+      </footer>
+    </div>
 
-        <div class="footer-bottom">
-          <div class="footer-copyright">
-            &copy; 2026 BorrowBox. All rights reserved.
-          </div>
-        </div>
-      </div>
-    </footer>
-
-    <!-- JavaScript -->
     <script src="../static/js/main.js"></script>
   </body>
 </html>

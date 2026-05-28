@@ -1,609 +1,288 @@
-//-------navbar------
-const navbar = document.querySelector(".navbar");
-
-window.addEventListener("scroll", () => {
-    if (window.scrollY > 60) {
-        navbar.classList.add("navbar-scrolled");
-    } else {
-        navbar.classList.remove("navbar-scrolled");
-    }
-});
-
-
 document.addEventListener('DOMContentLoaded', () => {
-
-    // ========== CAROUSEL FUNCTIONALITY ==========
-    initCarousel();
-
-    // ========== SMOOTH SCROLLING ==========
-    initSmoothScroll();
-
-    // ========== NAVBAR SCROLL EFFECT ==========
-    initNavbarScroll();
-
-    // ========== STATS COUNTER ANIMATION ==========
-    initStatsCounter();
-
-    // ========== FORM HANDLERS ==========
-    initFormHandlers();
-
-    // ==========HOW IT WORKS ==============
+    // Execute modules safely
+    initStickyNavbar();
+    initHeroBackdropModule();
     initHowItWorks();
+    initStructuredInventoryConsole();
+    initTerminalBlock();
 });
 
-// How It Works Section - Enhanced Interactions
+// 1. STICKY NAVBAR
+function initStickyNavbar() {
+    const navbar = document.getElementById('mainNavbar');
+    if (!navbar) return;
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 40) navbar.classList.add('scrolled');
+        else navbar.classList.remove('scrolled');
+    });
+}
+
+// 2. HERO ANIMATION
+function initHeroBackdropModule() {
+    const heroTitle = document.querySelector('.hero-main-title');
+    const heroLead = document.querySelector('.hero-context-lead');
+    const heroActions = document.querySelector('.hero-action-row');
+    const heroBackdrop = document.querySelector('.hero-pattern-backdrop');
+    if (!heroTitle || !heroLead || !heroActions || !heroBackdrop) return;
+
+    const heroAnimationArray = [heroTitle, heroLead, heroActions];
+    heroBackdrop.style.opacity = '0';
+    heroBackdrop.style.transform = 'scale(1.05)';
+    heroBackdrop.style.transition = 'opacity 1.2s ease-out, transform 1.2s ease-out';
+
+    heroAnimationArray.forEach((el) => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(16px)';
+        el.style.transition = 'opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+    });
+
+    requestAnimationFrame(() => {
+        heroBackdrop.style.opacity = '1';
+        heroBackdrop.style.transform = 'scale(1)';
+        heroAnimationArray.forEach((el, index) => {
+            setTimeout(() => {
+                el.style.opacity = '1';
+                el.style.transform = 'translateY(0)';
+            }, 150 + (index * 100)); 
+        });
+    });
+}
+
+// 3. HOW IT WORKS
 function initHowItWorks() {
     const steps = document.querySelectorAll('.step');
     const connectionLine = document.getElementById('connectionLine');
+    const workflowContainer = document.querySelector('.workflow-container');
+    if (!connectionLine || !workflowContainer || steps.length === 0) return;
 
-    if (!connectionLine) return;
-
-    // Observer for scroll animation
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
+    const lineFill = connectionLine.querySelector('.connection-line-fill');
+    const workflowObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                // Animate connection line
-                if (connectionLine) {
-                    connectionLine.classList.add('active');
-                    // Force width calculation
-                    const fill = connectionLine.querySelector('.connection-line-fill');
-                    if (fill) fill.style.width = '100%';
-                }
-
-                // Stagger step animations
+                connectionLine.classList.add('active');
+                if (lineFill) lineFill.style.width = '100%';
                 steps.forEach((step, index) => {
                     setTimeout(() => {
                         step.style.opacity = '1';
                         step.style.transform = 'translateY(0)';
-                    }, index * 200);
+                    }, index * 120); 
                 });
+                workflowObserver.unobserve(entry.target);
             }
         });
-    }, observerOptions);
+    }, { threshold: 0.15, rootMargin: '0px' });
 
-    // Initial setup
     steps.forEach(step => {
         step.style.opacity = '0';
-        step.style.transform = 'translateY(40px)';
-        step.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+        step.style.transform = 'translateY(24px)';
+        step.style.transition = 'all 0.3s ease';
     });
 
-    // Initialize line width to 0 via JS (so it defaults to 100% if JS fails)
-    if (connectionLine) {
-        const fill = connectionLine.querySelector('.connection-line-fill');
-        if (fill) fill.style.width = '0%';
-    }
+    if (lineFill) lineFill.style.width = '0%';
+    workflowObserver.observe(workflowContainer);
 
-    // Observe the workflow container
-    const workflowContainer = document.querySelector('.workflow-container');
-    if (workflowContainer) {
-        observer.observe(workflowContainer);
-    }
-
-    // Progressive line fill on step hover
     let currentHoveredIndex = -1;
+    let resetTimeout = null;
 
     steps.forEach((step, index) => {
         step.addEventListener('mouseenter', () => {
+            if (resetTimeout) clearTimeout(resetTimeout);
             currentHoveredIndex = index;
-            updateLineFill(index);
-
-            // Add glow effect to previous steps
+            if (lineFill) lineFill.style.width = `${((index + 1) / steps.length) * 100}%`;
             steps.forEach((s, i) => {
-                if (i <= index) {
-                    s.style.borderColor = 'var(--tertiary-color)';
-                } else {
-                    s.style.borderColor = 'transparent';
-                }
+                if (i <= index) s.classList.add('active-path');
+                else s.classList.remove('active-path');
             });
         });
-
         step.addEventListener('mouseleave', () => {
             currentHoveredIndex = -1;
-            // Reset to full line after a delay
-            setTimeout(() => {
-                if (currentHoveredIndex === -1) {
-                    updateLineFill(steps.length - 1);
-                    steps.forEach(s => {
-                        s.style.borderColor = 'transparent';
-                    });
+            resetTimeout = setTimeout(() => {
+                if (currentHoveredIndex === -1 && lineFill) {
+                    lineFill.style.width = '100%';
+                    steps.forEach(s => s.classList.remove('active-path'));
                 }
-            }, 300);
-        });
-    });
-
-    function updateLineFill(stepIndex) {
-        const lineFill = connectionLine.querySelector('.connection-line-fill');
-        const percentage = ((stepIndex + 1) / steps.length) * 100;
-        lineFill.style.width = `${percentage}%`;
-    }
-
-    // Keyboard navigation
-    let currentFocusIndex = -1;
-
-    document.addEventListener('keydown', (e) => {
-        const workflowInView = isElementInViewport(workflowContainer);
-        if (!workflowInView) return;
-
-        if (e.key === 'ArrowRight') {
-            e.preventDefault();
-            currentFocusIndex = Math.min(currentFocusIndex + 1, steps.length - 1);
-            focusStep(currentFocusIndex);
-        } else if (e.key === 'ArrowLeft') {
-            e.preventDefault();
-            currentFocusIndex = Math.max(currentFocusIndex - 1, 0);
-            focusStep(currentFocusIndex);
-        }
-    });
-
-    function focusStep(index) {
-        steps.forEach(s => s.classList.remove('focused'));
-        if (index >= 0 && index < steps.length) {
-            steps[index].classList.add('focused');
-            steps[index].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            updateLineFill(index);
-        }
-    }
-
-    function isElementInViewport(el) {
-        if (!el) return false;
-        const rect = el.getBoundingClientRect();
-        return (
-            rect.top >= 0 &&
-            rect.left >= 0 &&
-            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-        );
-    }
-
-    // Click handler for steps
-    steps.forEach((step, index) => {
-        step.addEventListener('click', () => {
-            const stepNumber = step.getAttribute('data-step');
-            console.log(`Clicked on step ${stepNumber}`);
-            // Add your navigation or detailed view logic here
-        });
-    });
-
-    // Parallax effect on scroll
-    window.addEventListener('scroll', () => {
-        if (!workflowContainer) return;
-
-        const rect = workflowContainer.getBoundingClientRect();
-        const scrollPercent = Math.max(0, Math.min(1,
-            (window.innerHeight - rect.top) / (window.innerHeight + rect.height)
-        ));
-
-        steps.forEach((step, index) => {
-            const delay = index * 0.1;
+            }, 250);
         });
     });
 }
 
+// 4. INVENTORY CONSOLE (Grid Fixes applied)
+function initStructuredInventoryConsole() {
+    const tabs = document.querySelectorAll('.structured-tab');
+    const productGridContainer = document.getElementById('structuredProductGrid');
+    if (tabs.length === 0 || !productGridContainer) return;
 
-// ========== RECENTLY ADDED ITEMS RAIL SCROLL ==========
-function initRecentlyAddedRail() {
-    const itemsRail = document.getElementById('itemsRail');
-    const scrollLeftBtn = document.getElementById('scrollLeft');
-    const scrollRightBtn = document.getElementById('scrollRight');
-
-    if (!itemsRail || !scrollLeftBtn || !scrollRightBtn) return;
-
-    const scrollAmount = 300; // Pixels to scroll on button click
-    const autoSlideInterval = 2000; // Auto-slide every 2 seconds
-    let autoSlideTimer;
-    let isUserInteracting = false;
-
-    // Update button states based on scroll position
-    function updateScrollButtons() {
-        const maxScroll = itemsRail.scrollWidth - itemsRail.clientWidth;
-        const currentScroll = itemsRail.scrollLeft;
-
-        scrollLeftBtn.disabled = currentScroll <= 0;
-        scrollRightBtn.disabled = currentScroll >= maxScroll - 1;
-    }
-
-    // Auto-slide function
-    function autoSlide() {
-        if (isUserInteracting) return;
-
-        const maxScroll = itemsRail.scrollWidth - itemsRail.clientWidth;
-        const currentScroll = itemsRail.scrollLeft;
-
-        // If at the end, scroll back to start
-        if (currentScroll >= maxScroll - 1) {
-            itemsRail.scrollTo({
-                left: 0,
-                behavior: 'smooth'
-            });
-        } else {
-            // Otherwise, scroll forward
-            itemsRail.scrollBy({
-                left: scrollAmount,
-                behavior: 'smooth'
-            });
-        }
-    }
-
-    // Start auto-slide
-    function startAutoSlide() {
-        stopAutoSlide();
-        autoSlideTimer = setInterval(autoSlide, autoSlideInterval);
-    }
-
-    // Stop auto-slide
-    function stopAutoSlide() {
-        if (autoSlideTimer) {
-            clearInterval(autoSlideTimer);
-            autoSlideTimer = null;
-        }
-    }
-
-    // Reset auto-slide timer
-    function resetAutoSlide() {
-        isUserInteracting = true;
-        stopAutoSlide();
-
-        // Resume auto-slide after 2 seconds of no interaction
-        setTimeout(() => {
-            isUserInteracting = false;
-            startAutoSlide();
-        }, 2000);
-    }
-
-    // Scroll left
-    scrollLeftBtn.addEventListener('click', () => {
-        itemsRail.scrollBy({
-            left: -scrollAmount,
-            behavior: 'smooth'
-        });
-        resetAutoSlide();
-    });
-
-    // Scroll right
-    scrollRightBtn.addEventListener('click', () => {
-        itemsRail.scrollBy({
-            left: scrollAmount,
-            behavior: 'smooth'
-        });
-        resetAutoSlide();
-    });
-
-    // Pause auto-slide on hover
-    itemsRail.addEventListener('mouseenter', () => {
-        isUserInteracting = true;
-        stopAutoSlide();
-    });
-
-    // Resume auto-slide when mouse leaves
-    itemsRail.addEventListener('mouseleave', () => {
-        isUserInteracting = false;
-        startAutoSlide();
-    });
-
-    // Pause auto-slide on manual scroll
-    itemsRail.addEventListener('scroll', () => {
-        updateScrollButtons();
-
-        // If user manually scrolled, reset the timer
-        if (isUserInteracting) {
-            resetAutoSlide();
-        }
-    });
-
-    // Pause auto-slide on touch
-    itemsRail.addEventListener('touchstart', () => {
-        resetAutoSlide();
-    });
-
-    // Initial button state
-    updateScrollButtons();
-
-    // Update on window resize
-    window.addEventListener('resize', updateScrollButtons);
-
-    // Start auto-slide
-    startAutoSlide();
-
-    // Click handler for item cards
-    const itemCards = itemsRail.querySelectorAll('.rail-item-card');
-    itemCards.forEach(card => {
-        card.addEventListener('click', () => {
-            const itemName = card.querySelector('.rail-item-name').textContent;
-            console.log(`Clicked on: ${itemName}`);
-            // Add your navigation logic here
-            // Example: window.location.href = '/item-details?name=' + encodeURIComponent(itemName);
-        });
-    });
-}
-
-// Initialize on DOM load
-document.addEventListener('DOMContentLoaded', () => {
-    initRecentlyAddedRail();
-});
-
-
-// Add smooth parallax effect to carousel images
-function initParallaxEffect() {
-    const slides = document.querySelectorAll('.carousel-slide');
-
-    slides.forEach(slide => {
-        slide.addEventListener('mousemove', (e) => {
-            if (!slide.classList.contains('active')) return;
-
-            const image = slide.querySelector('.slide-image');
-            if (!image) return;
-
-            const rect = slide.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-
-            const deltaX = (x - centerX) / centerX;
-            const deltaY = (y - centerY) / centerY;
-
-            const moveX = deltaX * 10;
-            const moveY = deltaY * 10;
-
-            image.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.05)`;
-        });
-
-        slide.addEventListener('mouseleave', () => {
-            const image = slide.querySelector('.slide-image');
-            if (image) {
-                image.style.transform = 'translate(0, 0) scale(1)';
-            }
-        });
-    });
-}
-
-// Initialize all enhanced features
-document.addEventListener('DOMContentLoaded', () => {
-    initCarousel();
-    initProductCards();
-    initParallaxEffect();
-});
-
-
-// Smooth scrolling for navigation links
-function initSmoothScroll() {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-
-            if (target) {
-                const navHeight = document.querySelector('.navbar').offsetHeight;
-                const targetPosition = target.offsetTop - navHeight - 20;
-
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-}
-
-// Navbar scroll effect
-function initNavbarScroll() {
-    const navbar = document.querySelector('.navbar');
-    let lastScroll = 0;
-
-    window.addEventListener('scroll', () => {
-        const currentScroll = window.pageYOffset;
-
-        if (currentScroll > 100) {
-            navbar.style.boxShadow = '0 8px 30px rgba(0, 0, 0, 0.12)';
-        } else {
-            navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.08)';
-        }
-
-        lastScroll = currentScroll;
-    });
-}
-
-// Animated stats counter
-function initStatsCounter() {
-    const stats = document.querySelectorAll('.stat-number');
-    const observerOptions = {
-        threshold: 0.5,
-        rootMargin: '0px'
+    const campusCatalogMockDatabase = {
+        electronics: [
+            { name: "Lenovo LOQ-15IRX9", owner: "Kashyap P.", price: "₹950", tag: "High Perf", img: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=500" },
+            { name: "MacBook Pro M3", owner: "Design Club", price: "₹850", tag: "Verified", img: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500" },
+            { name: "Sony WH-1000XM4", owner: "Ritesh M.", price: "₹250", tag: "Top Rated", img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500" },
+            { name: "iPad Pro 11-inch", owner: "Yash M.", price: "₹400", tag: "Verified", img: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=500" },
+            { name: "Anker PowerBank 20k", owner: "LearnIT", price: "₹80", tag: "Available", img: "https://images.unsplash.com/photo-1609592424083-d9cc38ef617c?w=500" },
+            { name: "Raspberry Pi 4 Kit", owner: "Cyber Lab", price: "₹150", tag: "Hardware", img: "https://images.unsplash.com/photo-1601462904263-ce21eb6b2979?w=500" }
+        ],
+        textbooks: [
+            { name: "Core Java: Volume I", owner: "Dr. Pratistha M.", price: "₹40", tag: "Academic", img: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=500" },
+            { name: "Intro to Algorithms", owner: "Rahul S.", price: "₹60", tag: "IT Dept", img: "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=500" },
+            { name: "Cryptography & Sec", owner: "Cyber Lab", price: "₹50", tag: "Rare", img: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=500" },
+            { name: "Calculus II", owner: "Library", price: "₹30", tag: "Available", img: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=500" },
+            { name: "Network Principles", owner: "LearnIT", price: "₹45", tag: "Syllabus", img: "https://images.unsplash.com/photo-1555662100-6d25164bc9ba?w=500" },
+            { name: "Data Structures in C", owner: "Kashyap P.", price: "₹35", tag: "Available", img: "https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?w=500" }
+        ],
+        photography: [
+            { name: "Canon EOS R5 Body", owner: "Media Club", price: "₹1200", tag: "Premium", img: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500" },
+            { name: "DJI Mavic 3 Drone", owner: "Yash M.", price: "₹1500", tag: "Deposit Req", img: "https://images.unsplash.com/photo-1508614589041-895b88991e3e?w=500" },
+            { name: "Sigma 24-70mm", owner: "Kashyap P.", price: "₹500", tag: "Verified", img: "https://images.unsplash.com/photo-1617005082133-548c4dd27f35?w=500" },
+            { name: "Carbon Tripod", owner: "Puja M.", price: "₹150", tag: "Available", img: "https://images.unsplash.com/photo-1604347491176-5085a6a61ef7?w=500" },
+            { name: "Sony A7IV Mirrorless", owner: "Ritesh M.", price: "₹1100", tag: "Premium", img: "https://images.unsplash.com/photo-1519638831568-d9897f54ed69?w=500" },
+            { name: "Rode VideoMic Pro", owner: "Media Club", price: "₹200", tag: "Audio", img: "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=500" }
+        ],
+        sports: [
+            { name: "Wilson Basketball", owner: "Sports Complex", price: "₹70", tag: "Indoor", img: "https://images.unsplash.com/photo-1519766304817-4f37bda74a27?w=500" },
+            { name: "Yonex Astrox 99", owner: "Veena M.", price: "₹120", tag: "Verified", img: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=500" },
+            { name: "Quechua 3P Tent", owner: "LearnIT", price: "₹300", tag: "Cleaned", img: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=500" },
+            { name: "Football Case", owner: "Rakesh M.", price: "₹60", tag: "Available", img: "https://images.unsplash.com/photo-1517649763962-0c623066013b?w=500" },
+            { name: "Ferrari Team Cap", owner: "Kashyap P.", price: "₹40", tag: "F1 Merch", img: "https://images.unsplash.com/photo-1580242453538-2321852da24a?w=500" },
+            { name: "Everlast Gloves", owner: "Hostel Gym", price: "₹90", tag: "Cleaned", img: "https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?w=500" }
+        ],
+        music: [
+            { name: "Fender Strat", owner: "Music Society", price: "₹600", tag: "Studio", img: "https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=500" },
+            { name: "Novation Launchkey", owner: "Kashyap P.", price: "₹250", tag: "Verified", img: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=500" },
+            { name: "AT2020 Mic", owner: "Hostel B", price: "₹180", tag: "Mint", img: "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=500" },
+            { name: "Yamaha Acoustic", owner: "Rishit K.", price: "₹200", tag: "Available", img: "https://images.unsplash.com/photo-1550985543-f47f38aee64e?w=500" },
+            { name: "Focusrite Scarlett", owner: "Music Society", price: "₹150", tag: "Interface", img: "https://images.unsplash.com/photo-1612264663673-86105f252654?w=500" },
+            { name: "Roland SPD-SX", owner: "Hostel Band", price: "₹450", tag: "Available", img: "https://images.unsplash.com/photo-1519892300165-cb5542fb47c7?w=500" }
+        ]
     };
 
-    const animateCounter = (element) => {
-        const target = parseInt(element.textContent);
-        const duration = 2000; // 2 seconds
-        const increment = target / (duration / 16); // 60fps
-        let current = 0;
+    function renderActiveProductGroup(categoryKey) {
+        const activeItems = campusCatalogMockDatabase[categoryKey];
+        if (!activeItems) return;
 
-        const updateCounter = () => {
-            current += increment;
-            if (current < target) {
-                element.textContent = Math.ceil(current);
-                requestAnimationFrame(updateCounter);
-            } else {
-                element.textContent = target + '+';
-            }
-        };
+        productGridContainer.innerHTML = '';
 
-        updateCounter();
-    };
+        activeItems.forEach((product, idx) => {
+            const cardNode = document.createElement('div');
+            cardNode.className = 'sc-card';
+            
+            cardNode.style.opacity = '0';
+            cardNode.style.transform = 'translateY(16px)';
+            cardNode.style.transition = `opacity 0.4s ease-out ${idx * 0.05}s, transform 0.4s ease-out ${idx * 0.05}s, border-color 0.2s, box-shadow 0.2s`;
 
-    const observer = new IntersectionObserver((entries) => {
+            cardNode.innerHTML = `
+                <div class="sc-image-box">
+                    <span class="sc-badge">${product.tag}</span>
+                    <img src="${product.img}" alt="${product.name}">
+                </div>
+                <div class="sc-content">
+                    <div class="sc-header-row">
+                        <h3>${product.name}</h3>
+                        <div class="sc-price">${product.price}<span>/day</span></div>
+                    </div>
+                    <div class="sc-meta-row">
+                        <span class="sc-owner"><i class="fas fa-user-circle"></i> ${product.owner}</span>
+                        <span class="sc-status">Verified <i class="fas fa-check-circle" style="color:var(--accent-secure);"></i></span>
+                    </div>
+                    <button class="sc-action-btn">Reserve Item</button>
+                </div>
+            `;
+
+            productGridContainer.appendChild(cardNode);
+
+            // Bind Event: Primary Action
+            const reserveBtn = cardNode.querySelector('.sc-action-btn');
+            reserveBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); 
+                console.log(`[BorrowBox] Routing checkout: ${product.name}`);
+                reserveBtn.textContent = "Processing...";
+                reserveBtn.style.backgroundColor = "var(--accent-secure)";
+                reserveBtn.style.borderColor = "var(--accent-secure)";
+                reserveBtn.style.color = "var(--surface-card)";
+                setTimeout(() => {
+                    reserveBtn.textContent = "Reserve Item";
+                    reserveBtn.style = "";
+                }, 1000);
+            });
+
+            // Bind Event: Full Card Click
+            cardNode.addEventListener('click', () => {
+                console.log(`[BorrowBox] Opening details: ${product.name}`);
+            });
+
+            requestAnimationFrame(() => {
+                cardNode.style.opacity = '1';
+                cardNode.style.transform = 'translateY(0)';
+            });
+        });
+    }
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            if (tab.classList.contains('active')) return;
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            const selectedTarget = tab.getAttribute('data-target');
+            renderActiveProductGroup(selectedTarget);
+        });
+    });
+
+    renderActiveProductGroup('electronics');
+}
+
+// 5. TERMINAL BLOCK (Manifesto + Marquee)
+function initTerminalBlock() {
+    const terminalBlock = document.querySelector('.merged-terminal-block');
+    const animateElements = document.querySelectorAll('.manifesto-pill, .manifesto-headline, .manifesto-divider, .manifesto-lead, .manifesto-metric');
+    
+    const marqueeTrack = document.getElementById('marqueeTrack');
+    if (marqueeTrack) {
+        const marqueeContent = marqueeTrack.innerHTML;
+        marqueeTrack.innerHTML = marqueeContent + marqueeContent + marqueeContent + marqueeContent;
+    }
+
+    if (!terminalBlock || animateElements.length === 0) return;
+
+    const terminalObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting && !entry.target.classList.contains('counted')) {
-                entry.target.classList.add('counted');
-                animateCounter(entry.target);
-            }
-        });
-    }, observerOptions);
-
-    stats.forEach(stat => observer.observe(stat));
-}
-
-// Form handlers
-function initFormHandlers() {
-    // Newsletter form
-    const newsletterForm = document.querySelector('.newsletter-form');
-    if (newsletterForm) {
-        newsletterForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = newsletterForm.querySelector('input[type="email"]').value;
-
-            // Show success message (you can customize this)
-            alert(`Thank you for subscribing with ${email}! We'll keep you updated.`);
-            newsletterForm.reset();
-        });
-    }
-
-    // Hero buttons
-    const heroBtn = document.querySelector('.hero-btn');
-    const heroBtn2 = document.querySelector('.hero-btn_2');
-
-    if (heroBtn) {
-        heroBtn.addEventListener('click', () => {
-            // Navigate to browse or login page
-            window.location.href = '/templates/login.html';
-        });
-    }
-
-    if (heroBtn2) {
-        heroBtn2.addEventListener('click', () => {
-            // Scroll to products section
-            const productsSection = document.getElementById('Products');
-            if (productsSection) {
-                productsSection.scrollIntoView({ behavior: 'smooth' });
-            }
-        });
-    }
-}
-
-// Add loading animation for product cards
-function initProductCards() {
-    const productCards = document.querySelectorAll('.product-card');
-
-    const observerOptions = {
-        threshold: 0.2,
-        rootMargin: '0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry, index) => {
             if (entry.isIntersecting) {
-                setTimeout(() => {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }, index * 100); // Stagger animation
+                animateElements.forEach((el, index) => {
+                    setTimeout(() => {
+                        el.style.opacity = '1';
+                        el.style.transform = 'translateY(0)';
+                        const counter = el.querySelector('.counter-number');
+                        if (counter) runNumberCounter(counter);
+                    }, index * 100);
+                });
+                observer.unobserve(entry.target);
             }
         });
-    }, observerOptions);
+    }, { threshold: 0.15, rootMargin: '0px' });
 
-    productCards.forEach(card => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(20px)';
-        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-        observer.observe(card);
+    animateElements.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(24px)';
+        el.style.transition = 'opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
     });
-}
 
-// Initialize product cards animation
-initProductCards();
+    terminalObserver.observe(terminalBlock);
 
-// Add category card interactions
-function initCategoryCards() {
-    const categoryCards = document.querySelectorAll('.category-card');
+    function runNumberCounter(counterElement) {
+        const target = parseInt(counterElement.getAttribute('data-target'));
+        const duration = 1500; 
+        const frameRate = 1000 / 60;
+        const totalFrames = Math.round(duration / frameRate);
+        let frame = 0;
 
-    categoryCards.forEach(card => {
-        card.addEventListener('click', function () {
-            const categoryName = this.querySelector('h3').textContent;
-            console.log(`Navigating to ${categoryName} category`);
-            // Add your navigation logic here
-        });
-    });
-}
+        const counterInterval = setInterval(() => {
+            frame++;
+            const progress = frame / totalFrames;
+            const easeOutProgress = 1 - Math.pow(1 - progress, 3); 
+            counterElement.textContent = Math.round(target * easeOutProgress);
 
-initCategoryCards();
-
-const container = document.getElementById('ring-container');
-
-function createRing() {
-    const ring = document.createElement('div');
-    ring.className = 'floating-ring';
-
-    // Randomize Size (between 50px and 200px)
-    const size = Math.random() * 150 + 50;
-    ring.style.width = `${size}px`;
-    ring.style.height = `${size}px`;
-
-    // Randomize Position
-    ring.style.left = `${Math.random() * 100}%`;
-    ring.style.top = `${Math.random() * 100}%`;
-
-    // Randomize Animation Speed
-    const duration = Math.random() * 15 + 10;
-    ring.style.animationDuration = `${duration}s`;
-
-    // Randomize Opacity (makes some look further away)
-    ring.style.opacity = Math.random() * 0.4 + 0.1;
-
-    container.appendChild(ring);
-}
-
-// Generate 8 random rings
-for (let i = 0; i < 8; i++) {
-    createRing();
-}
-
-document.addEventListener('mousemove', (e) => {
-    const ripples = document.querySelectorAll('.ripple');
-    const card = document.querySelector('.cta-card');
-
-    if (!card) return;
-
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    // Check if mouse is inside the card
-    if (x > 0 && x < rect.width && y > 0 && y < rect.height) {
-        ripples.forEach((ripple, index) => {
-            // Each layer moves at a slightly different speed for depth
-            const depth = (index + 1) * 10;
-            const moveX = (x - rect.width / 2) / depth;
-            const moveY = (y - rect.height / 2) / depth;
-
-            ripple.style.transform = `translate(${moveX}px, ${moveY}px)`;
-        });
+            if (frame === totalFrames) {
+                clearInterval(counterInterval);
+                counterElement.textContent = target; 
+            }
+        }, frameRate);
     }
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    const cards = document.querySelectorAll('.category-card');
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry, index) => {
-            if (entry.isIntersecting) {
-                // Apply a staggered fade-in effect
-                setTimeout(() => {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }, index * 100);
-            }
-        });
-    }, { threshold: 0.1 });
-
-    cards.forEach(card => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(20px)';
-        card.style.transition = 'all 0.6s ease-out';
-        observer.observe(card);
-    });
-});
+}

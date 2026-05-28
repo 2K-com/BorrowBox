@@ -1,473 +1,219 @@
-// ========== FLOATING RINGS BACKGROUND ==========
-const container = document.getElementById('ring-container');
-
-function createRing() {
-    const ring = document.createElement('div');
-    ring.className = 'floating-ring';
-
-    // Randomize Size (between 50px and 200px)
-    const size = Math.random() * 150 + 50;
-    ring.style.width = `${size}px`;
-    ring.style.height = `${size}px`;
-
-    // Randomize Position
-    ring.style.left = `${Math.random() * 100}%`;
-    ring.style.top = `${Math.random() * 100}%`;
-
-    // Randomize Animation Speed
-    const duration = Math.random() * 15 + 10;
-    ring.style.animationDuration = `${duration}s`;
-
-    // Randomize Opacity (makes some look further away)
-    ring.style.opacity = Math.random() * 0.4 + 0.1;
-
-    container.appendChild(ring);
-}
-
-// Generate 8 random rings
-for (let i = 0; i < 8; i++) {
-    createRing();
-}
-
-// Navbar scroll effect removed as per request
-
-
-
-
-// ========== CATEGORY TABS - NEW! ==========
-// ========== CATEGORY FILTERS (CUSTOM DROPDOWN) ==========
-const allItemsBtn = document.getElementById('all-items-btn');
-const categoryRadios = document.querySelectorAll('input[name="category"]');
-const selectedTextSpan = document.querySelector('.selected-text');
-
-// Helper to update displayed text
-function updateSelectedText(text) {
-    if (selectedTextSpan) {
-        selectedTextSpan.textContent = text;
-    }
-}
-
-// "All Items" Button Click
-if (allItemsBtn) {
-    allItemsBtn.addEventListener('click', () => {
-        // Reset Radio Buttons
-        categoryRadios.forEach(radio => radio.checked = false);
-
-        // Reset Display Text
-        updateSelectedText("Select Category");
-
-        // Highlight Button
-        allItemsBtn.classList.add('active');
-
-        console.log('Filtering by category: all');
-        // filterProducts('all');
-    });
-}
-
-// Radio Button Change
-categoryRadios.forEach(radio => {
-    radio.addEventListener('change', (e) => {
-        const selectedCategory = e.target.value;
-        const selectedLabel = e.target.nextElementSibling.getAttribute('data-txt');
-
-        // Unhighlight "All Items" button
-        if (allItemsBtn) allItemsBtn.classList.remove('active');
-
-        // Update Display Text
-        updateSelectedText(selectedLabel);
-
-        console.log(`Filtering by category: ${selectedCategory}`);
-        // filterProducts(selectedCategory);
-    });
-});
-
-
-const productGrid = document.getElementById('productGrid');
-
-const productData = {
-    name: "Nike Airforce1 Premium",
-    subtitle: "Own the Airforce",
-    desc: "Step back into classic hoops style with a durable leather.",
-    price: "$111",
-    img: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=500" // High quality sneaker image
-};
-
-function createCards() {
-    for (let i = 0; i < 20; i++) {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-
-        card.innerHTML = `
-      <div class="image-container">
-        <span class="badge">Best Seller</span>
-        <img src="${productData.img}" alt="Product Image">
-      </div>
-      <div class="product-info">
-        <h3>${productData.name}</h3>
-        <p class="subtitle">${productData.subtitle}</p>
-        <p class="description">${productData.desc}</p>
-      </div>
-      <div class="card-footer">
-        <div class="price-tag">${productData.price}</div>
-        <button class="rent-btn">
-          Rent Now <i class="fas fa-external-link-alt"></i>
-        </button>
-      </div>
-    `;
-        productGrid.appendChild(card);
-    }
-}
-
-createCards();
-
 // ========================================
-// PAGINATION COMPONENT - BORROWBOX
-// Clean version - Component only
+// BORROWBOX CATALOG LOGIC (Full Version with Modal)
 // ========================================
 
-class Pagination {
-    constructor(options = {}) {
-        // Configuration
-        this.currentPage = options.currentPage || 1;
-        this.totalPages = options.totalPages || 10;
-        this.itemsPerPage = options.itemsPerPage || 10;
-        this.totalItems = options.totalItems || 100;
-        this.maxVisiblePages = options.maxVisiblePages || 5;
-        this.onPageChange = options.onPageChange || null;
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Navbar Scroll Effect
+    const navbar = document.getElementById('mainNavbar');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 20) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
 
-        // DOM Elements
-        this.prevBtn = document.getElementById('prev-btn');
-        this.nextBtn = document.getElementById('next-btn');
-        this.numbersContainer = document.getElementById('pagination-numbers');
-        this.paginationText = document.getElementById('pagination-text');
+    // 2. Dummy Data for Products
+    const products = [
+        { id: 1, title: "Scientific Calculator (Casio fx-991EX)", category: "study", price: 30, owner: "Rahul M.", block: "Block C", imageIcon: "fa-calculator" },
+        { id: 2, title: "Sony WH-1000XM4 Noise Cancelling", category: "electronics", price: 150, owner: "Sneha P.", block: "Block A", imageIcon: "fa-headphones" },
+        { id: 3, title: "Electric Kettle (1.5L)", category: "appliances", price: 40, owner: "Aman K.", block: "Block D", imageIcon: "fa-mug-hot" },
+        { id: 4, title: "Engineering Drawing Board + Kit", category: "study", price: 50, owner: "Vikram S.", block: "Block B", imageIcon: "fa-drafting-compass" },
+        { id: 5, title: "Men's Formal Blazer (Navy, Size 40)", category: "apparel", price: 200, owner: "Karan T.", block: "Block C", imageIcon: "fa-user-tie" },
+        { id: 6, title: "Mechanical Keyboard (Red Switches)", category: "electronics", price: 80, owner: "Priya R.", block: "Block A", imageIcon: "fa-keyboard" },
+        { id: 7, title: "Table Lamp (Adjustable LED)", category: "appliances", price: 25, owner: "Neha D.", block: "Block D", imageIcon: "fa-lightbulb" },
+        { id: 8, title: "Graphic Tablet (Wacom Intuos)", category: "electronics", price: 120, owner: "Arjun V.", block: "Block B", imageIcon: "fa-pen-nib" }
+    ];
 
-        // Initialize
-        this.init();
+    // Core Elements
+    const productGrid = document.getElementById('productGrid');
+    const resultsCount = document.getElementById('resultsCount');
+    const categoryItems = document.querySelectorAll('.category-list li');
+    const priceSlider = document.getElementById('priceRange');
+    const priceValue = document.getElementById('priceValue');
+
+    // Modal Elements
+    const modal = document.getElementById('quickViewModal');
+    const closeBtn = document.getElementById('closeModalBtn');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalPrice = document.getElementById('modalPrice');
+    const modalOwner = document.getElementById('modalOwner');
+    const modalBlock = document.getElementById('modalBlock');
+    const modalCategory = document.getElementById('modalCategory');
+    const mainModalIcon = document.getElementById('mainModalIcon');
+
+    // 3. Render Function
+    function renderProducts(items) {
+        productGrid.innerHTML = '';
+        
+        if (items.length === 0) {
+            productGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px 0;">No items found matching your filters.</p>';
+            resultsCount.textContent = `0 items found`;
+            return;
+        }
+
+        resultsCount.textContent = `Showing ${items.length} items`;
+
+        items.forEach(product => {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.innerHTML = `
+                <div class="card-image">
+                    <span class="status-badge">Available</span>
+                    <i class="fas ${product.imageIcon}"></i>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">${product.title}</h3>
+                    <div class="card-price">₹${product.price} <span>/ day</span></div>
+                    <div class="card-owner">
+                        <i class="fas fa-user-circle"></i> ${product.owner} • ${product.block}
+                    </div>
+                    <button class="btn-primary open-modal-btn" data-id="${product.id}">Reserve Item</button>
+                </div>
+            `;
+            productGrid.appendChild(card);
+        });
+
+        // Crucial: Bind the click events to the new buttons after they are created!
+        bindModalButtons();
     }
 
-    init() {
-        // Attach event listeners safely (elements may be missing)
-        if (this.prevBtn) this.prevBtn.addEventListener('click', () => this.goToPrevious());
-        if (this.nextBtn) this.nextBtn.addEventListener('click', () => this.goToNext());
+    // 4. Initial Render on Page Load
+    renderProducts(products);
 
-        // Keyboard navigation
-        document.addEventListener('keydown', (e) => this.handleKeyboard(e));
+    // 5. Category Filtering Logic
+    categoryItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+            categoryItems.forEach(i => i.classList.remove('active'));
+            e.target.classList.add('active');
 
-        // Render initial state
-        this.render();
+            const selectedCat = e.target.getAttribute('data-category');
+            const maxPrice = parseInt(priceSlider.value);
+            
+            const filtered = products.filter(p => {
+                const matchCat = selectedCat === 'all' || p.category === selectedCat;
+                const matchPrice = p.price <= maxPrice;
+                return matchCat && matchPrice;
+            });
 
-        console.log('✓ Pagination initialized');
-        console.log(`- Total pages: ${this.totalPages}`);
-        console.log(`- Current page: ${this.currentPage}`);
-        console.log('- Use Arrow Left/Right keys to navigate');
+            renderProducts(filtered);
+        });
+    });
+
+    // 6. Price Slider Sync Logic
+    priceSlider.addEventListener('input', (e) => {
+        const val = e.target.value;
+        priceValue.textContent = `₹${val}`;
+        
+        const activeCat = document.querySelector('.category-list li.active').getAttribute('data-category');
+        
+        const filtered = products.filter(p => {
+            const matchCat = activeCat === 'all' || p.category === activeCat;
+            const matchPrice = p.price <= val;
+            return matchCat && matchPrice;
+        });
+
+        renderProducts(filtered);
+    });
+
+    // ========================================
+    // QUICK VIEW MODAL LOGIC
+    // ========================================
+    
+    function bindModalButtons() {
+        const openBtns = document.querySelectorAll('.open-modal-btn');
+        openBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const productId = parseInt(e.target.getAttribute('data-id'));
+                openModal(productId);
+            });
+        });
     }
 
-    // Render pagination UI
-    render() {
-        this.renderPageNumbers();
-        this.updateButtons();
-        this.updateInfo();
+    function openModal(productId) {
+        // Find specific product by ID
+        const product = products.find(p => p.id === productId);
+        if(!product) return;
+
+        // Populate Modal Data
+        modalTitle.textContent = product.title;
+        modalPrice.textContent = `₹${product.price}`;
+        modalOwner.textContent = product.owner;
+        modalBlock.textContent = product.block;
+        modalCategory.textContent = product.category;
+        
+        // Setup Image/Icon Carousel
+        setupMockCarousel(product.imageIcon);
+
+        // Show Modal
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Stop background scrolling
     }
 
-    // Render page number buttons
-    renderPageNumbers() {
-        this.numbersContainer.innerHTML = '';
+    function closeModal() {
+        modal.classList.remove('active');
+        document.body.style.overflow = ''; // Restore background scrolling
+    }
 
-        const pages = this.getPageNumbers();
+    // Modal Close Triggers
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        // Close if clicking on the dark overlay background
+        if(e.target === modal) closeModal(); 
+    });
+    document.addEventListener('keydown', (e) => {
+        // Close on 'ESC' key
+        if(e.key === 'Escape' && modal.classList.contains('active')) closeModal();
+    });
 
-        pages.forEach((page) => {
-            if (page === '...') {
-                // Create ellipsis
-                const ellipsis = document.createElement('span');
-                ellipsis.className = 'page-ellipsis';
-                ellipsis.textContent = '...';
-                this.numbersContainer.appendChild(ellipsis);
+    // Modal Carousel Logic
+    let currentImageIndex = 0;
+    let currentIcons = [];
+    
+    const thumbnails = document.querySelectorAll('.thumbnail');
+    const prevBtn = document.getElementById('prevImgBtn');
+    const nextBtn = document.getElementById('nextImgBtn');
+
+    function setupMockCarousel(primaryIcon) {
+        currentIcons = [primaryIcon, 'fa-box-open', 'fa-tag'];
+        currentImageIndex = 0;
+        updateCarouselUI();
+    }
+
+    function updateCarouselUI() {
+        // Fade out
+        mainModalIcon.style.opacity = 0;
+        
+        setTimeout(() => {
+            // Change icon and fade back in
+            mainModalIcon.className = `fas ${currentIcons[currentImageIndex]} main-icon`;
+            mainModalIcon.style.opacity = 1;
+        }, 200);
+
+        // Update thumbnails
+        thumbnails.forEach((thumb, idx) => {
+            if(idx === currentImageIndex) {
+                thumb.classList.add('active');
             } else {
-                // Create page button
-                const button = document.createElement('button');
-                button.className = 'page-number';
-                button.textContent = page;
-                button.setAttribute('aria-label', `Go to page ${page}`);
-
-                if (page === this.currentPage) {
-                    button.classList.add('active');
-                    button.setAttribute('aria-current', 'page');
-                }
-
-                button.addEventListener('click', () => this.goToPage(page));
-                this.numbersContainer.appendChild(button);
+                thumb.classList.remove('active');
             }
         });
     }
 
-    // Calculate which page numbers to show with ellipsis
-    getPageNumbers() {
-        const pages = [];
-        const totalPages = this.totalPages;
-        const current = this.currentPage;
-        const maxVisible = this.maxVisiblePages;
-
-        if (totalPages <= maxVisible + 2) {
-            // Show all pages if total is small
-            for (let i = 1; i <= totalPages; i++) {
-                pages.push(i);
-            }
-        } else {
-            // Always show first page
-            pages.push(1);
-
-            let startPage, endPage;
-
-            if (current <= 3) {
-                // Near the start
-                startPage = 2;
-                endPage = maxVisible;
-                for (let i = startPage; i <= endPage; i++) {
-                    pages.push(i);
-                }
-                pages.push('...');
-            } else if (current >= totalPages - 2) {
-                // Near the end
-                pages.push('...');
-                startPage = totalPages - maxVisible + 1;
-                endPage = totalPages - 1;
-                for (let i = startPage; i <= endPage; i++) {
-                    pages.push(i);
-                }
-            } else {
-                // In the middle
-                pages.push('...');
-                startPage = current - 1;
-                endPage = current + 1;
-                for (let i = startPage; i <= endPage; i++) {
-                    pages.push(i);
-                }
-                pages.push('...');
-            }
-
-            // Always show last page
-            pages.push(totalPages);
-        }
-
-        return pages;
-    }
-
-    // Update Previous/Next buttons (Freeze when needed)
-    updateButtons() {
-        // FREEZE Previous button on first page
-        if (this.currentPage === 1) {
-            this.prevBtn.disabled = true;
-            this.prevBtn.setAttribute('aria-disabled', 'true');
-        } else {
-            this.prevBtn.disabled = false;
-            this.prevBtn.setAttribute('aria-disabled', 'false');
-        }
-
-        // FREEZE Next button on last page
-        if (this.currentPage === this.totalPages) {
-            this.nextBtn.disabled = true;
-            this.nextBtn.setAttribute('aria-disabled', 'true');
-        } else {
-            this.nextBtn.disabled = false;
-            this.nextBtn.setAttribute('aria-disabled', 'false');
-        }
-    }
-
-    // Update pagination info text
-    updateInfo() {
-        const start = (this.currentPage - 1) * this.itemsPerPage + 1;
-        const end = Math.min(this.currentPage * this.itemsPerPage, this.totalItems);
-        // Guard in case the info container isn't present in the DOM
-        if (this.paginationText) {
-            this.paginationText.textContent = `Showing ${start}-${end} of ${this.totalItems} items`;
-        }
-    }
-
-    // Navigate to specific page
-    goToPage(pageNumber) {
-        if (pageNumber === this.currentPage) return;
-        if (pageNumber < 1 || pageNumber > this.totalPages) return;
-
-        this.currentPage = pageNumber;
-        this.render();
-
-        // Callback
-        if (this.onPageChange) {
-            this.onPageChange(this.currentPage);
-        }
-
-        // Show notification
-        this.showNotification(`Page ${pageNumber}`);
-
-        // Log to console
-        console.log(`✓ Navigated to page ${pageNumber}`);
-    }
-
-    // Go to previous page
-    goToPrevious() {
-        if (this.currentPage > 1) {
-            this.goToPage(this.currentPage - 1);
-        }
-    }
-
-    // Go to next page
-    goToNext() {
-        if (this.currentPage < this.totalPages) {
-            this.goToPage(this.currentPage + 1);
-        }
-    }
-
-    // Keyboard navigation
-    handleKeyboard(e) {
-        if (e.key === 'ArrowLeft') {
-            this.goToPrevious();
-        } else if (e.key === 'ArrowRight') {
-            this.goToNext();
-        }
-    }
-
-    // Show notification
-    showNotification(message) {
-        // Remove existing notification
-        const existing = document.querySelector('.pagination-notification');
-        if (existing) {
-            existing.remove();
-        }
-
-        const notification = document.createElement('div');
-        notification.className = 'pagination-notification';
-        notification.innerHTML = `
-            <i class="fas fa-check-circle"></i>
-            <span>${message}</span>
-        `;
-
-        document.body.appendChild(notification);
-
-        // Trigger animation
-        setTimeout(() => notification.classList.add('show'), 10);
-
-        // Auto remove after 2 seconds
-        setTimeout(() => {
-            notification.classList.remove('show');
-            setTimeout(() => notification.remove(), 300);
-        }, 2000);
-    }
-
-    // Public methods to update pagination
-    setTotalItems(total) {
-        this.totalItems = total;
-        this.totalPages = Math.ceil(total / this.itemsPerPage);
-
-        // Reset to page 1 if current page exceeds new total
-        if (this.currentPage > this.totalPages) {
-            this.currentPage = 1;
-        }
-
-        this.render();
-    }
-
-    setItemsPerPage(perPage) {
-        this.itemsPerPage = perPage;
-        this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
-        this.currentPage = 1;
-
-        this.render();
-    }
-
-    getCurrentPage() {
-        return this.currentPage;
-    }
-}
-
-// ========================================
-// INITIALIZE PAGINATION
-// ========================================
-
-document.addEventListener('DOMContentLoaded', () => {
-    // Create pagination instance
-    const pagination = new Pagination({
-        currentPage: 1,           // Starting page
-        totalPages: 10,           // Total number of pages
-        itemsPerPage: 10,         // Items per page
-        totalItems: 100,          // Total items
-        maxVisiblePages: 5,       // Max page numbers visible
-        onPageChange: (page) => {
-            // Your custom logic when page changes
-            console.log(`Page changed to: ${page}`);
-
-            // Example: Fetch data for new page
-            // fetchData(page);
-
-            // Example: Update URL
-            // window.history.pushState({}, '', `?page=${page}`);
-
-            // Example: Scroll to top
-            // window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+    prevBtn.addEventListener('click', () => {
+        currentImageIndex = (currentImageIndex === 0) ? currentIcons.length - 1 : currentImageIndex - 1;
+        updateCarouselUI();
     });
 
-    // Make pagination accessible globally
-    window.paginationInstance = pagination;
+    nextBtn.addEventListener('click', () => {
+        currentImageIndex = (currentImageIndex === currentIcons.length - 1) ? 0 : currentImageIndex + 1;
+        updateCarouselUI();
+    });
 
-    // Example usage in console:
-    // paginationInstance.goToPage(5)
-    // paginationInstance.setTotalItems(150)
-    // paginationInstance.getCurrentPage()
+    thumbnails.forEach((thumb, index) => {
+        thumb.addEventListener('click', () => {
+            currentImageIndex = index;
+            updateCarouselUI();
+        });
+    });
 });
-
-// Add notification styles
-const notificationStyles = document.createElement('style');
-notificationStyles.textContent = `
-    .pagination-notification {
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        background: white;
-        padding: 1rem 1.5rem;
-        border-radius: 12px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        z-index: 10000;
-        transform: translateY(150px);
-        transition: transform 0.3s ease;
-        font-family: 'Inter', sans-serif;
-        font-size: 0.9rem;
-        border-left: 4px solid #6D90B9;
-    }
-
-    .pagination-notification.show {
-        transform: translateY(0);
-    }
-
-    .pagination-notification i {
-        font-size: 1.25rem;
-        color: #6D90B9;
-    }
-
-    @media (max-width: 480px) {
-        .pagination-notification {
-            right: 10px;
-            left: 10px;
-            bottom: 20px;
-        }
-    }
-`;
-document.head.appendChild(notificationStyles);
-
-// ========== SEARCH FUNCTIONALITY ==========
-const searchInput = document.getElementById('searchInput');
-
-if (searchInput) {
-    searchInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            const searchQuery = searchInput.value.trim();
-            if (searchQuery) {
-                console.log('Searching for:', searchQuery);
-                // Add your search logic here
-                // Example: window.location.href = `/search?q=${encodeURIComponent(searchQuery)}`;
-            }
-        }
-    });
-}
