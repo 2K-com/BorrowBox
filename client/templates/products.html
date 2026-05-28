@@ -3,324 +3,231 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="BorrowBox - Borrow anything, anytime. The smart way to rent items from fellow students."
+    <meta name="description" content="BorrowBox - Campus Catalog" />
+    <title>BorrowBox | Campus Catalog</title>
+
+    <!-- Google Fonts: Inter -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
     />
-    <title>BorrowBox - Smart Student Borrowing Platform</title>
-
-    <!-- CSS Files -->
-    <link rel="stylesheet" href="../static/css/root.css" />
-    <link rel="stylesheet" href="../static/css/products.css" />
-
     <!-- Font Awesome for Icons -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+    <!-- CSS -->
+    <link rel="stylesheet" href="../static/css/products.css" />
   </head>
   <body>
-    <!-- Floating Background Shapes -->
-    <div class="floating-background">
-      <div class="shape shape-1"></div>
-      <div class="shape shape-2"></div>
-      <div class="shape shape-3"></div>
-      <div class="shape shape-4"></div>
-      <div class="shape shape-5"></div>
-    </div>
-    <div class="ring-container" id="ring-container"></div>
-
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-      <ul class="nav-left">
-        <li><a href="#Home">Home</a></li>
-        <li><a href="#Categories">Categories</a></li>
-        <li><a href="products.html">Products</a></li>
-        <li><a href="#Contact">Contact</a></li>
-      </ul>
-
-      <div class="nav-center">
-        <h1>BorrowBox</h1>
-      </div>
-
-      <div class="nav-right">
-        <a href="login.html">
-          <button class="login-btn">Login</button>
-        </a>
+    <!-- Minimalist Global Navbar -->
+    <nav class="navbar" id="mainNavbar">
+      <div class="nav-container">
+        <a href="index.html" class="brand-logo"
+          ><i class="fas fa-layer-group"></i> BorrowBox</a
+        >
+        <div class="nav-links">
+          <a href="index.html">Home</a>
+          <a href="products.html" class="active">Catalog</a>
+          <a href="dashboard.html">My Vault</a>
+          <a href="login.html" class="btn-nav-primary">Sign In</a>
+        </div>
       </div>
     </nav>
 
-    <!-- Category Tabs Section - NEW! -->
-    <section class="category-section" id="Categories">
-      <div class="category-tabs">
-        <button
-          class="category-tab active"
-          id="all-items-btn"
-          data-category="all"
-        >
-          <i class="fas fa-th"></i>
-          All Items
-        </button>
-
-        <div class="custom-select">
-          <div
-            class="select-selected"
-            data-default="Select Category"
-            data-electronics="Electronics"
-            data-books="Books & Study"
-            data-sports="Sports"
-            data-kitchen="Kitchen"
-            data-fashion="Fashion"
-          >
-            <span class="selected-text">Select Category</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="1em"
-              viewBox="0 0 512 512"
-              class="arrow"
-            >
-              <path
-                d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
-              ></path>
-            </svg>
-          </div>
-          <div class="select-options">
-            <div title="electronics">
-              <input
-                id="electronics"
-                name="category"
-                type="radio"
-                value="electronics"
-              />
-              <label
-                class="option"
-                for="electronics"
-                data-txt="Electronics"
-              ></label>
-            </div>
-            <div title="books">
-              <input id="books" name="category" type="radio" value="books" />
-              <label
-                class="option"
-                for="books"
-                data-txt="Books & Study"
-              ></label>
-            </div>
-            <div title="sports">
-              <input id="sports" name="category" type="radio" value="sports" />
-              <label class="option" for="sports" data-txt="Sports"></label>
-            </div>
-            <div title="kitchen">
-              <input
-                id="kitchen"
-                name="category"
-                type="radio"
-                value="kitchen"
-              />
-              <label class="option" for="kitchen" data-txt="Kitchen"></label>
-            </div>
-            <div title="fashion">
-              <input
-                id="fashion"
-                name="category"
-                type="radio"
-                value="fashion"
-              />
-              <label class="option" for="fashion" data-txt="Fashion"></label>
-            </div>
-          </div>
+    <main class="catalog-main">
+      <!-- Header Section -->
+      <header class="catalog-header">
+        <div class="header-content">
+          <h1>Campus Catalog</h1>
+          <p>
+            Discover gear, textbooks, and electronics available to borrow in
+            your network.
+          </p>
         </div>
-      </div>
-
-      <div class="search-container-relative">
-        <input
-          placeholder="Search..."
-          class="search-input-new"
-          name="search"
-          type="search"
-          id="searchInput"
-        />
-        <svg
-          class="search-icon-new"
-          stroke="currentColor"
-          stroke-width="1.5"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-            stroke-linejoin="round"
-            stroke-linecap="round"
-          ></path>
-        </svg>
-      </div>
-    </section>
-
-    <section class="product-grid-section">
-      <div class="product-grid" id="productGrid"></div>
-    </section>
-
-    <div class="pagination-container-wrapper">
-      <!-- Pagination Component -->
-      <div class="pagination-wrapper">
-        <div class="pagination-container">
-          <!-- Previous Button -->
-          <button
-            class="pagination-btn pagination-prev"
-            id="prev-btn"
-            aria-label="Previous page"
-          >
-            <i class="fas fa-chevron-left"></i>
-            <span>Previous</span>
-          </button>
-
-          <!-- Page Numbers -->
-          <div class="pagination-numbers" id="pagination-numbers">
-            <!-- Dynamically generated page numbers -->
-          </div>
-
-          <!-- Next Button -->
-          <button
-            class="pagination-btn pagination-next"
-            id="next-btn"
-            aria-label="Next page"
-          >
-            <span>Next</span>
-            <i class="fas fa-chevron-right"></i>
-          </button>
+        <div class="search-bar">
+          <i class="fas fa-search"></i>
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search for calculators, cameras, books..."
+          />
+          <button id="searchBtn" class="btn-primary">Search</button>
         </div>
-      </div>
-    </div>
+      </header>
 
-    <!-- Footer -->
-    <footer class="site-footer" id="Contact">
-      <div class="footer-container">
-        <div class="footer-main">
-          <div class="footer-column">
-            <h4>BorrowBox</h4>
-            <p>
-              The easiest way for college students to rent or borrow items from
-              fellow students. Save money, reduce waste, build community.
-            </p>
-            <div
-              id="SocailIcons"
-              style="justify-content: flex-start; margin-top: 1rem"
-            >
-              <div class="icons instaIcon">
-                <div class="icon insta">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    height=""
-                    width="35"
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
-                    class="w-6 h-6 text-gray-800 dark:text-white"
-                  >
-                    <path
-                      clip-rule="evenodd"
-                      d="M3 8a5 5 0 0 1 5-5h8a5 5 0 0 1 5 5v8a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V8Zm5-3a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3H8Zm7.597 2.214a1 1 0 0 1 1-1h.01a1 1 0 1 1 0 2h-.01a1 1 0 0 1-1-1ZM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm-5 3a5 5 0 1 1 10 0 5 5 0 0 1-10 0Z"
-                      fill-rule="evenodd"
-                      fill="currentColor"
-                    ></path>
-                  </svg>
-                </div>
-              </div>
-              <div class="icons linkedin">
-                <div class="icon link">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="35"
-                    height=""
-                    viewBox="0 0 24 24"
-                    style="fill: rgba(0, 0, 0, 1)"
-                  >
-                    <circle
-                      cx="4.983"
-                      cy="5.009"
-                      r="2.188"
-                      fill="currentColor"
-                    ></circle>
-                    <path
-                      d="M9.237 8.855v12.139h3.769v-6.003c0-1.584.298-3.118 2.262-3.118 1.937 0 1.961 1.811 1.961 3.218v5.904H21v-6.657c0-3.27-.704-5.783-4.526-5.783-1.835 0-3.065 1.007-3.568 1.96h-.051v-1.66H9.237zm-6.142 0H6.87v12.139H3.095z"
-                      fill="currentColor"
-                    ></path>
-                  </svg>
-                </div>
-              </div>
-              <div class="icons whatsapp">
-                <div class="icon whats">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="35"
-                    height=""
-                    viewBox="0 0 24 24"
-                    style="fill: rgba(0, 0, 0, 1)"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M18.403 5.633A8.919 8.919 0 0 0 12.053 3c-4.948 0-8.976 4.027-8.978 8.977 0 1.582.413 3.126 1.198 4.488L3 21.116l4.759-1.249a8.981 8.981 0 0 0 4.29 1.093h.004c4.947 0 8.975-4.027 8.977-8.977a8.926 8.926 0 0 0-2.627-6.35m-6.35 13.812h-.003a7.446 7.446 0 0 1-3.798-1.041l-.272-.162-2.824.741.753-2.753-.177-.282a7.448 7.448 0 0 1-1.141-3.971c.002-4.114 3.349-7.461 7.465-7.461a7.413 7.413 0 0 1 5.275 2.188 7.42 7.42 0 0 1 2.183 5.279c-.002 4.114-3.349 7.462-7.461 7.462m4.093-5.589c-.225-.113-1.327-.655-1.533-.73-.205-.075-.354-.112-.504.112s-.58.729-.711.879-.262.168-.486.056-.947-.349-1.804-1.113c-.667-.595-1.117-1.329-1.248-1.554s-.014-.346.099-.458c.101-.1.224-.262.336-.393.112-.131.149-.224.224-.374s.038-.281-.019-.393c-.056-.113-.505-1.217-.692-1.666-.181-.435-.366-.377-.504-.383a9.65 9.65 0 0 0-.429-.008.826.826 0 0 0-.599.28c-.206.225-.785.767-.785 1.871s.804 2.171.916 2.321c.112.15 1.582 2.415 3.832 3.387.536.231.954.369 1.279.473.537.171 1.026.146 1.413.089.431-.064 1.327-.542 1.514-1.066.187-.524.187-.973.131-1.067-.056-.094-.207-.151-.43-.263"
-                      fill="currentColor"
-                    ></path>
-                  </svg>
-                </div>
-              </div>
-              <div class="icons youtube">
-                <div class="icon tube">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="35"
-                    height=""
-                    viewBox="0 0 24 24"
-                    style="fill: rgba(0, 0, 0, 1)"
-                  >
-                    <path
-                      d="M21.593 7.203a2.506 2.506 0 0 0-1.762-1.766C18.265 5.007 12 5 12 5s-6.264-.007-7.831.404a2.56 2.56 0 0 0-1.766 1.778c-.413 1.566-.417 4.814-.417 4.814s-.004 3.264.406 4.814c.23.857.905 1.534 1.763 1.765 1.582.43 7.83.437 7.83.437s6.265.007 7.831-.403a2.515 2.515 0 0 0 1.767-1.763c.414-1.565.417-4.812.417-4.812s.02-3.265-.407-4.831zM9.996 15.005l.005-6 5.207 3.005-5.212 2.995z"
-                      fill="currentColor"
-                    ></path>
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="footer-column">
-            <h4>Quick Links</h4>
-            <ul>
-              <li><a href="#Categories">Categories</a></li>
-              <li><a href="#Products">Featured Products</a></li>
-              <li><a href="#">How It Works</a></li>
+      <div class="catalog-container">
+        <!-- Sidebar Filters -->
+        <aside class="catalog-sidebar">
+          <div class="filter-group">
+            <h3>Categories</h3>
+            <ul class="category-list" id="categoryList">
+              <li class="active" data-category="all">All Items</li>
+              <li data-category="electronics">Electronics & Tech</li>
+              <li data-category="study">Study Essentials</li>
+              <li data-category="apparel">Apparel & Formal</li>
+              <li data-category="appliances">Dorm Appliances</li>
             </ul>
           </div>
 
-          <div class="footer-column">
-            <h4>Support</h4>
-            <ul>
-              <li><a href="#">Contact Us</a></li>
-              <li><a href="#">Terms of Service</a></li>
-              <li><a href="#">Privacy Policy</a></li>
-            </ul>
+          <div class="filter-group">
+            <h3>Availability</h3>
+            <label class="checkbox-label">
+              <input type="checkbox" id="availToday" checked />
+              <div class="checkbox-custom"></div>
+              <span>Available Today</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="availWeekend" />
+              <div class="checkbox-custom"></div>
+              <span>Available this Weekend</span>
+            </label>
           </div>
 
-          <div class="footer-column">
-            <h4>Stay Updated</h4>
-            <p>Get news and updates about new items and features.</p>
-            <form class="newsletter-form">
-              <input type="email" placeholder="Enter your email" required />
-              <button type="submit">Subscribe</button>
-            </form>
+          <div class="filter-group">
+            <h3>Price Range (Per Day)</h3>
+            <input
+              type="range"
+              min="0"
+              max="500"
+              value="500"
+              class="price-slider"
+              id="priceRange"
+            />
+            <div class="price-labels">
+              <span>₹0</span>
+              <span id="priceValue">₹500</span>
+            </div>
           </div>
-        </div>
+        </aside>
 
-        <div class="footer-bottom">
-          <div class="footer-copyright">
-            &copy; 2026 BorrowBox. All rights reserved.
+        <!-- Product Grid Area -->
+        <section class="catalog-results">
+          <div class="results-meta">
+            <span id="resultsCount">Showing all items</span>
+            <div class="sort-dropdown">
+              <label for="sortSelect">Sort by:</label>
+              <select id="sortSelect">
+                <option value="newest">Newest Listed</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="popular">Most Popular</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Dynamic Grid Injected via JS -->
+          <div class="product-grid" id="productGrid">
+            <!-- Products load here -->
+          </div>
+
+          <div class="load-more-container">
+            <button class="btn-secondary" id="loadMoreBtn">
+              Load More Items
+            </button>
+          </div>
+        </section>
+      </div>
+      <div class="quick-view-overlay" id="quickViewModal">
+        <div class="quick-view-container">
+          <button class="close-modal-btn" id="closeModalBtn">
+            <i class="fas fa-times"></i>
+          </button>
+
+          <div class="modal-layout">
+            <div class="modal-gallery">
+              <div class="main-image-view">
+                <i class="fas fa-camera main-icon" id="mainModalIcon"></i>
+                <button class="gallery-nav prev" id="prevImgBtn">
+                  <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="gallery-nav next" id="nextImgBtn">
+                  <i class="fas fa-chevron-right"></i>
+                </button>
+              </div>
+              <div class="gallery-thumbnails">
+                <div class="thumbnail active" data-index="0">
+                  <i class="fas fa-camera"></i>
+                </div>
+                <div class="thumbnail" data-index="1">
+                  <i class="fas fa-box"></i>
+                </div>
+                <div class="thumbnail" data-index="2">
+                  <i class="fas fa-tag"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-details">
+              <div class="modal-header-meta">
+                <span class="category-pill" id="modalCategory">Category</span>
+                <span class="status-badge-inline">Available Now</span>
+              </div>
+
+              <h2 class="modal-title" id="modalTitle">Product Name</h2>
+
+              <div class="modal-price-row">
+                <div class="price-block">
+                  <span class="price-value" id="modalPrice">₹0</span>
+                  <span class="price-interval">/ day</span>
+                </div>
+                <div class="review-summary">
+                  <i class="fas fa-star" style="color: #ffb020"></i>
+                  <span class="rating-number">4.8</span>
+                  <span class="review-count">(12 reviews)</span>
+                </div>
+              </div>
+
+              <div class="modal-divider"></div>
+
+              <div class="owner-card">
+                <div class="owner-avatar"><i class="fas fa-user"></i></div>
+                <div class="owner-info">
+                  <h4>
+                    <span id="modalOwner">Owner Name</span>
+                    <i class="fas fa-check-circle verified-icon"></i>
+                  </h4>
+                  <p>
+                    <i class="fas fa-map-marker-alt"></i> Meetup:
+                    <span id="modalBlock">Block Name</span>
+                  </p>
+                </div>
+              </div>
+
+              <div class="modal-divider"></div>
+
+              <div class="product-description">
+                <h3>Description</h3>
+                <p>
+                  This item is in great condition. Perfect for upcoming
+                  assignments or weekend projects. Please return it in the same
+                  condition it was borrowed.
+                </p>
+                <ul class="rule-list">
+                  <li>
+                    <i class="fas fa-clock"></i> Max rental period: 3 Days
+                  </li>
+                  <li>
+                    <i class="fas fa-shield-alt"></i> Security deposit required
+                    at meetup
+                  </li>
+                </ul>
+              </div>
+
+              <div class="modal-actions">
+                <button
+                  class="btn-secondary btn-icon-only"
+                  title="Save to Vault"
+                >
+                  <i class="far fa-heart"></i>
+                </button>
+                <button class="btn-primary flex-grow">Request Booking</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </footer>
+    </main>
 
     <script src="../static/js/products.js"></script>
   </body>

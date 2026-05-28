@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ============================================================
 function initNavigation() {
     const navLinks = document.querySelectorAll('[data-page]');
-    const pages    = document.querySelectorAll('.dash-page');
+    const pages = document.querySelectorAll('.dash-page');
     const pageTitle = document.querySelector('.topnav-title');
 
     function activatePage(pageId) {
@@ -42,15 +42,15 @@ function initNavigation() {
 
         // Update top nav title
         const titles = {
-            home:        'Dashboard',
-            browse:      'Browse Items',
-            listings:    'My Listings',
-            'add-item':  'Add New Item',
-            requests:    'Borrow Requests',
-            borrowings:  'Active Borrowings',
-            history:     'Transaction History',
+            home: 'Dashboard',
+            browse: 'Browse Items',
+            listings: 'My Listings',
+            'add-item': 'Add New Item',
+            requests: 'Borrow Requests',
+            borrowings: 'Active Borrowings',
+            history: 'Transaction History',
             notifications: 'Notifications',
-            profile:     'My Profile',
+            profile: 'My Profile',
         };
         if (pageTitle && titles[pageId]) pageTitle.textContent = titles[pageId];
 
@@ -94,9 +94,9 @@ function handleLogout() {
 // SIDEBAR MOBILE TOGGLE
 // ============================================================
 function initSidebarToggle() {
-    const sidebar   = document.querySelector('.dash-sidebar');
-    const overlay   = document.querySelector('.sidebar-overlay');
-    const menuBtn   = document.querySelector('.topnav-menu-btn');
+    const sidebar = document.querySelector('.dash-sidebar');
+    const overlay = document.querySelector('.sidebar-overlay');
+    const menuBtn = document.querySelector('.topnav-menu-btn');
 
     if (menuBtn) {
         menuBtn.addEventListener('click', () => {
@@ -226,9 +226,9 @@ function animateStatNumbers() {
     const statEls = document.querySelectorAll('.stat-number-anim');
     statEls.forEach(el => {
         const target = parseInt(el.getAttribute('data-target'), 10);
-        let current  = 0;
-        const step   = Math.ceil(target / 30);
-        const timer  = setInterval(() => {
+        let current = 0;
+        const step = Math.ceil(target / 30);
+        const timer = setInterval(() => {
             current = Math.min(current + step, target);
             el.textContent = current;
             if (current >= target) clearInterval(timer);
@@ -407,7 +407,7 @@ function initRequests() {
 }
 
 // Expose globally so inline onclick works
-window.handleRequest = function(id, action) {
+window.handleRequest = function (id, action) {
     const req = REQUESTS_DATA.find(r => r.id === id);
     if (!req) return;
     req.status = action;
@@ -490,7 +490,7 @@ function initHistory() {
                 </div>
             </td>
             <td>
-                <span style="font-size:var(--fs-xs);padding:0.2rem 0.6rem;border-radius:var(--radius-full);background:${h.type==='Borrow'?'rgba(109,144,185,0.1)':'rgba(16,185,129,0.1)'};color:${h.type==='Borrow'?'var(--quaternary-color)':'#10B981'};font-weight:var(--fw-semibold);">${h.type}</span>
+                <span style="font-size:var(--fs-xs);padding:0.2rem 0.6rem;border-radius:var(--radius-full);background:${h.type === 'Borrow' ? 'rgba(109,144,185,0.1)' : 'rgba(16,185,129,0.1)'};color:${h.type === 'Borrow' ? 'var(--quaternary-color)' : '#10B981'};font-weight:var(--fw-semibold);">${h.type}</span>
             </td>
             <td class="amount-positive">${h.rent}</td>
             <td class="amount-neutral">${h.deposit}</td>
@@ -600,7 +600,7 @@ function initAddItemForm() {
 
     // Upload zone click
     const uploadZone = document.querySelector('.upload-zone');
-    const fileInput  = document.getElementById('item-image-input');
+    const fileInput = document.getElementById('item-image-input');
     if (uploadZone && fileInput) {
         uploadZone.addEventListener('click', () => fileInput.click());
         uploadZone.addEventListener('dragover', (e) => {
@@ -637,7 +637,7 @@ function setInputById(id, val) {
     if (el) el.value = val;
 }
 
-window.showToast = function(msg, type = 'info') {
+window.showToast = function (msg, type = 'info') {
     const existing = document.querySelector('.dash-toast');
     if (existing) existing.remove();
 

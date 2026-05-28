@@ -1,26 +1,15 @@
 // ========================================
-// BORROWBOX LOGIN PAGE JAVASCRIPT
-// Campus-Verified Rental Platform
+// BORROWBOX SECURE LOGIN JAVASCRIPT
+// Nordic Minimalist Architecture
 // ========================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize all features
     initFormSwitching();
     initPasswordToggle();
     initPasswordStrength();
     initOTPInput();
     initStepNavigation();
     initFormValidation();
-});
-
-const navbar = document.querySelector(".navbar");
-
-window.addEventListener("scroll", () => {
-    if (window.scrollY > 60) {
-        navbar.classList.add("navbar-scrolled");
-    } else {
-        navbar.classList.remove("navbar-scrolled");
-    }
 });
 
 // ========================================
@@ -89,44 +78,35 @@ function initPasswordStrength() {
         const password = passwordInput.value;
         const strength = calculatePasswordStrength(password);
 
-        // Update progress bar
         strengthProgress.className = 'strength-progress';
         if (strength.score === 1) {
             strengthProgress.classList.add('weak');
             strengthText.textContent = 'Weak';
-            strengthText.style.color = '#D04049';
+            strengthText.style.color = '#EF4444'; // Error Red
         } else if (strength.score === 2) {
             strengthProgress.classList.add('medium');
             strengthText.textContent = 'Medium';
-            strengthText.style.color = '#FFA500';
+            strengthText.style.color = '#F59E0B'; // Warning Amber
         } else if (strength.score === 3) {
             strengthProgress.classList.add('strong');
             strengthText.textContent = 'Strong';
-            strengthText.style.color = '#10B981';
+            strengthText.style.color = '#10B981'; // Secure Emerald
         } else {
             strengthText.textContent = '-';
-            strengthText.style.color = '#ADB5BD';
+            strengthText.style.color = '#64748B'; // Text Muted
         }
     });
 }
 
 function calculatePasswordStrength(password) {
     let score = 0;
-
     if (!password) return { score: 0 };
-
-    // Length check
     if (password.length >= 8) score++;
     if (password.length >= 12) score++;
-
-    // Character variety
     if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score++;
     if (/\d/.test(password)) score++;
     if (/[^a-zA-Z0-9]/.test(password)) score++;
-
-    // Cap at 3
     score = Math.min(3, Math.floor(score / 2) + 1);
-
     return { score };
 }
 
@@ -139,26 +119,19 @@ function initOTPInput() {
     otpInputs.forEach((input, index) => {
         input.addEventListener('input', (e) => {
             const value = e.target.value;
-
-            // Only allow numbers
             if (!/^\d$/.test(value)) {
                 e.target.value = '';
                 return;
             }
-
-            // Move to next input if exists
             if (value && index < otpInputs.length - 1) {
                 otpInputs[index + 1].focus();
             }
         });
 
         input.addEventListener('keydown', (e) => {
-            // Handle backspace
             if (e.key === 'Backspace' && !input.value && index > 0) {
                 otpInputs[index - 1].focus();
             }
-
-            // Handle arrow keys
             if (e.key === 'ArrowLeft' && index > 0) {
                 otpInputs[index - 1].focus();
             }
@@ -167,11 +140,9 @@ function initOTPInput() {
             }
         });
 
-        // Handle paste
         input.addEventListener('paste', (e) => {
             e.preventDefault();
             const pastedData = e.clipboardData.getData('text').slice(0, 6);
-            
             if (!/^\d+$/.test(pastedData)) return;
 
             pastedData.split('').forEach((char, i) => {
@@ -179,14 +150,11 @@ function initOTPInput() {
                     otpInputs[i].value = char;
                 }
             });
-
-            // Focus last filled input or last input
             const lastIndex = Math.min(pastedData.length, otpInputs.length - 1);
             otpInputs[lastIndex].focus();
         });
     });
 
-    // Resend OTP handler
     const resendBtn = document.querySelector('.resend-otp');
     if (resendBtn) {
         resendBtn.addEventListener('click', (e) => {
@@ -197,7 +165,6 @@ function initOTPInput() {
 }
 
 function handleResendOTP() {
-    // Simulate OTP resend
     const resendBtn = document.querySelector('.resend-otp');
     const originalText = resendBtn.textContent;
     
@@ -209,7 +176,6 @@ function handleResendOTP() {
         resendBtn.textContent = originalText;
         resendBtn.style.pointerEvents = 'auto';
         
-        // Clear OTP inputs
         document.querySelectorAll('.otp-digit').forEach(input => {
             input.value = '';
         });
@@ -222,9 +188,7 @@ function handleResendOTP() {
 // ========================================
 function initStepNavigation() {
     let currentStep = 1;
-    const totalSteps = 3;
 
-    // Step 1 -> Step 2 (Send OTP)
     const nextStep1Btn = document.getElementById('next-step-1');
     if (nextStep1Btn) {
         nextStep1Btn.addEventListener('click', () => {
@@ -235,7 +199,6 @@ function initStepNavigation() {
         });
     }
 
-    // Verify OTP -> Step 3
     const verifyOTPBtn = document.getElementById('verify-otp');
     if (verifyOTPBtn) {
         verifyOTPBtn.addEventListener('click', () => {
@@ -245,42 +208,27 @@ function initStepNavigation() {
         });
     }
 
-    // Back buttons
     const backStep2Btn = document.getElementById('back-step-2');
     const backStep3Btn = document.getElementById('back-step-3');
 
-    if (backStep2Btn) {
-        backStep2Btn.addEventListener('click', () => goToStep(1));
-    }
-
-    if (backStep3Btn) {
-        backStep3Btn.addEventListener('click', () => goToStep(2));
-    }
+    if (backStep2Btn) backStep2Btn.addEventListener('click', () => goToStep(1));
+    if (backStep3Btn) backStep3Btn.addEventListener('click', () => goToStep(2));
 
     function goToStep(stepNumber) {
         currentStep = stepNumber;
-
-        // Update step indicators
         const stepIndicators = document.querySelectorAll('.step');
         const formSteps = document.querySelectorAll('.form-step');
 
         stepIndicators.forEach((step, index) => {
             const num = index + 1;
             step.classList.remove('active', 'completed');
-            
-            if (num < currentStep) {
-                step.classList.add('completed');
-            } else if (num === currentStep) {
-                step.classList.add('active');
-            }
+            if (num < currentStep) step.classList.add('completed');
+            else if (num === currentStep) step.classList.add('active');
         });
 
-        // Show current form step
         formSteps.forEach(step => step.classList.remove('active'));
         const currentFormStep = document.querySelector(`.form-step[data-step="${stepNumber}"]`);
-        if (currentFormStep) {
-            currentFormStep.classList.add('active');
-        }
+        if (currentFormStep) currentFormStep.classList.add('active');
     }
 
     function validateStep1() {
@@ -288,36 +236,17 @@ function initStepNavigation() {
         const email = document.getElementById('signup-email').value.trim();
         const phone = document.getElementById('signup-phone').value.trim();
 
-        if (!name) {
-            showNotification('Please enter your full name', 'error');
-            return false;
-        }
-
-        if (!email || !isValidCollegeEmail(email)) {
-            showNotification('Please enter a valid college email address', 'error');
-            return false;
-        }
-
-        if (!phone || !isValidPhone(phone)) {
-            showNotification('Please enter a valid phone number', 'error');
-            return false;
-        }
-
+        if (!name) { showNotification('Please enter your full name', 'error'); return false; }
+        if (!email || !isValidCollegeEmail(email)) { showNotification('Please enter a valid .edu email', 'error'); return false; }
+        if (!phone || !isValidPhone(phone)) { showNotification('Please enter a valid phone number', 'error'); return false; }
         return true;
     }
 
     function sendOTP() {
         const email = document.getElementById('signup-email').value;
         const emailDisplay = document.getElementById('verify-email-display');
-        
-        if (emailDisplay) {
-            emailDisplay.textContent = email;
-        }
-
-        // Simulate OTP sending
+        if (emailDisplay) emailDisplay.textContent = email;
         showNotification('OTP sent to your email!', 'success');
-        
-        // Auto-focus first OTP input
         setTimeout(() => {
             const firstOTPInput = document.querySelector('.otp-digit');
             if (firstOTPInput) firstOTPInput.focus();
@@ -333,8 +262,6 @@ function initStepNavigation() {
             return false;
         }
 
-        // Simulate OTP verification (replace with actual API call)
-        // For demo, accept "123456" as valid OTP
         if (otp === '123456') {
             showNotification('Email verified successfully!', 'success');
             return true;
@@ -346,7 +273,6 @@ function initStepNavigation() {
 }
 
 function resetSignupForm() {
-    // Reset to step 1
     const stepIndicators = document.querySelectorAll('.step');
     const formSteps = document.querySelectorAll('.form-step');
 
@@ -360,23 +286,15 @@ function resetSignupForm() {
         if (index === 0) step.classList.add('active');
     });
 
-    // Clear all inputs
     document.getElementById('signup-form').reset();
-    
-    // Clear OTP inputs
-    document.querySelectorAll('.otp-digit').forEach(input => {
-        input.value = '';
-    });
+    document.querySelectorAll('.otp-digit').forEach(input => input.value = '');
 
-    // Reset password strength
     const strengthProgress = document.querySelector('.strength-progress');
     const strengthText = document.querySelector('.strength-text strong');
-    if (strengthProgress) {
-        strengthProgress.className = 'strength-progress';
-    }
+    if (strengthProgress) strengthProgress.className = 'strength-progress';
     if (strengthText) {
         strengthText.textContent = '-';
-        strengthText.style.color = '#ADB5BD';
+        strengthText.style.color = '#64748B';
     }
 }
 
@@ -384,7 +302,6 @@ function resetSignupForm() {
 // FORM VALIDATION & SUBMISSION
 // ========================================
 function initFormValidation() {
-    // Sign In Form
     const signinForm = document.getElementById('signin-form');
     if (signinForm) {
         signinForm.addEventListener('submit', (e) => {
@@ -393,7 +310,6 @@ function initFormValidation() {
         });
     }
 
-    // Sign Up Form
     const signupForm = document.getElementById('signup-form');
     if (signupForm) {
         signupForm.addEventListener('submit', (e) => {
@@ -402,29 +318,26 @@ function initFormValidation() {
         });
     }
 
-    // Real-time email validation
     const signupEmail = document.getElementById('signup-email');
     if (signupEmail) {
         signupEmail.addEventListener('blur', () => {
             const email = signupEmail.value.trim();
             if (email && !isValidCollegeEmail(email)) {
-                signupEmail.style.borderColor = '#D04049';
+                signupEmail.style.borderColor = '#EF4444'; // Error Red
                 showNotification('Please use a valid college email (.edu domain)', 'error');
             } else if (email) {
-                signupEmail.style.borderColor = '#10B981';
+                signupEmail.style.borderColor = '#10B981'; // Secure Emerald
             }
         });
     }
 
-    // Password confirmation matching
     const confirmPassword = document.getElementById('signup-confirm-password');
     if (confirmPassword) {
         confirmPassword.addEventListener('input', () => {
             const password = document.getElementById('signup-password').value;
             const confirm = confirmPassword.value;
-
             if (confirm && password !== confirm) {
-                confirmPassword.style.borderColor = '#D04049';
+                confirmPassword.style.borderColor = '#EF4444';
             } else if (confirm) {
                 confirmPassword.style.borderColor = '#10B981';
             }
@@ -436,35 +349,19 @@ function handleSignIn() {
     const email = document.getElementById('signin-email').value.trim();
     const password = document.getElementById('signin-password').value;
 
-    if (!email || !password) {
-        showNotification('Please fill in all fields', 'error');
-        return;
-    }
+    if (!email || !password) { showNotification('Please fill in all fields', 'error'); return; }
+    if (!isValidCollegeEmail(email)) { showNotification('Please use a valid college email', 'error'); return; }
 
-    if (!isValidCollegeEmail(email)) {
-        showNotification('Please use a valid college email address', 'error');
-        return;
-    }
-
-    // Show loading state
     const submitBtn = document.querySelector('#signin-form .form-submit-btn');
     const originalHTML = submitBtn.innerHTML;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Signing In...</span>';
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Authenticating...</span>';
     submitBtn.disabled = true;
 
-    // Simulate API call
     setTimeout(() => {
-        // Reset button
         submitBtn.innerHTML = originalHTML;
         submitBtn.disabled = false;
-
-        // For demo purposes - always show success
-        showNotification('Sign in successful!', 'success');
-        
-        // Redirect after 1.5 seconds
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 1500);
+        showNotification('Authentication successful.', 'success');
+        setTimeout(() => { window.location.href = 'index.html'; }, 1000);
     }, 1500);
 }
 
@@ -473,56 +370,30 @@ function handleSignUp() {
     const confirmPassword = document.getElementById('signup-confirm-password').value;
     const termsAgreed = document.getElementById('terms-agreement').checked;
 
-    if (password !== confirmPassword) {
-        showNotification('Passwords do not match', 'error');
-        return;
-    }
+    if (password !== confirmPassword) { showNotification('Passwords do not match', 'error'); return; }
+    if (password.length < 8) { showNotification('Password must be at least 8 characters', 'error'); return; }
+    if (!termsAgreed) { showNotification('You must agree to the protocol terms.', 'error'); return; }
 
-    if (password.length < 8) {
-        showNotification('Password must be at least 8 characters', 'error');
-        return;
-    }
-
-    if (!termsAgreed) {
-        showNotification('Please agree to Terms of Service and Community Rules', 'error');
-        return;
-    }
-
-    // Show loading state
     const submitBtn = document.querySelector('#signup-form .form-submit-btn[type="submit"]');
     const originalHTML = submitBtn.innerHTML;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Creating Account...</span>';
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Securing Vault...</span>';
     submitBtn.disabled = true;
 
-    // Simulate API call
     setTimeout(() => {
-        // Reset button
         submitBtn.innerHTML = originalHTML;
         submitBtn.disabled = false;
-
-        // Show success
-        showNotification('Account created successfully!', 'success');
-        
-        // Redirect after 1.5 seconds
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 1500);
+        showNotification('Verification complete.', 'success');
+        setTimeout(() => { window.location.href = 'index.html'; }, 1000);
     }, 2000);
 }
 
-// ========================================
-// VALIDATION HELPERS
-// ========================================
 function isValidCollegeEmail(email) {
-    // Check if email ends with .edu
     const eduPattern = /^[^\s@]+@[^\s@]+\.edu$/i;
     return eduPattern.test(email);
 }
 
 function isValidPhone(phone) {
-    // Remove all non-digit characters
     const cleaned = phone.replace(/\D/g, '');
-    // Check if it has 10 digits (US format) or 11 (with country code)
     return cleaned.length >= 10 && cleaned.length <= 11;
 }
 
@@ -530,142 +401,45 @@ function isValidPhone(phone) {
 // NOTIFICATION SYSTEM
 // ========================================
 function showNotification(message, type = 'info') {
-    // Remove existing notification
     const existing = document.querySelector('.notification');
-    if (existing) {
-        existing.remove();
-    }
+    if (existing) existing.remove();
 
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
     
-    const icons = {
-        success: 'fa-check-circle',
-        error: 'fa-exclamation-circle',
-        info: 'fa-info-circle'
-    };
+    const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
 
-    notification.innerHTML = `
-        <i class="fas ${icons[type]}"></i>
-        <span>${message}</span>
-    `;
-
+    notification.innerHTML = `<i class="fas ${icons[type]}"></i><span>${message}</span>`;
     document.body.appendChild(notification);
 
-    // Trigger animation
     setTimeout(() => notification.classList.add('show'), 10);
-
-    // Auto remove after 4 seconds
     setTimeout(() => {
         notification.classList.remove('show');
         setTimeout(() => notification.remove(), 300);
     }, 4000);
 }
 
-// Add notification styles dynamically
 const notificationStyles = document.createElement('style');
 notificationStyles.textContent = `
-    .notification {
-        position: fixed;
-        top: 100px;
-        right: 20px;
-        background: white;
-        padding: 1rem 1.5rem;
-        border-radius: 12px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        z-index: 10000;
-        transform: translateX(400px);
-        transition: transform 0.3s ease;
-        max-width: 350px;
-        font-family: var(--font-secondary);
-        font-size: 0.9rem;
-    }
-
-    .notification.show {
-        transform: translateX(0);
-    }
-
-    .notification i {
-        font-size: 1.25rem;
-    }
-
-    .notification-success {
-        border-left: 4px solid #10B981;
-    }
-
-    .notification-success i {
-        color: #10B981;
-    }
-
-    .notification-error {
-        border-left: 4px solid #D04049;
-    }
-
-    .notification-error i {
-        color: #D04049;
-    }
-
-    .notification-info {
-        border-left: 4px solid #6D90B9;
-    }
-
-    .notification-info i {
-        color: #6D90B9;
-    }
-
-    @media (max-width: 480px) {
-        .notification {
-            right: 10px;
-            left: 10px;
-            max-width: none;
-        }
-    }
+    .notification { position: fixed; top: 100px; right: 24px; background: white; padding: 16px 24px; border: 1px solid var(--border-clean); border-radius: var(--radius-md); box-shadow: var(--shadow-md); display: flex; align-items: center; gap: 12px; z-index: 10000; transform: translateX(120%); transition: transform var(--transition-base); font-family: var(--font-secondary); font-size: 0.9rem; font-weight: 500; color: var(--text-main); }
+    .notification.show { transform: translateX(0); }
+    .notification i { font-size: 1.25rem; }
+    .notification-success i { color: var(--accent-secure); }
+    .notification-error i { color: var(--error-red); }
+    .notification-info i { color: var(--text-main); }
+    @media (max-width: 480px) { .notification { right: 16px; left: 16px; justify-content: center; top: 16px; } }
 `;
 document.head.appendChild(notificationStyles);
-
-// ========================================
-// ADDITIONAL ENHANCEMENTS
-// ========================================
-
-// Add enter key handling for OTP inputs
-document.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        const activeStep = document.querySelector('.form-step.active');
-        if (!activeStep) return;
-
-        const stepNum = activeStep.getAttribute('data-step');
-        
-        if (stepNum === '2') {
-            // If in OTP step, trigger verify
-            const verifyBtn = document.getElementById('verify-otp');
-            if (verifyBtn) verifyBtn.click();
-        }
-    }
-});
 
 // Auto-format phone number
 const phoneInput = document.getElementById('signup-phone');
 if (phoneInput) {
     phoneInput.addEventListener('input', (e) => {
         let value = e.target.value.replace(/\D/g, '');
-        
-        if (value.length > 10) {
-            value = value.slice(0, 10);
-        }
-        
-        if (value.length > 6) {
-            value = `+1 (${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6)}`;
-        } else if (value.length > 3) {
-            value = `+1 (${value.slice(0, 3)}) ${value.slice(3)}`;
-        } else if (value.length > 0) {
-            value = `+1 (${value}`;
-        }
-        
+        if (value.length > 10) value = value.slice(0, 10);
+        if (value.length > 6) value = `+1 (${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6)}`;
+        else if (value.length > 3) value = `+1 (${value.slice(0, 3)}) ${value.slice(3)}`;
+        else if (value.length > 0) value = `+1 (${value}`;
         e.target.value = value;
     });
 }
-
-console.log('BorrowBox Login System Initialized ✓');
