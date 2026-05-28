@@ -1,0 +1,751 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — BorrowBox</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- BorrowBox Styles -->
+  <link rel="stylesheet" href="../static/css/root.css" />
+  <link rel="stylesheet" href="../static/css/dashboard.css" />
+</head>
+
+<body class="dashboard-body">
+
+<!-- =============================================
+     SIDEBAR OVERLAY (mobile)
+     ============================================= -->
+<div class="sidebar-overlay"></div>
+
+<!-- =============================================
+     LAYOUT SHELL
+     ============================================= -->
+<div class="dash-shell">
+
+  <!-- =============================================
+       SIDEBAR
+       ============================================= -->
+  <aside class="dash-sidebar">
+
+    <!-- Brand -->
+    <a class="sidebar-brand" data-page="home" href="#">
+      <div class="sidebar-brand-icon">
+        <i class="fas fa-box-open"></i>
+      </div>
+      <span class="sidebar-brand-name">BorrowBox</span>
+    </a>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav">
+      <span class="sidebar-section-label">Main</span>
+
+      <a class="sidebar-link" data-page="home" href="#">
+        <i class="nav-icon fas fa-gauge-high"></i>
+        Dashboard
+      </a>
+
+      <a class="sidebar-link" data-page="browse" href="#">
+        <i class="nav-icon fas fa-compass"></i>
+        Browse Items
+      </a>
+
+      <span class="sidebar-section-label">Manage</span>
+
+      <a class="sidebar-link" data-page="listings" href="#">
+        <i class="nav-icon fas fa-list-ul"></i>
+        My Listings
+      </a>
+
+      <a class="sidebar-link" data-page="add-item" href="#">
+        <i class="nav-icon fas fa-plus-circle"></i>
+        Add Item
+      </a>
+
+      <a class="sidebar-link" data-page="requests" href="#">
+        <i class="nav-icon fas fa-inbox"></i>
+        Borrow Requests
+        <span class="nav-badge" id="requests-pending-count">2</span>
+      </a>
+
+      <a class="sidebar-link" data-page="borrowings" href="#">
+        <i class="nav-icon fas fa-arrows-rotate"></i>
+        Active Borrowings
+      </a>
+
+      <span class="sidebar-section-label">Account</span>
+
+      <a class="sidebar-link" data-page="history" href="#">
+        <i class="nav-icon fas fa-clock-rotate-left"></i>
+        Transaction History
+      </a>
+
+      <a class="sidebar-link" data-page="notifications" href="#">
+        <i class="nav-icon fas fa-bell"></i>
+        Notifications
+        <span class="nav-badge" id="notif-badge">3</span>
+      </a>
+
+      <a class="sidebar-link" data-page="profile" href="#">
+        <i class="nav-icon fas fa-user-circle"></i>
+        Profile
+      </a>
+    </nav>
+
+    <!-- Sidebar Footer -->
+    <div class="sidebar-footer">
+      <div class="sidebar-user-mini">
+        <div class="sidebar-avatar-sm">AS</div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name">Aditya Sharma</div>
+          <div class="sidebar-user-role">Student · NITB</div>
+        </div>
+      </div>
+      <a class="sidebar-link" data-page="logout" href="#" style="margin-top:0.5rem;color:var(--secondary-color);">
+        <i class="nav-icon fas fa-right-from-bracket"></i>
+        Logout
+      </a>
+    </div>
+
+  </aside>
+  <!-- /sidebar -->
+
+  <!-- =============================================
+       MAIN AREA
+       ============================================= -->
+  <div class="dash-main">
+
+    <!-- Top Navbar -->
+    <header class="dash-topnav">
+      <button class="topnav-menu-btn" aria-label="Toggle sidebar">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <span class="topnav-title">Dashboard</span>
+
+      <div class="topnav-search">
+        <i class="fas fa-magnifying-glass topnav-search-icon"></i>
+        <input type="search" placeholder="Search items, users…" />
+      </div>
+
+      <div class="topnav-right">
+        <button class="topnav-icon-btn" title="Notifications" data-page="notifications">
+          <i class="fas fa-bell"></i>
+          <span class="notif-dot"></span>
+        </button>
+
+        <div class="topnav-user" data-page="profile">
+          <div class="topnav-avatar">AS</div>
+          <span class="topnav-username">Aditya Sharma</span>
+        </div>
+      </div>
+    </header>
+    <!-- /topnav -->
+
+    <!-- Content Area -->
+    <main class="dash-content">
+
+      <!-- ==========================================
+           PAGE 1: DASHBOARD HOME
+           ========================================== -->
+      <section class="dash-page" id="page-home">
+
+        <!-- Welcome Banner -->
+        <div class="welcome-banner">
+          <h2>Welcome back, <span id="welcome-name">Aditya</span> 👋</h2>
+          <p>Your campus borrowing hub. List items, borrow from peers, and manage everything in one place.</p>
+          <div class="welcome-actions">
+            <button class="btn-white" data-page="browse"><i class="fas fa-compass"></i> Browse Items</button>
+            <button class="btn-outline-white" data-page="add-item"><i class="fas fa-plus"></i> Add Listing</button>
+          </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-card-icon blue"><i class="fas fa-list-ul"></i></div>
+            <div class="stat-card-body">
+              <div class="stat-card-number stat-number-anim" data-target="7">0</div>
+              <div class="stat-card-label">Items Listed</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-icon green"><i class="fas fa-arrows-rotate"></i></div>
+            <div class="stat-card-body">
+              <div class="stat-card-number stat-number-anim" data-target="12">0</div>
+              <div class="stat-card-label">Items Borrowed</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-icon amber"><i class="fas fa-inbox"></i></div>
+            <div class="stat-card-body">
+              <div class="stat-card-number stat-number-anim" data-target="2">0</div>
+              <div class="stat-card-label">Pending Requests</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-icon red"><i class="fas fa-star"></i></div>
+            <div class="stat-card-body">
+              <div class="stat-card-number">4.8</div>
+              <div class="stat-card-label">Your Rating</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Two-col: Activity + Quick Stats -->
+        <div class="two-col-grid">
+
+          <!-- Recent Activity -->
+          <div class="dash-card">
+            <div class="card-header-row">
+              <span class="card-title">Recent Activity</span>
+              <a class="card-link" data-page="history" href="#">View all</a>
+            </div>
+            <div class="activity-list">
+              <div class="activity-item">
+                <div class="activity-icon green"><i class="fas fa-check"></i></div>
+                <div class="activity-text">
+                  <p>Your request for <strong>Sony WH-1000XM5</strong> was approved by Vikram Desai.</p>
+                  <div class="activity-time">2 hours ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-icon blue"><i class="fas fa-hand-holding"></i></div>
+                <div class="activity-text">
+                  <p><strong>Priya Mehta</strong> requested your Dell Laptop from 28 May – 2 Jun.</p>
+                  <div class="activity-time">5 hours ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-icon amber"><i class="fas fa-rotate-left"></i></div>
+                <div class="activity-text">
+                  <p>You returned <strong>Linear Algebra Textbook</strong> to Ananya Joshi.</p>
+                  <div class="activity-time">2 days ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-icon blue"><i class="fas fa-hand-holding"></i></div>
+                <div class="activity-text">
+                  <p><strong>Rahul Singh</strong> requested your Engineering Textbooks.</p>
+                  <div class="activity-time">8 hours ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-icon green"><i class="fas fa-plus"></i></div>
+                <div class="activity-text">
+                  <p>You listed <strong>Portable Projector</strong> at ₹300/day.</p>
+                  <div class="activity-time">4 days ago</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Stats -->
+          <div class="dash-card">
+            <div class="card-header-row">
+              <span class="card-title">Quick Overview</span>
+            </div>
+            <div class="quick-stat-row">
+              <div class="quick-stat-item">
+                <span class="quick-stat-label"><i class="fas fa-check-circle"></i> Active Listings</span>
+                <span class="quick-stat-val">4 of 7 Available</span>
+              </div>
+              <div class="quick-stat-item">
+                <span class="quick-stat-label"><i class="fas fa-arrows-rotate"></i> Currently Borrowing</span>
+                <span class="quick-stat-val">3 Items</span>
+              </div>
+              <div class="quick-stat-item">
+                <span class="quick-stat-label"><i class="fas fa-calendar-check"></i> Returns Due This Week</span>
+                <span class="quick-stat-val" style="color:var(--secondary-color);">2 Items</span>
+              </div>
+              <div class="quick-stat-item">
+                <span class="quick-stat-label"><i class="fas fa-rupee-sign"></i> Total Rent Earned</span>
+                <span class="quick-stat-val">₹6,800</span>
+              </div>
+              <div class="quick-stat-item">
+                <span class="quick-stat-label"><i class="fas fa-rupee-sign"></i> Total Rent Paid</span>
+                <span class="quick-stat-val">₹2,140</span>
+              </div>
+              <div class="quick-stat-item">
+                <span class="quick-stat-label"><i class="fas fa-shield-alt"></i> Deposits Outstanding</span>
+                <span class="quick-stat-val">₹3,800</span>
+              </div>
+              <div class="quick-stat-item">
+                <span class="quick-stat-label"><i class="fas fa-calendar-alt"></i> Member Since</span>
+                <span class="quick-stat-val">January 2025</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+      <!-- /page-home -->
+
+
+      <!-- ==========================================
+           PAGE 2: BROWSE ITEMS
+           ========================================== -->
+      <section class="dash-page" id="page-browse">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2>Browse Items</h2>
+            <p>Find something to borrow from your campus community</p>
+          </div>
+        </div>
+
+        <!-- Search + Filters -->
+        <div class="dash-card" style="padding:1rem 1.25rem;">
+          <div style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;">
+            <div style="position:relative;flex:1;max-width:320px;">
+              <i class="fas fa-magnifying-glass" style="position:absolute;left:.75rem;top:50%;transform:translateY(-50%);color:var(--gray);font-size:.85rem;"></i>
+              <input id="browse-search" type="search" placeholder="Search items…"
+                style="width:100%;padding:.65rem 1rem .65rem 2.25rem;border:1.5px solid var(--border-light);border-radius:var(--radius-md);font-family:var(--font-secondary);font-size:var(--fs-sm);outline:none;transition:border .2s;"
+                onfocus="this.style.borderColor='var(--quaternary-color)'" onblur="this.style.borderColor='var(--border-light)'" />
+            </div>
+            <div class="browse-filters">
+              <button class="filter-chip active" data-cat="all">All</button>
+              <button class="filter-chip" data-cat="Electronics">Electronics</button>
+              <button class="filter-chip" data-cat="Study">Study</button>
+              <button class="filter-chip" data-cat="Appliances">Appliances</button>
+              <button class="filter-chip" data-cat="Sports">Sports</button>
+              <button class="filter-chip" data-cat="Accessories">Accessories</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Items Grid -->
+        <div class="items-grid" id="browse-grid">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+      <!-- /page-browse -->
+
+
+      <!-- ==========================================
+           PAGE 3: MY LISTINGS
+           ========================================== -->
+      <section class="dash-page" id="page-listings">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2>My Listings</h2>
+            <p>Items you've listed for borrowing</p>
+          </div>
+          <button class="btn-primary-dash" data-page="add-item">
+            <i class="fas fa-plus"></i> Add New Item
+          </button>
+        </div>
+
+        <div class="dash-card" style="padding:0;">
+          <div class="listings-table-wrap">
+            <table class="listings-table">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Rent</th>
+                  <th>Deposit</th>
+                  <th>Status</th>
+                  <th>Requests</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="listings-tbody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+      <!-- /page-listings -->
+
+
+      <!-- ==========================================
+           PAGE 4: ADD ITEM
+           ========================================== -->
+      <section class="dash-page" id="page-add-item">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2>Add New Item</h2>
+            <p>List an item for your campus to borrow</p>
+          </div>
+        </div>
+
+        <form id="add-item-form">
+          <div class="add-item-grid">
+
+            <!-- Image Upload -->
+            <div>
+              <div class="dash-card" style="padding:0;overflow:hidden;">
+                <div class="upload-zone" style="border-radius:var(--radius-lg);border:none;">
+                  <i class="fas fa-cloud-arrow-up"></i>
+                  <p>Click to upload item photo</p>
+                  <small>JPG, PNG or WEBP · Max 5MB</small>
+                  <input type="file" id="item-image-input" accept="image/*" style="display:none;" />
+                </div>
+              </div>
+
+              <!-- Tips -->
+              <div class="dash-card" style="margin-top:1rem;background:rgba(109,144,185,0.05);border-color:rgba(109,144,185,0.2);">
+                <div class="card-title" style="margin-bottom:.75rem;"><i class="fas fa-lightbulb" style="color:var(--quaternary-color);margin-right:.4rem;"></i> Listing Tips</div>
+                <ul style="font-size:var(--fs-sm);color:var(--text-secondary);line-height:1.8;padding-left:1.25rem;">
+                  <li>Use a clear photo in good lighting</li>
+                  <li>Mention the condition honestly</li>
+                  <li>Set a fair rent price for campus peers</li>
+                  <li>Keep deposit reasonable vs. item value</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Form Fields -->
+            <div class="dash-card">
+              <div class="card-header-row" style="margin-bottom:1.5rem;">
+                <span class="card-title">Item Details</span>
+              </div>
+
+              <div class="dash-form-group">
+                <label for="item-name">Item Name <span style="color:var(--secondary-color)">*</span></label>
+                <input id="item-name" type="text" placeholder="e.g. Canon DSLR Camera EOS 1500D" required />
+              </div>
+
+              <div class="form-row">
+                <div class="dash-form-group">
+                  <label for="item-category">Category <span style="color:var(--secondary-color)">*</span></label>
+                  <select id="item-category" required>
+                    <option value="" disabled selected>Select a category</option>
+                    <option>Electronics</option>
+                    <option>Study Essentials</option>
+                    <option>Appliances</option>
+                    <option>Clothing</option>
+                    <option>Accessories</option>
+                    <option>Sports</option>
+                    <option>Instruments</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+
+                <div class="dash-form-group">
+                  <label for="item-condition">Condition</label>
+                  <select id="item-condition">
+                    <option value="" disabled selected>Select condition</option>
+                    <option>Like New</option>
+                    <option>Good</option>
+                    <option>Fair</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="dash-form-group">
+                <label for="item-description">Description</label>
+                <textarea id="item-description" placeholder="Describe your item — model, features, what's included, any wear…"></textarea>
+              </div>
+
+              <div class="form-row">
+                <div class="dash-form-group">
+                  <label for="item-rent">Rent Per Day (₹) <span style="color:var(--secondary-color)">*</span></label>
+                  <input id="item-rent" type="number" min="1" placeholder="e.g. 150" required />
+                </div>
+
+                <div class="dash-form-group">
+                  <label for="item-deposit">Security Deposit (₹) <span style="color:var(--secondary-color)">*</span></label>
+                  <input id="item-deposit" type="number" min="0" placeholder="e.g. 1500" required />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="dash-form-group">
+                  <label for="item-from">Available From</label>
+                  <input id="item-from" type="date" />
+                </div>
+                <div class="dash-form-group">
+                  <label for="item-until">Available Until</label>
+                  <input id="item-until" type="date" />
+                </div>
+              </div>
+
+              <div style="display:flex;gap:.75rem;flex-wrap:wrap;">
+                <button type="submit" class="btn-primary-dash">
+                  <i class="fas fa-plus-circle"></i> List Item
+                </button>
+                <button type="reset" class="btn-secondary-dash">
+                  <i class="fas fa-rotate-left"></i> Reset
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </form>
+      </section>
+      <!-- /page-add-item -->
+
+
+      <!-- ==========================================
+           PAGE 5: BORROW REQUESTS
+           ========================================== -->
+      <section class="dash-page" id="page-requests">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2>Borrow Requests</h2>
+            <p>People who want to borrow your listed items</p>
+          </div>
+        </div>
+
+        <!-- Filter tabs -->
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+          <button class="filter-chip active" data-req-filter="all">All Requests</button>
+          <button class="filter-chip" data-req-filter="pending">Pending</button>
+          <button class="filter-chip" data-req-filter="accepted">Accepted</button>
+          <button class="filter-chip" data-req-filter="rejected">Rejected</button>
+        </div>
+
+        <div class="requests-list" id="requests-list">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+      <!-- /page-requests -->
+
+
+      <!-- ==========================================
+           PAGE 6: ACTIVE BORROWINGS
+           ========================================== -->
+      <section class="dash-page" id="page-borrowings">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2>Active Borrowings</h2>
+            <p>Items you are currently borrowing</p>
+          </div>
+          <button class="btn-secondary-dash" data-page="browse">
+            <i class="fas fa-compass"></i> Borrow More
+          </button>
+        </div>
+
+        <div class="borrowings-grid" id="borrowings-grid">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+      <!-- /page-borrowings -->
+
+
+      <!-- ==========================================
+           PAGE 7: TRANSACTION HISTORY
+           ========================================== -->
+      <section class="dash-page" id="page-history">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2>Transaction History</h2>
+            <p>Your past borrowings and lendings</p>
+          </div>
+        </div>
+
+        <div class="dash-card" style="padding:0;">
+          <div class="history-table-wrap">
+            <table class="history-table">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Type</th>
+                  <th>Rent</th>
+                  <th>Deposit</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="history-tbody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+      <!-- /page-history -->
+
+
+      <!-- ==========================================
+           PAGE 8: NOTIFICATIONS
+           ========================================== -->
+      <section class="dash-page" id="page-notifications">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2>Notifications</h2>
+            <p>Updates about your requests and listings</p>
+          </div>
+          <button id="mark-all-read" class="btn-secondary-dash">
+            <i class="fas fa-check-double"></i> Mark All Read
+          </button>
+        </div>
+
+        <div class="dash-card" style="padding:0 1.5rem;">
+          <div class="notif-list" id="notif-list">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </section>
+      <!-- /page-notifications -->
+
+
+      <!-- ==========================================
+           PAGE 9: PROFILE
+           ========================================== -->
+      <section class="dash-page" id="page-profile">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h2>My Profile</h2>
+            <p>Manage your account and preferences</p>
+          </div>
+        </div>
+
+        <div class="profile-layout">
+
+          <!-- Left: Avatar & Stats -->
+          <div class="dash-card profile-card-left">
+            <div class="profile-avatar-wrap">
+              <div class="profile-avatar" id="profile-avatar-main">AS</div>
+              <div class="profile-avatar-edit" title="Change photo">
+                <i class="fas fa-camera"></i>
+              </div>
+            </div>
+
+            <div class="profile-name" id="profile-name">Aditya Sharma</div>
+            <div class="profile-email" id="profile-email">aditya.sharma@college.edu</div>
+
+            <div class="profile-rating">
+              <i class="fas fa-star"></i>
+              <span id="profile-rating">4.8 ★</span>
+              <span style="color:var(--text-muted);font-size:var(--fs-xs);">(18 reviews)</span>
+            </div>
+
+            <div class="profile-stat-mini-row">
+              <div class="profile-stat-mini">
+                <div class="profile-stat-mini-num" id="profile-listings-count">7</div>
+                <div class="profile-stat-mini-label">Listings</div>
+              </div>
+              <div class="profile-stat-mini">
+                <div class="profile-stat-mini-num" id="profile-borrowings-count">12</div>
+                <div class="profile-stat-mini-label">Borrowed</div>
+              </div>
+            </div>
+
+            <div style="font-size:var(--fs-xs);color:var(--text-muted);margin-top:.25rem;">
+              <i class="fas fa-calendar" style="margin-right:.3rem;color:var(--quaternary-color);"></i>
+              Member since <span id="profile-since">January 2025</span>
+            </div>
+
+            <div style="display:flex;align-items:center;gap:.4rem;font-size:var(--fs-xs);color:#10B981;">
+              <i class="fas fa-shield-check"></i>
+              <span>College Email Verified</span>
+            </div>
+          </div>
+
+          <!-- Right: Edit Form -->
+          <div style="display:flex;flex-direction:column;gap:1rem;">
+
+            <div class="dash-card">
+              <div class="card-header-row">
+                <span class="card-title">Personal Information</span>
+              </div>
+
+              <div class="form-row">
+                <div class="dash-form-group">
+                  <label>Full Name</label>
+                  <input id="edit-name" type="text" placeholder="Your full name" />
+                </div>
+                <div class="dash-form-group">
+                  <label>Phone Number</label>
+                  <input id="edit-phone" type="tel" placeholder="+91 XXXXX XXXXX" />
+                </div>
+              </div>
+
+              <div class="dash-form-group">
+                <label>College Email <span style="font-size:var(--fs-xs);color:#10B981;"><i class="fas fa-check-circle"></i> Verified</span></label>
+                <input id="edit-email" type="email" disabled style="background:#F8F9FA;color:var(--text-muted);cursor:not-allowed;" />
+              </div>
+
+              <div class="dash-form-group">
+                <label>College / Institution</label>
+                <input type="text" value="National Institute of Technology, Bhopal" />
+              </div>
+
+              <div class="dash-form-group">
+                <label>Bio (optional)</label>
+                <textarea placeholder="Tell the community a bit about yourself…" style="min-height:70px;"></textarea>
+              </div>
+
+              <button id="save-profile-btn" class="btn-primary-dash">
+                <i class="fas fa-save"></i> Save Changes
+              </button>
+            </div>
+
+            <!-- Security -->
+            <div class="dash-card">
+              <div class="card-header-row">
+                <span class="card-title">Security</span>
+              </div>
+              <div class="quick-stat-row">
+                <div class="quick-stat-item">
+                  <span class="quick-stat-label"><i class="fas fa-lock"></i> Password</span>
+                  <button class="btn-secondary-dash btn-sm" onclick="showToast('Change password — connect to backend')">
+                    Change Password
+                  </button>
+                </div>
+                <div class="quick-stat-item">
+                  <span class="quick-stat-label"><i class="fas fa-mobile-screen"></i> Two-Factor Auth</span>
+                  <span class="status-badge status-pending">Coming Soon</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+      <!-- /page-profile -->
+
+    </main>
+    <!-- /dash-content -->
+
+  </div>
+  <!-- /dash-main -->
+
+</div>
+<!-- /dash-shell -->
+
+<!-- JS -->
+<script src="../static/js/dashboard.js"></script>
+
+<!-- Wire welcome-banner buttons to navigation after JS loads -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Wire welcome banner buttons
+    document.querySelectorAll('.welcome-banner [data-page]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const pageId = btn.getAttribute('data-page');
+        const link = document.querySelector(`.sidebar-link[data-page="${pageId}"]`);
+        if (link) link.click();
+      });
+    });
+
+    // Wire topnav notification button
+    document.querySelector('.topnav-icon-btn[data-page="notifications"]')?.addEventListener('click', () => {
+      document.querySelector('.sidebar-link[data-page="notifications"]')?.click();
+    });
+
+    // Wire topnav user to profile
+    document.querySelector('.topnav-user[data-page="profile"]')?.addEventListener('click', () => {
+      document.querySelector('.sidebar-link[data-page="profile"]')?.click();
+    });
+
+    // Wire add-listing button in listings page
+    document.querySelector('#page-listings .btn-primary-dash[data-page="add-item"]')?.addEventListener('click', () => {
+      document.querySelector('.sidebar-link[data-page="add-item"]')?.click();
+    });
+
+    // Wire borrow-more button
+    document.querySelector('#page-borrowings .btn-secondary-dash[data-page="browse"]')?.addEventListener('click', () => {
+      document.querySelector('.sidebar-link[data-page="browse"]')?.click();
+    });
+  });
+</script>
+
+</body>
+</html>
