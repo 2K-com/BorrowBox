@@ -38,6 +38,11 @@ body {
     font-family: var(--font-secondary);
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
+    background-image: url("../images/login-bg.png");
+    image-rendering: optimizeQuality;
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
 }
 
 /* ========== MINIMALIST NAVBAR ========== */
@@ -67,7 +72,10 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    padding: 120px 24px 40px; /* Accounts for navbar */
+    padding: 120px 24px 40px;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(12px);
+    /* Accounts for navbar */
 }
 
 .auth-container {
