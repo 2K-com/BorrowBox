@@ -6,10 +6,12 @@
 // ============================================================
 
 document.addEventListener('DOMContentLoaded', () => {
+    initThemeToggle();
+    initSidebarCollapse();
+    initSidebarTooltips();
     initNavigation();
     initSidebarToggle();
     initDashboardHome();
-    initBrowse();
     initListings();
     initRequests();
     initBorrowings();
@@ -126,14 +128,8 @@ function initTopnavSearch() {
         if (e.key === 'Enter') {
             const q = input.value.trim();
             if (q) {
-                // Navigate to browse and filter
-                document.querySelector('[data-page="browse"]').click();
-                const browseSearch = document.getElementById('browse-search');
-                if (browseSearch) {
-                    browseSearch.value = q;
-                    browseSearch.dispatchEvent(new Event('input'));
-                }
-                input.value = '';
+                // Redirect to catalog page (products.html) with search term
+                window.location.href = `products.html?search=${encodeURIComponent(q)}`;
             }
         }
     });
@@ -236,108 +232,55 @@ function animateStatNumbers() {
     });
 }
 
-// ============================================================
-// PAGE: BROWSE ITEMS
-// ============================================================
-function initBrowse() {
-    const grid = document.getElementById('browse-grid');
-    if (!grid) return;
-
-    function renderBrowse(data) {
-        grid.innerHTML = data.map(item => `
-            <div class="item-card">
-                <div class="item-card-img">
-                    <span class="item-card-category">${item.category}</span>
-                    <span class="item-card-avail">
-                        <span class="status-badge ${item.available ? 'status-available' : 'status-rented'}">
-                            ${item.available ? 'Available' : 'Rented'}
-                        </span>
-                    </span>
-                    <span style="font-size:3rem;">${item.emoji}</span>
-                </div>
-                <div class="item-card-body">
-                    <div class="item-card-name">${item.name}</div>
-                    <div class="item-card-price-row">
-                        <span class="item-card-rent">${item.rent}</span>
-                        <span class="item-card-deposit">Dep. ${item.deposit}</span>
-                    </div>
-                </div>
-                <div class="item-card-footer">
-                    <button class="btn-primary-dash" style="width:100%; justify-content:center;" ${!item.available ? 'disabled style="opacity:.5;cursor:not-allowed;"' : ''}>
-                        ${item.available ? '<i class="fas fa-eye"></i> View Details' : 'Currently Rented'}
-                    </button>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    renderBrowse(BROWSE_DATA);
-
-    // Filter chips
-    const chips = document.querySelectorAll('.filter-chip');
-    chips.forEach(chip => {
-        chip.addEventListener('click', () => {
-            chips.forEach(c => c.classList.remove('active'));
-            chip.classList.add('active');
-            const cat = chip.getAttribute('data-cat');
-            const filtered = cat === 'all' ? BROWSE_DATA : BROWSE_DATA.filter(i => i.category === cat);
-            renderBrowse(filtered);
-        });
-    });
-
-    // Search
-    const searchInput = document.getElementById('browse-search');
-    if (searchInput) {
-        searchInput.addEventListener('input', () => {
-            const q = searchInput.value.toLowerCase();
-            const filtered = BROWSE_DATA.filter(i =>
-                i.name.toLowerCase().includes(q) || i.category.toLowerCase().includes(q)
-            );
-            renderBrowse(filtered);
-        });
-    }
-}
+// PAGE: BROWSE ITEMS REMOVED (Redirection to products.html handled by topnav/search catalog button)
 
 // ============================================================
 // PAGE: MY LISTINGS
 // ============================================================
 function initListings() {
-    const tbody = document.getElementById('listings-tbody');
-    if (!tbody) return;
+    const grid = document.getElementById('listings-grid');
+    if (!grid) return;
 
     function renderListings(data) {
-        tbody.innerHTML = data.map(item => `
-            <tr>
-                <td>
-                    <div class="listing-name-cell">
-                        <div class="listing-thumb">${item.emoji}</div>
-                        <div>
-                            <div class="listing-name">${item.name}</div>
-                            <div style="font-size:var(--fs-xs);color:var(--text-muted);">${item.category}</div>
-                        </div>
+        grid.innerHTML = data.map(item => `
+            <div class="inventory-card">
+                <div class="inventory-card-top">
+                    <div class="inventory-thumb">${item.emoji}</div>
+                    <div class="inventory-meta">
+                        <div class="inventory-name">${item.name}</div>
+                        <div class="inventory-category">${item.category}</div>
                     </div>
-                </td>
-                <td>${item.rent}</td>
-                <td>${item.deposit}</td>
-                <td><span class="status-badge status-${item.status}">${capitalize(item.status)}</span></td>
-                <td>
-                    <span style="font-weight:var(--fw-semibold);color:var(--quaternary-color);">${item.requests}</span>
-                    ${item.requests > 0 ? '<span style="font-size:var(--fs-xs);color:var(--text-muted);"> request(s)</span>' : ''}
-                </td>
-                <td>
-                    <div class="action-btns">
-                        <button class="btn-icon" title="Edit listing" onclick="showToast('Edit listing — connect to backend')">
-                            <i class="fas fa-pen"></i>
-                        </button>
-                        <button class="btn-icon" title="View requests" onclick="showToast('View requests for ${item.name}')">
-                            <i class="fas fa-inbox"></i>
-                        </button>
-                        <button class="btn-icon danger" title="Delete listing" onclick="confirmDelete('${item.name}')">
-                            <i class="fas fa-trash"></i>
-                        </button>
+                </div>
+                <div class="inventory-card-body">
+                    <div class="inventory-detail">
+                        <span class="detail-label">Rent</span>
+                        <span class="detail-value highlight-orange">${item.rent}</span>
                     </div>
-                </td>
-            </tr>
+                    <div class="inventory-detail">
+                        <span class="detail-label">Deposit</span>
+                        <span class="detail-value">${item.deposit}</span>
+                    </div>
+                    <div class="inventory-detail">
+                        <span class="detail-label">Status</span>
+                        <span class="status-badge status-${item.status}">${capitalize(item.status)}</span>
+                    </div>
+                    <div class="inventory-detail">
+                        <span class="detail-label">Requests</span>
+                        <span class="detail-value count-badge">${item.requests} pending</span>
+                    </div>
+                </div>
+                <div class="inventory-card-actions">
+                    <button class="btn-console-action" title="Edit listing" onclick="showToast('Edit listing — connect to backend')">
+                        <i class="fas fa-pen"></i> Edit
+                    </button>
+                    <button class="btn-console-action" title="View requests" onclick="showToast('View requests for ${item.name}')">
+                        <i class="fas fa-inbox"></i> Requests (${item.requests})
+                    </button>
+                    <button class="btn-console-action danger" title="Delete listing" onclick="confirmDelete('${item.name}')">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </div>
+            </div>
         `).join('');
     }
 
@@ -645,14 +588,15 @@ window.showToast = function (msg, type = 'info') {
     toast.className = 'dash-toast';
     toast.style.cssText = `
         position: fixed; bottom: 24px; right: 24px; z-index: 9999;
-        background: #fff; padding: 0.9rem 1.4rem;
-        border-radius: 12px;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+        background: var(--surface-card); padding: 0.9rem 1.4rem;
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-lg);
         display: flex; align-items: center; gap: 0.75rem;
-        font-family: var(--font-secondary); font-size: 0.875rem;
-        border-left: 4px solid ${type === 'error' ? 'var(--secondary-color)' : 'var(--quaternary-color)'};
+        font-family: var(--font-secondary); font-size: var(--fs-sm);
+        border: 1px solid var(--border-clean);
+        border-left: 4px solid ${type === 'error' ? 'var(--secondary-color)' : 'var(--accent-primary)'};
         transform: translateY(80px); transition: transform 0.3s ease;
-        max-width: 360px; color: var(--text-primary);
+        max-width: 360px; color: var(--text-main);
     `;
     const icon = type === 'error' ? 'fa-exclamation-circle' : 'fa-check-circle';
     const color = type === 'error' ? 'var(--secondary-color)' : 'var(--quaternary-color)';
@@ -664,3 +608,117 @@ window.showToast = function (msg, type = 'info') {
         setTimeout(() => toast.remove(), 300);
     }, 3500);
 };
+
+// ============================================================
+// THEME TOGGLE — Light and Dark themes control
+// ============================================================
+function initThemeToggle() {
+    const toggleBtn = document.getElementById('theme-toggle-btn');
+    const toggleIcon = document.getElementById('theme-toggle-icon');
+    if (!toggleBtn || !toggleIcon) return;
+
+    function updateIcon(theme) {
+        if (theme === 'dark') {
+            toggleIcon.className = 'fas fa-sun';
+            toggleBtn.title = 'Switch to Light Theme';
+        } else {
+            toggleIcon.className = 'fas fa-moon';
+            toggleBtn.title = 'Switch to Dark Theme';
+        }
+    }
+
+    // Get current theme from documentElement attribute (set by head script)
+    let currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    updateIcon(currentTheme);
+
+    toggleBtn.addEventListener('click', () => {
+        currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+        document.documentElement.setAttribute('data-theme', nextTheme);
+        localStorage.setItem('borrowbox-theme', nextTheme);
+        updateIcon(nextTheme);
+        showToast(`Theme switched to ${nextTheme === 'dark' ? 'Dark' : 'Light'} Mode`);
+    });
+}
+
+// ============================================================
+// SIDEBAR COLLAPSE — Desktop expanded/collapsed toggle
+// ============================================================
+function initSidebarCollapse() {
+    const collapseBtn = document.getElementById('sidebar-collapse-btn');
+    const collapseIcon = document.getElementById('sidebar-collapse-icon');
+    if (!collapseBtn || !collapseIcon) return;
+
+    function updateCollapseIcon(state) {
+        if (state === 'collapsed') {
+            collapseIcon.className = 'fas fa-chevron-right';
+            collapseBtn.title = 'Expand Sidebar';
+        } else {
+            collapseIcon.className = 'fas fa-chevron-left';
+            collapseBtn.title = 'Collapse Sidebar';
+        }
+    }
+
+    let currentState = document.documentElement.getAttribute('data-sidebar') || 'expanded';
+    updateCollapseIcon(currentState);
+
+    collapseBtn.addEventListener('click', () => {
+        currentState = document.documentElement.getAttribute('data-sidebar') || 'expanded';
+        const nextState = currentState === 'collapsed' ? 'expanded' : 'collapsed';
+
+        document.documentElement.setAttribute('data-sidebar', nextState);
+        localStorage.setItem('sidebar-state', nextState);
+        updateCollapseIcon(nextState);
+
+        // Hide any active tooltips to prevent layout residue
+        const activeTooltip = document.querySelector('.sidebar-tooltip');
+        if (activeTooltip) activeTooltip.style.opacity = '0';
+    });
+}
+
+// ============================================================
+// SIDEBAR TOOLTIPS — Custom positioning for collapsed icons
+// ============================================================
+function initSidebarTooltips() {
+    let tooltip = document.querySelector('.sidebar-tooltip');
+    if (!tooltip) {
+        tooltip = document.createElement('div');
+        tooltip.className = 'sidebar-tooltip';
+        tooltip.style.cssText = `
+            position: fixed; z-index: 9999;
+            background: var(--text-main); color: var(--bg-panel);
+            padding: 6px 12px; border-radius: var(--radius-sm);
+            font-family: var(--font-secondary); font-size: var(--fs-xs);
+            font-weight: var(--fw-semibold); border: 1px solid var(--border-clean);
+            box-shadow: var(--shadow-md); pointer-events: none;
+            opacity: 0; transition: opacity 0.15s ease;
+        `;
+        document.body.appendChild(tooltip);
+    }
+
+    document.querySelectorAll('.dash-sidebar [data-tooltip]').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            const isCollapsed = document.documentElement.getAttribute('data-sidebar') === 'collapsed';
+            const isDesktop = window.innerWidth > 768;
+            
+            if (!isCollapsed || !isDesktop) return;
+
+            const text = el.getAttribute('data-tooltip');
+            tooltip.textContent = text;
+
+            const rect = el.getBoundingClientRect();
+            tooltip.style.top = '0px'; // reset temp layout
+            
+            const tooltipHeight = tooltip.offsetHeight || 28;
+
+            tooltip.style.left = `${rect.right + 10}px`;
+            tooltip.style.top = `${rect.top + (rect.height / 2) - (tooltipHeight / 2)}px`;
+            tooltip.style.opacity = '1';
+        });
+
+        el.addEventListener('mouseleave', () => {
+            tooltip.style.opacity = '0';
+        });
+    });
+}

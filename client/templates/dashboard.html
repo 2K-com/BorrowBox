@@ -14,6 +14,17 @@
     <!-- BorrowBox Styles -->
     <link rel="stylesheet" href="../static/css/root.css" />
     <link rel="stylesheet" href="../static/css/dashboard.css" />
+
+    <!-- Theme and Sidebar Toggle Loader Script -->
+    <script>
+      (function () {
+        const theme = localStorage.getItem("borrowbox-theme") || "light";
+        document.documentElement.setAttribute("data-theme", theme);
+
+        const sidebarState = localStorage.getItem("sidebar-state") || "expanded";
+        document.documentElement.setAttribute("data-sidebar", sidebarState);
+      })();
+    </script>
   </head>
 
   <body class="dashboard-body">
@@ -30,73 +41,69 @@
        SIDEBAR
        ============================================= -->
       <aside class="dash-sidebar">
-        <!-- Brand -->
-        <a class="sidebar-brand" data-page="home" href="#">
-          <div class="sidebar-brand-icon">
-            <i class="fas fa-box-open"></i>
-          </div>
-          <span class="sidebar-brand-name">BorrowBox</span>
-        </a>
-
-        <!-- Navigation -->
-        <nav class="sidebar-nav">
-          <span class="sidebar-section-label">Main</span>
-
-          <a class="sidebar-link" data-page="home" href="#">
-            <i class="nav-icon fas fa-gauge-high"></i>
-            Dashboard
+        <!-- Brand Wrapper -->
+        <div class="sidebar-brand-wrapper">
+          <a class="sidebar-brand" data-page="home" href="#">
+            <div class="sidebar-brand-icon">
+              <i class="fas fa-layer-group"></i>
+            </div>
+            <span class="sidebar-brand-name">BorrowBox</span>
           </a>
-
-          <a class="sidebar-link" data-page="browse" href="#">
-            <i class="nav-icon fas fa-compass"></i>
-            Browse Items
-          </a>
+          <button id="sidebar-collapse-btn" class="sidebar-collapse-btn" title="Collapse Sidebar">
+            <i class="fas fa-chevron-left" id="sidebar-collapse-icon"></i>
+          </button>
+        </div>
 
           <span class="sidebar-section-label">Manage</span>
 
-          <a class="sidebar-link" data-page="listings" href="#">
+          <a class="sidebar-link" data-page="home" href="#" data-tooltip="Dashboard">
+            <i class="nav-icon fas fa-gauge-high"></i>
+            <span class="sidebar-link-text">Dashboard</span>
+          </a>
+
+          <a class="sidebar-link" data-page="listings" href="#" data-tooltip="My Listings">
             <i class="nav-icon fas fa-list-ul"></i>
-            My Listings
+            <span class="sidebar-link-text">My Listings</span>
           </a>
 
-          <a class="sidebar-link" data-page="add-item" href="#">
+          <a class="sidebar-link" data-page="add-item" href="#" data-tooltip="Create Listing">
             <i class="nav-icon fas fa-plus-circle"></i>
-            Add Item
+            <span class="sidebar-link-text">Create Listing</span>
           </a>
 
-          <a class="sidebar-link" data-page="requests" href="#">
+          <a class="sidebar-link" data-page="requests" href="#" data-tooltip="Borrow Requests">
             <i class="nav-icon fas fa-inbox"></i>
-            Borrow Requests
+            <span class="sidebar-link-text">Borrow Requests</span>
             <span class="nav-badge" id="requests-pending-count">2</span>
           </a>
 
-          <a class="sidebar-link" data-page="borrowings" href="#">
+          <a class="sidebar-link" data-page="borrowings" href="#" data-tooltip="Active Borrowings">
             <i class="nav-icon fas fa-arrows-rotate"></i>
-            Active Borrowings
+            <span class="sidebar-link-text">Active Borrowings</span>
           </a>
 
           <span class="sidebar-section-label">Account</span>
 
-          <a class="sidebar-link" data-page="history" href="#">
+          <a class="sidebar-link" data-page="history" href="#" data-tooltip="Transaction History">
             <i class="nav-icon fas fa-clock-rotate-left"></i>
-            Transaction History
+            <span class="sidebar-link-text">Transaction History</span>
           </a>
 
-          <a class="sidebar-link" data-page="notifications" href="#">
+          <a class="sidebar-link" data-page="notifications" href="#" data-tooltip="Notifications">
             <i class="nav-icon fas fa-bell"></i>
-            Notifications
+            <span class="sidebar-link-text">Notifications</span>
             <span class="nav-badge" id="notif-badge">3</span>
           </a>
 
-          <a class="sidebar-link" data-page="profile" href="#">
+          <a class="sidebar-link" data-page="profile" href="#" data-tooltip="Profile">
             <i class="nav-icon fas fa-user-circle"></i>
-            Profile
+            <span class="sidebar-link-text">Profile</span>
           </a>
         </nav>
 
         <!-- Sidebar Footer -->
         <div class="sidebar-footer">
-          <div class="sidebar-user-mini">
+          <div class="sidebar-user-mini" data-tooltip="Aditya Sharma (Student · NITB)">
             <div class="sidebar-avatar-sm">AS</div>
             <div class="sidebar-user-info">
               <div class="sidebar-user-name">Aditya Sharma</div>
@@ -108,9 +115,10 @@
             data-page="logout"
             href="#"
             style="margin-top: 0.5rem; color: var(--secondary-color)"
+            data-tooltip="Logout"
           >
             <i class="nav-icon fas fa-right-from-bracket"></i>
-            Logout
+            <span class="sidebar-link-text">Logout</span>
           </a>
         </div>
       </aside>
@@ -128,12 +136,21 @@
 
           <span class="topnav-title">Dashboard</span>
 
-          <div class="topnav-search">
-            <i class="fas fa-magnifying-glass topnav-search-icon"></i>
-            <input type="search" placeholder="Search items, users…" />
-          </div>
-
           <div class="topnav-right">
+            <div class="topnav-search">
+              <i class="fas fa-magnifying-glass topnav-search-icon"></i>
+              <input type="search" placeholder="Search items, users…" />
+            </div>
+
+            <button
+              id="theme-toggle-btn"
+              class="topnav-icon-btn"
+              title="Toggle Theme"
+              aria-label="Toggle dark/light theme"
+            >
+              <i class="fas fa-moon" id="theme-toggle-icon"></i>
+            </button>
+
             <button
               class="topnav-icon-btn"
               title="Notifications"
@@ -159,27 +176,26 @@
           <section class="dash-page" id="page-home">
             <!-- Welcome Banner -->
             <div class="welcome-banner">
+              <div class="badge-pill-status">
+                <i class="fas fa-shield-halved"></i> Campus-Verified Identity
+              </div>
               <h2>Welcome back, <span id="welcome-name">Aditya</span> 👋</h2>
               <p>
-                Your campus borrowing hub. List items, borrow from peers, and
-                manage everything in one place.
+                Your private campus sharing console. List your idle assets, borrow gear from peers, and manage handovers with verified students on campus.
               </p>
               <div class="welcome-actions">
-                <button class="btn-white" data-page="browse">
-                  <i class="fas fa-compass"></i> Browse Items
-                </button>
-                <button class="btn-outline-white" data-page="add-item">
-                  <i class="fas fa-plus"></i> Add Listing
+                <a class="btn-console btn-console-primary" href="products.html">
+                  <i class="fas fa-compass"></i> Search Catalog
+                </a>
+                <button class="btn-console btn-console-secondary" data-page="add-item">
+                  <i class="fas fa-plus"></i> Create Listing
                 </button>
               </div>
             </div>
 
-            <!-- Stats Cards -->
+            <!-- Stats Grid -->
             <div class="stats-grid">
               <div class="stat-card">
-                <div class="stat-card-icon blue">
-                  <i class="fas fa-list-ul"></i>
-                </div>
                 <div class="stat-card-body">
                   <div
                     class="stat-card-number stat-number-anim"
@@ -187,14 +203,12 @@
                   >
                     0
                   </div>
-                  <div class="stat-card-label">Items Listed</div>
+                  <div class="stat-card-label">Active Listings</div>
+                  <div class="stat-card-sub">Items in your vault catalog</div>
                 </div>
               </div>
 
               <div class="stat-card">
-                <div class="stat-card-icon green">
-                  <i class="fas fa-arrows-rotate"></i>
-                </div>
                 <div class="stat-card-body">
                   <div
                     class="stat-card-number stat-number-anim"
@@ -203,13 +217,11 @@
                     0
                   </div>
                   <div class="stat-card-label">Items Borrowed</div>
+                  <div class="stat-card-sub">Transactions within campus network</div>
                 </div>
               </div>
 
               <div class="stat-card">
-                <div class="stat-card-icon amber">
-                  <i class="fas fa-inbox"></i>
-                </div>
                 <div class="stat-card-body">
                   <div
                     class="stat-card-number stat-number-anim"
@@ -218,16 +230,15 @@
                     0
                   </div>
                   <div class="stat-card-label">Pending Requests</div>
+                  <div class="stat-card-sub">Handover approvals outstanding</div>
                 </div>
               </div>
 
               <div class="stat-card">
-                <div class="stat-card-icon red">
-                  <i class="fas fa-star"></i>
-                </div>
                 <div class="stat-card-body">
                   <div class="stat-card-number">4.8</div>
-                  <div class="stat-card-label">Your Rating</div>
+                  <div class="stat-card-label">Reputation Rating</div>
+                  <div class="stat-card-sub">Verified peer account rating</div>
                 </div>
               </div>
             </div>
@@ -365,80 +376,7 @@
           </section>
           <!-- /page-home -->
 
-          <!-- ==========================================
-           PAGE 2: BROWSE ITEMS
-           ========================================== -->
-          <section class="dash-page" id="page-browse">
-            <div class="page-header">
-              <div class="page-header-left">
-                <h2>Browse Items</h2>
-                <p>Find something to borrow from your campus community</p>
-              </div>
-            </div>
-
-            <!-- Search + Filters -->
-            <div class="dash-card" style="padding: 1rem 1.25rem">
-              <div
-                style="
-                  display: flex;
-                  gap: 1rem;
-                  align-items: center;
-                  flex-wrap: wrap;
-                "
-              >
-                <div style="position: relative; flex: 1; max-width: 320px">
-                  <i
-                    class="fas fa-magnifying-glass"
-                    style="
-                      position: absolute;
-                      left: 0.75rem;
-                      top: 50%;
-                      transform: translateY(-50%);
-                      color: var(--gray);
-                      font-size: 0.85rem;
-                    "
-                  ></i>
-                  <input
-                    id="browse-search"
-                    type="search"
-                    placeholder="Search items…"
-                    style="
-                      width: 100%;
-                      padding: 0.65rem 1rem 0.65rem 2.25rem;
-                      border: 1.5px solid var(--border-light);
-                      border-radius: var(--radius-md);
-                      font-family: var(--font-secondary);
-                      font-size: var(--fs-sm);
-                      outline: none;
-                      transition: border 0.2s;
-                    "
-                    onfocus="this.style.borderColor = 'var(--quaternary-color)'"
-                    onblur="this.style.borderColor = 'var(--border-light)'"
-                  />
-                </div>
-                <div class="browse-filters">
-                  <button class="filter-chip active" data-cat="all">All</button>
-                  <button class="filter-chip" data-cat="Electronics">
-                    Electronics
-                  </button>
-                  <button class="filter-chip" data-cat="Study">Study</button>
-                  <button class="filter-chip" data-cat="Appliances">
-                    Appliances
-                  </button>
-                  <button class="filter-chip" data-cat="Sports">Sports</button>
-                  <button class="filter-chip" data-cat="Accessories">
-                    Accessories
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Items Grid -->
-            <div class="items-grid" id="browse-grid">
-              <!-- Populated by JS -->
-            </div>
-          </section>
-          <!-- /page-browse -->
+          <!-- PAGE 2: BROWSE ITEMS REMOVED (Redirection to products.html) -->
 
           <!-- ==========================================
            PAGE 3: MY LISTINGS
@@ -449,29 +387,13 @@
                 <h2>My Listings</h2>
                 <p>Items you've listed for borrowing</p>
               </div>
-              <button class="btn-primary-dash" data-page="add-item">
-                <i class="fas fa-plus"></i> Add New Item
+              <button class="btn-console btn-console-primary" data-page="add-item">
+                <i class="fas fa-plus"></i> Create Listing
               </button>
             </div>
 
-            <div class="dash-card" style="padding: 0">
-              <div class="listings-table-wrap">
-                <table class="listings-table">
-                  <thead>
-                    <tr>
-                      <th>Item</th>
-                      <th>Rent</th>
-                      <th>Deposit</th>
-                      <th>Status</th>
-                      <th>Requests</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody id="listings-tbody">
-                    <!-- Populated by JS -->
-                  </tbody>
-                </table>
-              </div>
+            <div id="listings-grid" class="listings-grid">
+              <!-- Populated by JS as cards -->
             </div>
           </section>
           <!-- /page-listings -->
@@ -709,9 +631,9 @@
                 <h2>Active Borrowings</h2>
                 <p>Items you are currently borrowing</p>
               </div>
-              <button class="btn-secondary-dash" data-page="browse">
+              <a class="btn-console btn-console-secondary" href="products.html">
                 <i class="fas fa-compass"></i> Borrow More
-              </button>
+              </a>
             </div>
 
             <div class="borrowings-grid" id="borrowings-grid">
@@ -761,7 +683,7 @@
                 <h2>Notifications</h2>
                 <p>Updates about your requests and listings</p>
               </div>
-              <button id="mark-all-read" class="btn-secondary-dash">
+              <button id="mark-all-read" class="btn-console btn-console-secondary">
                 <i class="fas fa-check-double"></i> Mark All Read
               </button>
             </div>
@@ -1004,9 +926,7 @@
 
         // Wire add-listing button in listings page
         document
-          .querySelector(
-            '#page-listings .btn-primary-dash[data-page="add-item"]',
-          )
+          .querySelector('#page-listings [data-page="add-item"]')
           ?.addEventListener("click", () => {
             document
               .querySelector('.sidebar-link[data-page="add-item"]')
@@ -1015,9 +935,7 @@
 
         // Wire borrow-more button
         document
-          .querySelector(
-            '#page-borrowings .btn-secondary-dash[data-page="browse"]',
-          )
+          .querySelector('#page-borrowings [data-page="browse"]')
           ?.addEventListener("click", () => {
             document
               .querySelector('.sidebar-link[data-page="browse"]')

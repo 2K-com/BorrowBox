@@ -31,6 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const categoryItems = document.querySelectorAll('.category-list li');
     const priceSlider = document.getElementById('priceRange');
     const priceValue = document.getElementById('priceValue');
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
 
     // Modal Elements
     const modal = document.getElementById('quickViewModal');
@@ -78,25 +80,37 @@ document.addEventListener('DOMContentLoaded', () => {
         bindModalButtons();
     }
 
-    // 4. Initial Render on Page Load
-    renderProducts(products);
+    // Unified Filtering Function
+    function filterProducts() {
+        const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+        const activeCatItem = document.querySelector('.category-list li.active');
+        const selectedCat = activeCatItem ? activeCatItem.getAttribute('data-category') : 'all';
+        const maxPrice = priceSlider ? parseInt(priceSlider.value) : 500;
+
+        const filtered = products.filter(p => {
+            const matchCat = selectedCat === 'all' || p.category === selectedCat;
+            const matchPrice = p.price <= maxPrice;
+            const matchQuery = !query || p.title.toLowerCase().includes(query) || p.category.toLowerCase().includes(query);
+            return matchCat && matchPrice && matchQuery;
+        });
+
+        renderProducts(filtered);
+    }
+
+    // 4. Initial Render on Page Load & Query Parameter check
+    const params = new URLSearchParams(window.location.search);
+    const searchParam = params.get('search');
+    if (searchParam && searchInput) {
+        searchInput.value = searchParam;
+    }
+    filterProducts();
 
     // 5. Category Filtering Logic
     categoryItems.forEach(item => {
         item.addEventListener('click', (e) => {
             categoryItems.forEach(i => i.classList.remove('active'));
             e.target.classList.add('active');
-
-            const selectedCat = e.target.getAttribute('data-category');
-            const maxPrice = parseInt(priceSlider.value);
-            
-            const filtered = products.filter(p => {
-                const matchCat = selectedCat === 'all' || p.category === selectedCat;
-                const matchPrice = p.price <= maxPrice;
-                return matchCat && matchPrice;
-            });
-
-            renderProducts(filtered);
+            filterProducts();
         });
     });
 
@@ -104,17 +118,16 @@ document.addEventListener('DOMContentLoaded', () => {
     priceSlider.addEventListener('input', (e) => {
         const val = e.target.value;
         priceValue.textContent = `₹${val}`;
-        
-        const activeCat = document.querySelector('.category-list li.active').getAttribute('data-category');
-        
-        const filtered = products.filter(p => {
-            const matchCat = activeCat === 'all' || p.category === activeCat;
-            const matchPrice = p.price <= val;
-            return matchCat && matchPrice;
-        });
-
-        renderProducts(filtered);
+        filterProducts();
     });
+
+    // 7. Search Input Logic
+    if (searchInput) {
+        searchInput.addEventListener('input', filterProducts);
+    }
+    if (searchBtn) {
+        searchBtn.addEventListener('click', filterProducts);
+    }
 
     // ========================================
     // QUICK VIEW MODAL LOGIC

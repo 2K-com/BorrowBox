@@ -2,8 +2,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700;800&display=swap');
 
 :root {
-    /* Typography */
-    --font-main: 'Sora', sans-serif;
+    /* Typography - Inter is the established font family */
+    --font-main: 'Inter', sans-serif;
     --font-secondary: 'Inter', sans-serif;
 
     /* Font Sizes */
@@ -13,7 +13,7 @@
     --fs-md: 1.125rem;
     --fs-lg: 1.5rem;
     --fs-xl: 2.25rem;
-    --fs-xxl: 3rem;
+    --fs-xxl: 3.0rem;
     --fs-hero: 3.5rem;
 
     /* Font Weights */
@@ -24,47 +24,47 @@
     --fw-bold: 700;
     --fw-extrabold: 800;
 
-    /* Color Palette - Keeping your primary colors */
-    --primary-color: #393E41;
-    --primary-light: #646c71;
-    --primary-dark: #2b2f31;
-    --secondary-color: #D04049;
-    --secondary-light: #d68489;
-    --tertiary-color: #FFCC95;
-    --tertiary-light: #fff2e6;
-    --quaternary-color: #6D90B9;
+    /* Color Palette - Oatmeal & Ink & Safety Orange */
+    --primary-color: #111111;       /* Ink Black */
+    --primary-light: #666666;       /* Charcoal */
+    --primary-dark: #000000;        /* Pure Black */
+    --secondary-color: #D04049;     /* Accent Red for errors/destructives */
+    --secondary-light: #E87A80;
+    --tertiary-color: #FF4F00;      /* Safety Orange (Primary Accent) */
+    --quaternary-color: #FF4F00;    /* Maps old blue variables to Safety Orange */
+    --accent-primary: #FF4F00;      /* Safety Orange */
 
+    /* ==========================================
+       LIGHT THEME (Default) Variables
+       ========================================== */
+    --bg-app: #F7F4EE;              /* Soft neutral beige background */
+    --bg-panel: #F3EDE2;            /* Warm Oatmeal panels (Sidebar/Topnav) */
+    --surface-card: #FFFDF8;        /* Warm white/Ivory cards */
+    --surface-card-light: #FAF8F5;  
+    --surface-input: #FFFDF8;       
+    --text-input: #111111;          
 
-    --accent-blue: #BBC7DC;
-    --accent-blue-light: #e4eeff;
-    --accent-blue-dark: #7c9bd0;
-
-    /* Neutral Colors */
-    --white: #FFFFFF;
-    --off-white: #F8F9FA;
-    --light-gray: #E9ECEF;
-    --gray: #ADB5BD;
-    --dark-gray: #495057;
-    --charcoal: #212529;
-
-    /* Semantic Colors */
-    --bg-gradient: linear-gradient(90deg, #618fc4, #BBC7DC);
-    --text-primary: #212529;
+    /* Typography Colors */
+    --text-main: #111111;           /* Ink Black text */
+    --text-muted: #666666;          /* Charcoal text */
+    --text-disabled: #A69F95;       /* Warm Sand text */
+    --text-light: #111111;          /* Black text for dark-on-light containers */
+    --text-primary: #111111;        
     --text-secondary: #495057;
-    --text-muted: #6C757D;
-    --text-light: #FFFFFF;
 
-    /* UI Colors */
-    --border-light: #DEE2E6;
-    --border-medium: #CED4DA;
-    --shadow-sm: rgba(0, 0, 0, 0.05);
-    --shadow-md: rgba(0, 0, 0, 0.1);
-    --shadow-lg: rgba(0, 0, 0, 0.15);
+    /* Borders & Tints */
+    --border-clean: #D9CBB6;        /* Sand Border */
+    --border-light: #D9CBB6;
+    --border-medium: #A69F95;
+    --tertiary-light: rgba(255, 79, 0, 0.08); /* Active item tint */
+    --shadow-color: rgba(17, 17, 17, 0.05);
 
-    /* Glassmorphism */
-    --glass-bg: rgba(255, 255, 255, 0.85);
-    --glass-border: rgba(255, 255, 255, 0.3);
-    --glass-blur: blur(16px);
+    /* Dynamic helper variables */
+    --bg-hover: rgba(17, 17, 17, 0.04);
+    --bg-active: rgba(255, 79, 0, 0.08);
+    --bg-table-header: rgba(17, 17, 17, 0.03);
+    --bg-table-row-hover: rgba(17, 17, 17, 0.015);
+    --border-translucent: rgba(17, 17, 17, 0.1);
 
     /* Spacing */
     --space-xs: 0.5rem;
@@ -77,9 +77,9 @@
 
     /* Border Radius */
     --radius-sm: 6px;
-    --radius-md: 12px;
-    --radius-lg: 16px;
-    --radius-xl: 24px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 18px;
     --radius-full: 9999px;
 
     /* Transitions */
@@ -88,13 +88,50 @@
     --transition-slow: 0.5s ease;
 
     /* Shadows */
-    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
-    --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
-    --shadow-button: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-sm: 0 1px 2px 0 var(--shadow-color);
+    --shadow-md: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -1px var(--shadow-color);
+    --shadow-lg: 0 10px 15px -3px var(--shadow-color);
+    --shadow-card: 0 2px 8px var(--shadow-color);
+    --shadow-card-hover: 0 8px 24px var(--shadow-color);
+    --shadow-button: 0 2px 4px var(--shadow-color);
 
     /* Container */
-    --container-max: 1200px;
+    --container-max: 1400px;
     --container-padding: 2rem;
+}
+
+/* ==========================================
+   DARK THEME (data-theme="dark") Variables
+   ========================================== */
+[data-theme="dark"] {
+    --bg-app: #0E0E0E;              /* Deep black background */
+    --bg-panel: #151515;            /* Deep black panels */
+    --surface-card: #1A1916;        /* Warm Dark Off-Black cards */
+    --surface-card-light: #242320;  
+    --surface-input: #151515;       
+    --text-input: #FFFFFF;          
+
+    /* Typography Colors */
+    --text-main: #F3EDE2;           /* Soft Oatmeal text */
+    --text-muted: #A69F95;          /* Warm Sand text */
+    --text-disabled: #666666;       /* Charcoal text */
+    --text-light: #FFFFFF;          /* High contrast white text */
+    --text-primary: #F3EDE2;        
+    --text-secondary: #A69F95;
+
+    /* Borders & Tints */
+    --border-clean: rgba(217, 203, 182, 0.2);
+    --border-light: rgba(217, 203, 182, 0.15);
+    --border-medium: #666666;
+    --tertiary-light: rgba(255, 79, 0, 0.15);
+    --shadow-color: rgba(0, 0, 0, 0.5);
+
+    /* Dynamic helper variables for dark theme */
+    --bg-hover: rgba(255, 255, 255, 0.05);
+    --bg-active: rgba(255, 79, 0, 0.15);
+    --bg-table-header: rgba(255, 255, 255, 0.03);
+    --bg-table-row-hover: rgba(255, 255, 255, 0.02);
+    --border-translucent: rgba(255, 255, 255, 0.1);
 }
 
 /* Responsive Font Sizes */
