@@ -42,74 +42,152 @@ html {
 }
 
 /* ==========================================================================
-   NAVIGATION
+   FLOATING PILL NAVBAR (Oatmeal & Ink Theme)
    ========================================================================== */
-.navbar {
+
+.floating-pill-navbar {
     position: fixed;
-    top: 0; left: 0; right: 0;
-    height: 80px;
-    background-color: rgba(243, 237, 226, 0.90); /* Oatmeal Glass */
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid transparent;
-    z-index: 100;
-    transition: all var(--transition-base);
-}
-
-.navbar.scrolled {
-    height: 70px;
-    border-bottom-color: var(--border-clean);
-    box-shadow: var(--shadow-sm);
-}
-
-.nav-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    height: 100%;
-    padding: 0 32px;
+    top: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 1100px; /* Limits how wide the bar gets on huge screens */
+    height: 72px;
+    background-color: var(--bg-app); /* Ink Black */
+    border-radius: 100px; /* Creates the perfect pill shape */
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0 12px 0 32px; /* Tighter padding on the right to hug the button */
+    z-index: 1000;
+    box-shadow: 0 12px 40px rgba(17, 17, 17, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.05); /* Subtle rim light */
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
+/* ========== LOGO STYLING ========== */
 .brand-logo {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     font-weight: 700;
+    color: var(--text-main); /* Pure White */
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    letter-spacing: -0.01em;
+}
+
+.brand-icon-box {
+    background-color: var(--surface-card);
     color: var(--text-main);
-    text-decoration: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px; /* Slightly rounded square like your reference image */
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
+    font-size: 0.95rem;
 }
 
-.brand-logo i { color: var(--accent-primary); }
-
-.nav-links {
+/* ========== CENTER LINKS ========== */
+.nav-center-links {
     display: flex;
     align-items: center;
-    gap: 32px;
+    gap: 4px;
 }
 
-.nav-links a {
+.nav-center-links a {
     text-decoration: none;
-    color: var(--text-muted);
+    color: var(--text-main); /* Muted gray for inactive links */
+    font-family: var(--font-main);
     font-weight: 500;
     font-size: 0.95rem;
-    transition: color var(--transition-fast);
-}
-
-.nav-links a:hover { color: var(--accent-primary); }
-
-.btn-nav-primary {
-    background-color: var(--text-main);
-    color: var(--surface-card) !important;
     padding: 10px 20px;
-    border-radius: var(--radius-sm);
-    transition: background-color var(--transition-fast);
+    border-radius: 100px;
+    transition: all var(--transition-fast);
 }
 
-.btn-nav-primary:hover { background-color: var(--accent-primary); }
+.nav-center-links a:hover {
+    color: var(--accent-primary); /* Safety Orange on hover */
+    background-color: rgba(255, 79, 0, 0.08);
+}
 
+
+/* ========== RIGHT ACTION BUTTON ========== */
+.btn-nav-action {
+    background-color: var(--surface-card); /* Pure white background */
+    color: var(--text-main) !important; /* Ink black text */
+    text-decoration: none;
+    font-family: var(--font-main);
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 14px 28px;
+    border-radius: 100px;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.btn-nav-action:hover {
+    transform: scale(1.02);
+    background-color: #F8F8F8; /* Very slight dim on hover */
+}
+.btn-nav-action { 
+    background-color: var(--surface-card); 
+    color: var(--text-main) !important; 
+    transition: all 0.3s ease; 
+    border: 1px solid transparent; 
+}
+.btn-nav-action:hover { 
+    background-color: var(--accent-primary); 
+    color: var(--surface-card) !important; 
+    border-color: var(--accent-primary); 
+}
+
+
+.floating-pill-navbar.scrolled {
+    top: 0;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0;
+    padding: 0 32px;
+    background-color: rgba(243, 237, 226, 0.85); /* Translucent Oatmeal */
+    backdrop-filter: blur(12px); /* The frosted glass effect */
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 4px 20px rgba(17, 17, 17, 0.05);
+    border: none;
+    border-bottom: 1px solid var(--border-clean);
+}
+
+/* Invert Logo Colors */
+.floating-pill-navbar.scrolled .brand-logo { color: var(--text-main); }
+.floating-pill-navbar.scrolled .brand-icon-box { background-color: var(--text-main); color: var(--surface-card); }
+
+/* Invert Link Colors & Match Reference Image */
+.floating-pill-navbar.scrolled .nav-center-links a { 
+    color: var(--text-main); 
+}
+.floating-pill-navbar.scrolled .nav-center-links a:hover { 
+    color: var(--accent-primary); 
+}
+
+/* Style Action Button for Scrolled State */
+.floating-pill-navbar.scrolled .btn-nav-action {
+    background-color: var(--surface-card);
+    border-color: var(--border-clean);
+    box-shadow: 0 2px 4px rgba(17, 17, 17, 0.05);
+}
+
+/* ========== MOBILE RESPONSIVENESS ========== */
+@media (max-width: 768px) {
+    .floating-pill-navbar {
+        width: 95%;
+        padding: 0 10px 0 20px;
+    }
+    
+    /* Hides center links on small phones to prevent breaking the layout */
+    .nav-center-links {
+        display: none; 
+    }
+}
 /* ==========================================================================
    HERO CONSOLE
    ========================================================================== */

@@ -15,18 +15,25 @@
     <link rel="stylesheet" href="../static/css/style.css" />
   </head>
   <body>
-    <nav class="navbar" id="mainNavbar">
-      <div class="nav-container">
-        <a href="#" class="brand-logo"
-          ><i class="fas fa-layer-group"></i> BorrowBox</a
-        >
-        <div class="nav-links">
-          <a href="#how-it-works">Protocol</a>
-          <a href="products.html">Catalog</a>
-          <a href="#mission">Mission</a>
-          <a href="login.html" class="btn-nav-primary">Sign In</a>
+    <!-- ========== FLOATING PILL NAVBAR ========== -->
+    <nav class="floating-pill-navbar" id="mainNavbar">
+      <!-- Left: Logo -->
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon-box">
+          <i class="fas fa-layer-group"></i>
         </div>
+        BorrowBox
+      </a>
+
+      <!-- Center: Navigation Links -->
+      <div class="nav-center-links">
+        <a href="index.html">Home</a>
+        <a href="products.html" class="active">Catalog</a>
+        <a href="dashboard.html">My Vault</a>
       </div>
+
+      <!-- Right: Call to Action Button -->
+      <a href="login.html" class="btn-nav-action">Sign In</a>
     </nav>
 
     <header class="hero-console-section">
