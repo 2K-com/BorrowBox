@@ -151,12 +151,12 @@ const USER = {
 };
 
 const LISTINGS_DATA = [
-    { id: 1, emoji: '💻', name: 'Dell Laptop (i5)', category: 'Electronics', rent: '₹200/day', deposit: '₹2000', status: 'available', requests: 3 },
-    { id: 2, emoji: '📷', name: 'Canon DSLR Camera', category: 'Electronics', rent: '₹500/day', deposit: '₹5000', status: 'rented', requests: 1 },
-    { id: 3, emoji: '🎒', name: 'Travel Backpack 45L', category: 'Accessories', rent: '₹80/day', deposit: '₹500', status: 'available', requests: 0 },
-    { id: 4, emoji: '📚', name: 'Engineering Textbooks (Set)', category: 'Study', rent: '₹60/day', deposit: '₹300', status: 'available', requests: 5 },
-    { id: 5, emoji: '🎸', name: 'Acoustic Guitar', category: 'Instruments', rent: '₹150/day', deposit: '₹1500', status: 'rented', requests: 0 },
-    { id: 6, emoji: '🖨️', name: 'Portable Projector', category: 'Electronics', rent: '₹300/day', deposit: '₹3000', status: 'available', requests: 2 },
+    { id: 1, image: '../static/images/dell_Laptop.jpg', name: 'Dell Laptop (i5)', category: 'Electronics', rent: '₹200/day', deposit: '₹2000', status: 'available', requests: 3 },
+    { id: 2, image: '../static/images/dslr.jpg', name: 'Canon DSLR Camera', category: 'Electronics', rent: '₹500/day', deposit: '₹5000', status: 'rented', requests: 1 },
+    { id: 3, image: '../static/images/bag.jpg', name: 'Travel Backpack 45L', category: 'Accessories', rent: '₹80/day', deposit: '₹500', status: 'available', requests: 0 },
+    { id: 4, image: '../static/images/books.jpg', name: 'Engineering Textbooks (Set)', category: 'Study', rent: '₹60/day', deposit: '₹300', status: 'available', requests: 5 },
+    { id: 5, image: '../static/images/guitar.jpg', name: 'Acoustic Guitar', category: 'Instruments', rent: '₹150/day', deposit: '₹1500', status: 'rented', requests: 0 },
+    { id: 6, image: '../static/images/projector.jpg', name: 'Portable Projector', category: 'Electronics', rent: '₹300/day', deposit: '₹3000', status: 'available', requests: 2 },
 ];
 
 const BROWSE_DATA = [
@@ -175,25 +175,25 @@ const BROWSE_DATA = [
 ];
 
 const REQUESTS_DATA = [
-    { id: 1, emoji: '💻', item: 'Dell Laptop (i5)', borrower: 'Priya Mehta', avatar: 'PM', dates: '28 May – 2 Jun 2026', days: 5, rent: '₹1,000', status: 'pending' },
-    { id: 2, emoji: '📚', item: 'Engineering Textbooks (Set)', borrower: 'Rahul Singh', avatar: 'RS', dates: '30 May – 5 Jun 2026', days: 6, rent: '₹360', status: 'pending' },
-    { id: 3, emoji: '🖨️', item: 'Portable Projector', borrower: 'Sneha Patil', avatar: 'SP', dates: '1 Jun – 3 Jun 2026', days: 2, rent: '₹600', status: 'accepted' },
-    { id: 4, emoji: '📚', item: 'Engineering Textbooks (Set)', borrower: 'Arjun Nair', avatar: 'AN', dates: '3 Jun – 8 Jun 2026', days: 5, rent: '₹300', status: 'rejected' },
+    { id: 1, image: '../static/images/dell_Laptop.jpg', item: 'Dell Laptop (i5)', borrower: 'Priya Mehta', avatar: 'PM', dates: '28 May – 2 Jun 2026', days: 5, rent: '₹1,000', status: 'pending' },
+    { id: 2, image: '../static/images/books.jpg', item: 'Engineering Textbooks (Set)', borrower: 'Rahul Singh', avatar: 'RS', dates: '30 May – 5 Jun 2026', days: 6, rent: '₹360', status: 'pending' },
+    { id: 3, image: '../static/images/projector.jpg', item: 'Portable Projector', borrower: 'Sneha Patil', avatar: 'SP', dates: '1 Jun – 3 Jun 2026', days: 2, rent: '₹600', status: 'accepted' },
+    { id: 4, image: '../static/images/books.jpg', item: 'Engineering Textbooks (Set)', borrower: 'Arjun Nair', avatar: 'AN', dates: '3 Jun – 8 Jun 2026', days: 5, rent: '₹300', status: 'rejected' },
 ];
 
 const BORROWINGS_DATA = [
-    { id: 1, emoji: '🎧', name: 'Sony WH-1000XM5 Headphones', owner: 'Vikram Desai', pickup: '22 May 2026', returnDate: '29 May 2026', deposit: 'paid', daysLeft: 3, totalDays: 7 },
-    { id: 2, emoji: '📷', name: 'Nikon D3500 Camera', owner: 'Ananya Joshi', pickup: '20 May 2026', returnDate: '27 May 2026', deposit: 'paid', daysLeft: 1, totalDays: 7 },
-    { id: 3, emoji: '🏸', name: 'Yonex Badminton Set', owner: 'Karan Mishra', pickup: '24 May 2026', returnDate: '31 May 2026', deposit: 'paid', daysLeft: 5, totalDays: 7 },
+    { id: 1, image: '../static/images/headphone.png', name: 'Sony WH-1000XM5 Headphones', owner: 'Vikram Desai', pickup: '22 May 2026', returnDate: '29 May 2026', deposit: 'paid', daysLeft: 3, totalDays: 7 },
+    { id: 2, image: '../static/images/dslr.jpg', name: 'Nikon D3500 Camera', owner: 'Ananya Joshi', pickup: '20 May 2026', returnDate: '27 May 2026', deposit: 'paid', daysLeft: 1, totalDays: 7 },
+    { id: 3, image: '../static/images/accessories.png', name: 'Yonex Badminton Set', owner: 'Karan Mishra', pickup: '24 May 2026', returnDate: '31 May 2026', deposit: 'paid', daysLeft: 5, totalDays: 7 },
 ];
 
 const HISTORY_DATA = [
-    { id: 1, emoji: '🎧', name: 'Wireless Headphones', date: '14 May 2026', type: 'Borrow', rent: '₹300', deposit: '₹1,500', status: 'returned' },
-    { id: 2, emoji: '📖', name: 'Linear Algebra Textbook', date: '8 May 2026', type: 'Borrow', rent: '₹150', deposit: '₹500', status: 'returned' },
-    { id: 3, emoji: '💻', name: 'Dell Laptop (i5)', date: '5 May 2026', type: 'Lend', rent: '₹800', deposit: '₹2,000', status: 'returned' },
-    { id: 4, emoji: '🎮', name: 'PS5 Controller', date: '28 Apr 2026', type: 'Borrow', rent: '₹200', deposit: '₹800', status: 'returned' },
-    { id: 5, emoji: '📷', name: 'Canon DSLR Camera', date: '20 Apr 2026', type: 'Lend', rent: '₹1,500', deposit: '₹5,000', status: 'returned' },
-    { id: 6, emoji: '🔊', name: 'Bluetooth Speaker', date: '12 Apr 2026', type: 'Borrow', rent: '₹140', deposit: '₹500', status: 'returned' },
+    { id: 1, image: '../static/images/headphone.png', name: 'Wireless Headphones', date: '14 May 2026', type: 'Borrow', rent: '₹300', deposit: '₹1,500', status: 'returned' },
+    { id: 2, image: '../static/images/books.jpg', name: 'Linear Algebra Textbook', date: '8 May 2026', type: 'Borrow', rent: '₹150', deposit: '₹500', status: 'returned' },
+    { id: 3, image: '../static/images/dell_Laptop.jpg', name: 'Dell Laptop (i5)', date: '5 May 2026', type: 'Lend', rent: '₹800', deposit: '₹2,000', status: 'returned' },
+    { id: 4, image: '../static/images/controller.png', name: 'PS5 Controller', date: '28 Apr 2026', type: 'Borrow', rent: '₹200', deposit: '₹800', status: 'returned' },
+    { id: 5, image: '../static/images/dslr.jpg', name: 'Canon DSLR Camera', date: '20 Apr 2026', type: 'Lend', rent: '₹1,500', deposit: '₹5,000', status: 'returned' },
+    { id: 6, image: '../static/images/electronics.png', name: 'Bluetooth Speaker', date: '12 Apr 2026', type: 'Borrow', rent: '₹140', deposit: '₹500', status: 'returned' },
 ];
 
 const NOTIFICATIONS_DATA = [
@@ -244,41 +244,38 @@ function initListings() {
     function renderListings(data) {
         grid.innerHTML = data.map(item => `
             <div class="inventory-card">
-                <div class="inventory-card-top">
-                    <div class="inventory-thumb">${item.emoji}</div>
-                    <div class="inventory-meta">
-                        <div class="inventory-name">${item.name}</div>
-                        <div class="inventory-category">${item.category}</div>
-                    </div>
+                <div class="inventory-card-image-wrap">
+                    <img class="inventory-card-image" src="${item.image}" alt="${item.name}">
+                    <span class="status-badge status-${item.status} inventory-card-status-badge">
+                        ${capitalize(item.status)}
+                    </span>
                 </div>
-                <div class="inventory-card-body">
-                    <div class="inventory-detail">
-                        <span class="detail-label">Rent</span>
-                        <span class="detail-value highlight-orange">${item.rent}</span>
+                <div class="inventory-card-details">
+                    <h3 class="inventory-card-name">${item.name}</h3>
+                    <div class="inventory-card-category">${item.category}</div>
+                    
+                    <div class="inventory-card-price-row">
+                        <span class="inventory-card-rent">${item.rent}</span>
+                        <span class="inventory-card-separator">•</span>
+                        <span class="inventory-card-deposit">${item.deposit} Deposit</span>
                     </div>
-                    <div class="inventory-detail">
-                        <span class="detail-label">Deposit</span>
-                        <span class="detail-value">${item.deposit}</span>
+                    
+                    <div class="inventory-card-requests-row">
+                        <i class="fas fa-inbox"></i>
+                        <span>${item.requests} Pending Request${item.requests === 1 ? '' : 's'}</span>
                     </div>
-                    <div class="inventory-detail">
-                        <span class="detail-label">Status</span>
-                        <span class="status-badge status-${item.status}">${capitalize(item.status)}</span>
+
+                    <div class="inventory-card-actions">
+                        <button class="btn-console-action" title="Edit listing" onclick="showToast('Edit listing — connect to backend')">
+                            <i class="fas fa-pen"></i> Edit
+                        </button>
+                        <button class="btn-console-action" title="View requests" onclick="showToast('View requests for ${item.name.replace(/'/g, "\\\'")}')">
+                            <i class="fas fa-inbox"></i> Requests (${item.requests})
+                        </button>
+                        <button class="btn-console-action danger" title="Delete listing" onclick="confirmDelete('${item.name.replace(/'/g, "\\\'")}')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
                     </div>
-                    <div class="inventory-detail">
-                        <span class="detail-label">Requests</span>
-                        <span class="detail-value count-badge">${item.requests} pending</span>
-                    </div>
-                </div>
-                <div class="inventory-card-actions">
-                    <button class="btn-console-action" title="Edit listing" onclick="showToast('Edit listing — connect to backend')">
-                        <i class="fas fa-pen"></i> Edit
-                    </button>
-                    <button class="btn-console-action" title="View requests" onclick="showToast('View requests for ${item.name}')">
-                        <i class="fas fa-inbox"></i> Requests (${item.requests})
-                    </button>
-                    <button class="btn-console-action danger" title="Delete listing" onclick="confirmDelete('${item.name}')">
-                        <i class="fas fa-trash"></i> Delete
-                    </button>
                 </div>
             </div>
         `).join('');
@@ -307,14 +304,21 @@ function initRequests() {
     function renderRequests(data) {
         list.innerHTML = data.map(req => `
             <div class="request-card" id="req-${req.id}">
-                <div class="request-card-icon">${req.emoji}</div>
-                <div class="request-card-body">
-                    <div class="request-card-top">
+                <div class="request-card-thumb-wrap">
+                    <img class="request-card-thumb" src="${req.image}" alt="${req.item}">
+                    <span class="status-badge status-${req.status} request-card-status-badge">
+                        ${capitalize(req.status)}
+                    </span>
+                </div>
+                <div class="request-card-details">
+                    <div class="request-card-header-row">
                         <span class="request-item-name">${req.item}</span>
-                        <span class="status-badge status-${req.status}">${capitalize(req.status)}</span>
+                        <div class="request-card-borrower">
+                            <span class="request-borrower-avatar">${req.avatar}</span>
+                            <span>${req.borrower}</span>
+                        </div>
                     </div>
-                    <div class="request-card-meta">
-                        <span class="request-meta-item"><i class="fas fa-user"></i> ${req.borrower}</span>
+                    <div class="request-card-meta-row">
                         <span class="request-meta-item"><i class="fas fa-calendar"></i> ${req.dates}</span>
                         <span class="request-meta-item"><i class="fas fa-clock"></i> ${req.days} days</span>
                         <span class="request-meta-item"><i class="fas fa-rupee-sign"></i> ${req.rent}</span>
@@ -370,44 +374,51 @@ function initBorrowings() {
     grid.innerHTML = BORROWINGS_DATA.map(b => {
         const pct = Math.round((b.daysLeft / b.totalDays) * 100);
         const fillClass = pct <= 20 ? 'danger' : pct <= 40 ? 'warning' : '';
+        const daysClass = pct <= 20 ? 'danger' : pct <= 40 ? 'warning' : '';
         return `
             <div class="borrowing-card">
-                <div class="borrowing-card-header">
-                    <div class="borrowing-card-icon">${b.emoji}</div>
-                    <div>
-                        <div class="borrowing-card-title">${b.name}</div>
-                        <div class="borrowing-card-owner">Owner: ${b.owner}</div>
-                    </div>
+                <div class="borrowing-card-image-wrap">
+                    <img class="borrowing-card-image" src="${b.image}" alt="${b.name}">
+                    <span class="borrowing-card-days-badge ${daysClass}">
+                        ${b.daysLeft} Day${b.daysLeft === 1 ? '' : 's'} Left
+                    </span>
                 </div>
-                <div class="borrowing-card-body">
-                    <div class="borrowing-detail-row">
-                        <span class="borrowing-detail-label"><i class="fas fa-calendar-check"></i> Pickup</span>
-                        <span class="borrowing-detail-value">${b.pickup}</span>
+                <div class="borrowing-card-details">
+                    <h3 class="borrowing-card-title">${b.name}</h3>
+                    <div class="borrowing-card-owner">Owner: ${b.owner}</div>
+                    
+                    <div class="borrowing-card-meta">
+                        <div class="borrowing-detail-row">
+                            <span class="borrowing-detail-label"><i class="fas fa-calendar-check"></i> Pickup</span>
+                            <span class="borrowing-detail-value">${b.pickup}</span>
+                        </div>
+                        <div class="borrowing-detail-row">
+                            <span class="borrowing-detail-label"><i class="fas fa-calendar-times"></i> Return By</span>
+                            <span class="borrowing-detail-value">${b.returnDate}</span>
+                        </div>
+                        <div class="borrowing-detail-row">
+                            <span class="borrowing-detail-label"><i class="fas fa-shield-alt"></i> Deposit</span>
+                            <span class="borrowing-detail-value">
+                                <span class="status-badge status-${b.deposit}">${capitalize(b.deposit)}</span>
+                            </span>
+                        </div>
                     </div>
-                    <div class="borrowing-detail-row">
-                        <span class="borrowing-detail-label"><i class="fas fa-calendar-times"></i> Return By</span>
-                        <span class="borrowing-detail-value">${b.returnDate}</span>
-                    </div>
-                    <div class="borrowing-detail-row">
-                        <span class="borrowing-detail-label"><i class="fas fa-shield-alt"></i> Deposit</span>
-                        <span class="borrowing-detail-value">
-                            <span class="status-badge status-${b.deposit}">${capitalize(b.deposit)}</span>
-                        </span>
-                    </div>
+                    
                     <div class="days-progress">
                         <div class="days-progress-label">
                             <span>Days remaining</span>
-                            <span style="color:${pct <= 20 ? 'var(--secondary-color)' : 'var(--text-primary)'}; font-weight: var(--fw-semibold);">${b.daysLeft} / ${b.totalDays}</span>
+                            <span style="color:${pct <= 20 ? 'var(--secondary-color)' : pct <= 40 ? '#D97706' : 'var(--text-main)'}; font-weight: var(--fw-semibold);">${b.daysLeft} / ${b.totalDays}</span>
                         </div>
                         <div class="days-progress-bar">
                             <div class="days-progress-fill ${fillClass}" style="width:${pct}%"></div>
                         </div>
                     </div>
-                </div>
-                <div class="borrowing-card-footer">
-                    <button class="btn-secondary-dash btn-sm" style="width:100%;justify-content:center;" onclick="showToast('Return flow — connect to backend')">
-                        <i class="fas fa-rotate-left"></i> Mark as Returned
-                    </button>
+                    
+                    <div class="borrowing-card-footer">
+                        <button class="btn-secondary-dash btn-sm" style="width:100%;justify-content:center;" onclick="showToast('Return flow — connect to backend')">
+                            <i class="fas fa-rotate-left"></i> Mark as Returned
+                        </button>
+                    </div>
                 </div>
             </div>
         `;
@@ -425,7 +436,9 @@ function initHistory() {
         <tr>
             <td>
                 <div class="history-item-info">
-                    <div class="history-thumb">${h.emoji}</div>
+                    <div class="history-thumb-wrap">
+                        <img class="history-thumb-image" src="${h.image}" alt="${h.name}">
+                    </div>
                     <div>
                         <div class="history-item-name">${h.name}</div>
                         <div class="history-item-date">${h.date}</div>
@@ -433,7 +446,7 @@ function initHistory() {
                 </div>
             </td>
             <td>
-                <span style="font-size:var(--fs-xs);padding:0.2rem 0.6rem;border-radius:var(--radius-full);background:${h.type === 'Borrow' ? 'rgba(109,144,185,0.1)' : 'rgba(16,185,129,0.1)'};color:${h.type === 'Borrow' ? 'var(--quaternary-color)' : '#10B981'};font-weight:var(--fw-semibold);">${h.type}</span>
+                <span class="history-type-badge type-${h.type.toLowerCase()}">${h.type}</span>
             </td>
             <td class="amount-positive">${h.rent}</td>
             <td class="amount-neutral">${h.deposit}</td>
