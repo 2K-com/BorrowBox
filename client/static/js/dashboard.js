@@ -28,7 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
 function initNavigation() {
     const navLinks = document.querySelectorAll('[data-page]');
     const pages = document.querySelectorAll('.dash-page');
-    const pageTitle = document.querySelector('.topnav-title');
 
     function activatePage(pageId) {
         // Hide all
@@ -41,20 +40,6 @@ function initNavigation() {
 
         // Mark link active
         document.querySelectorAll(`[data-page="${pageId}"]`).forEach(l => l.classList.add('active'));
-
-        // Update top nav title
-        const titles = {
-            home: 'Dashboard',
-            browse: 'Browse Items',
-            listings: 'My Listings',
-            'add-item': 'Add New Item',
-            requests: 'Borrow Requests',
-            borrowings: 'Active Borrowings',
-            history: 'Transaction History',
-            notifications: 'Notifications',
-            profile: 'My Profile',
-        };
-        if (pageTitle && titles[pageId]) pageTitle.textContent = titles[pageId];
 
         // Update notification badge for notifications page
         if (pageId === 'notifications') {
@@ -521,7 +506,7 @@ function initProfile() {
     setTextById('profile-since', USER.memberSince);
 
     // Init avatar initials
-    document.querySelectorAll('.profile-avatar').forEach(el => {
+    document.querySelectorAll('.profile-avatar, .profile-avatar-lg').forEach(el => {
         el.textContent = USER.initials;
     });
 
@@ -530,14 +515,114 @@ function initProfile() {
     setInputById('edit-email', USER.email);
     setInputById('edit-phone', USER.phone);
 
-    // Save button
+    // Pre-fill theme preference selectors
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    const lightCard = document.getElementById('pref-theme-light');
+    const darkCard = document.getElementById('pref-theme-dark');
+    if (lightCard && darkCard) {
+        if (currentTheme === 'light') {
+            lightCard.classList.add('active');
+            darkCard.classList.remove('active');
+        } else {
+            darkCard.classList.add('active');
+            lightCard.classList.remove('active');
+        }
+    }
+
+    // Tab switching logic
+    const tabBtns = document.querySelectorAll('.profile-tab-btn');
+    const panes = document.querySelectorAll('.profile-settings-pane');
+    
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetTab = btn.getAttribute('data-profile-tab');
+            
+            // Remove active from all buttons & panes
+            tabBtns.forEach(b => b.classList.remove('active'));
+            panes.forEach(p => p.classList.remove('active'));
+            
+            // Add active to current
+            btn.classList.add('active');
+            const targetPane = document.getElementById('profile-pane-' + targetTab);
+            if (targetPane) targetPane.classList.add('active');
+        });
+    });
+
+    // Save button logic (with live mock updating)
     const saveBtn = document.getElementById('save-profile-btn');
     if (saveBtn) {
         saveBtn.addEventListener('click', () => {
-            showToast('Profile updated — connect to backend to persist changes');
+            const newName = document.getElementById('edit-name')?.value?.trim();
+            const newPhone = document.getElementById('edit-phone')?.value?.trim();
+            const newBio = document.getElementById('edit-bio')?.value?.trim();
+
+            if (!newName) {
+                showToast('Please enter a valid name', 'error');
+                return;
+            }
+
+            // Update USER object
+            USER.name = newName;
+            if (newPhone) USER.phone = newPhone;
+            if (newBio) USER.bio = newBio;
+
+            // Generate initials
+            const parts = newName.split(' ');
+            let initials = '';
+            if (parts.length > 0 && parts[0]) initials += parts[0][0];
+            if (parts.length > 1 && parts[parts.length - 1]) initials += parts[parts.length - 1][0];
+            USER.initials = initials.toUpperCase() || 'AS';
+
+            // Propagate initials to all avatars
+            document.querySelectorAll('.profile-avatar, .profile-avatar-lg, .sidebar-avatar-sm, .topnav-avatar').forEach(el => {
+                el.textContent = USER.initials;
+            });
+
+            // Propagate name to headers & welcome texts
+            const welcomeName = document.getElementById('welcome-name');
+            if (welcomeName) welcomeName.textContent = newName.split(' ')[0];
+            
+            const profileName = document.getElementById('profile-name');
+            if (profileName) profileName.textContent = newName;
+
+            showToast('Profile updated successfully!');
         });
     }
 }
+
+// Global Theme Sync for Preferences Tab Cards
+window.setDashboardTheme = function(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('borrowbox-theme', theme);
+    
+    // update topnav icon if exists
+    const toggleIcon = document.getElementById('theme-toggle-icon');
+    const toggleBtn = document.getElementById('theme-toggle-btn');
+    if (toggleIcon && toggleBtn) {
+        if (theme === 'dark') {
+            toggleIcon.className = 'fas fa-sun';
+            toggleBtn.title = 'Switch to Light Theme';
+        } else {
+            toggleIcon.className = 'fas fa-moon';
+            toggleBtn.title = 'Switch to Dark Theme';
+        }
+    }
+
+    // Update active classes on cards
+    const lightCard = document.getElementById('pref-theme-light');
+    const darkCard = document.getElementById('pref-theme-dark');
+    if (lightCard && darkCard) {
+        if (theme === 'light') {
+            lightCard.classList.add('active');
+            darkCard.classList.remove('active');
+        } else {
+            darkCard.classList.add('active');
+            lightCard.classList.remove('active');
+        }
+    }
+    
+    showToast(`Theme switched to ${theme === 'dark' ? 'Dark' : 'Light'} Mode`);
+};
 
 // ============================================================
 // PAGE: ADD ITEM FORM
@@ -546,34 +631,178 @@ function initAddItemForm() {
     const form = document.getElementById('add-item-form');
     if (!form) return;
 
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const name = form.querySelector('#item-name')?.value?.trim();
-        if (!name) { showToast('Please enter an item name', 'error'); return; }
-        showToast(`"${name}" listing saved — connect to backend to persist`);
-        form.reset();
-    });
+    let uploadedImageSrc = '';
 
-    // Upload zone click
-    const uploadZone = document.querySelector('.upload-zone');
     const fileInput = document.getElementById('item-image-input');
-    if (uploadZone && fileInput) {
-        uploadZone.addEventListener('click', () => fileInput.click());
-        uploadZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadZone.style.borderColor = 'var(--quaternary-color)';
-        });
-        uploadZone.addEventListener('dragleave', () => {
-            uploadZone.style.borderColor = '';
-        });
+    const primaryPreview = document.getElementById('image-primary-preview');
+    const previewImg = document.getElementById('preview-image-actual');
+    const previewPlaceholder = document.getElementById('preview-image-placeholder');
+
+    // Reset preview to default state
+    function resetPreview() {
+        uploadedImageSrc = '';
+        if (primaryPreview) {
+            primaryPreview.innerHTML = `
+                <i class="fas fa-cloud-arrow-up upload-icon"></i>
+                <p>Click to upload primary photo</p>
+                <small>JPG, PNG or WEBP · Max 5MB</small>
+            `;
+        }
+        if (previewImg && previewPlaceholder) {
+            previewImg.src = '';
+            previewImg.style.display = 'none';
+            previewPlaceholder.style.display = 'flex';
+        }
+        
+        const thumbSlot1 = document.querySelector('#thumb-slot-1 .slot-image-wrap');
+        if (thumbSlot1) {
+            thumbSlot1.innerHTML = `<i class="fas fa-plus"></i>`;
+        }
+
+        setTextById('preview-name-text', 'Listing Name');
+        setTextById('preview-category-text', 'Category');
+        setTextById('preview-rent-text', '₹0');
+        setTextById('preview-deposit-text', '₹0');
+        setTextById('preview-avail-text', 'Dates not set');
+    }
+
+    // Photo Upload click & change handlers
+    if (primaryPreview && fileInput) {
+        primaryPreview.addEventListener('click', () => fileInput.click());
+        
         fileInput.addEventListener('change', () => {
-            const f = fileInput.files[0];
-            if (f) {
-                uploadZone.querySelector('p').textContent = f.name;
-                uploadZone.style.borderColor = 'var(--quaternary-color)';
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    uploadedImageSrc = e.target.result;
+                    
+                    // Update primary preview area
+                    primaryPreview.innerHTML = `<img src="${uploadedImageSrc}" style="width:100%; height:100%; object-fit:cover; border-radius:12px;" />`;
+                    
+                    // Update live preview card
+                    if (previewImg && previewPlaceholder) {
+                        previewImg.src = uploadedImageSrc;
+                        previewImg.style.display = 'block';
+                        previewPlaceholder.style.display = 'none';
+                    }
+
+                    // Update thumbnail slot 1
+                    const thumbSlot1 = document.querySelector('#thumb-slot-1 .slot-image-wrap');
+                    if (thumbSlot1) {
+                        thumbSlot1.innerHTML = `<img src="${uploadedImageSrc}" style="width:100%; height:100%; object-fit:cover; border-radius:6px;" />`;
+                    }
+                };
+                reader.readAsDataURL(file);
             }
         });
     }
+
+    // Live binding for form fields
+    const nameInput = document.getElementById('item-name');
+    const categorySelect = document.getElementById('item-category');
+    const rentInput = document.getElementById('item-rent');
+    const depositInput = document.getElementById('item-deposit');
+    const fromInput = document.getElementById('item-from');
+    const untilInput = document.getElementById('item-until');
+
+    if (nameInput) {
+        nameInput.addEventListener('input', (e) => {
+            const val = e.target.value.trim();
+            setTextById('preview-name-text', val || 'Listing Name');
+        });
+    }
+
+    if (categorySelect) {
+        categorySelect.addEventListener('change', (e) => {
+            const val = e.target.value;
+            setTextById('preview-category-text', val || 'Category');
+        });
+    }
+
+    if (rentInput) {
+        rentInput.addEventListener('input', (e) => {
+            const val = e.target.value;
+            setTextById('preview-rent-text', val ? `₹${val}` : '₹0');
+        });
+    }
+
+    if (depositInput) {
+        depositInput.addEventListener('input', (e) => {
+            const val = e.target.value;
+            setTextById('preview-deposit-text', val ? `₹${val}` : '₹0');
+        });
+    }
+
+    function updatePreviewDates() {
+        const fromVal = fromInput?.value;
+        const untilVal = untilInput?.value;
+        if (fromVal && untilVal) {
+            const fromDate = new Date(fromVal);
+            const untilDate = new Date(untilVal);
+            const options = { day: 'numeric', month: 'short' };
+            const formattedFrom = fromDate.toLocaleDateString('en-IN', options);
+            const formattedUntil = untilDate.toLocaleDateString('en-IN', options);
+            setTextById('preview-avail-text', `${formattedFrom} – ${formattedUntil}`);
+        } else {
+            setTextById('preview-avail-text', 'Dates not set');
+        }
+    }
+
+    if (fromInput) fromInput.addEventListener('change', updatePreviewDates);
+    if (untilInput) untilInput.addEventListener('change', updatePreviewDates);
+
+    // Cancel Button logic
+    const cancelBtn = document.getElementById('cancel-listing-btn');
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
+            form.reset();
+            resetPreview();
+            document.querySelector('.sidebar-link[data-page="listings"]')?.click();
+        });
+    }
+
+    // Form Submit (Creates a real mockup item in Listings Grid)
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = nameInput?.value?.trim();
+        const category = categorySelect?.value;
+        const condition = document.getElementById('item-condition')?.value;
+        const rent = rentInput?.value;
+        const deposit = depositInput?.value;
+
+        if (!name || !category || !rent || !deposit) {
+            showToast('Please fill in all required fields', 'error');
+            return;
+        }
+
+        // Add to global LISTINGS_DATA
+        const newItem = {
+            id: LISTINGS_DATA.length + 1,
+            // Fallback default image if none uploaded
+            image: uploadedImageSrc || '../static/images/dell_Laptop.jpg',
+            name: name,
+            category: category,
+            rent: `₹${rent}/day`,
+            deposit: `₹${deposit}`,
+            status: 'available',
+            requests: 0
+        };
+
+        LISTINGS_DATA.unshift(newItem); // Add new listing to front of array
+
+        // Re-initialize Listings grid to show the new card instantly
+        initListings();
+
+        showToast(`"${name}" listing created successfully!`);
+        
+        // Reset form and preview states
+        form.reset();
+        resetPreview();
+
+        // Redirect back to Listings page
+        document.querySelector('.sidebar-link[data-page="listings"]')?.click();
+    });
 }
 
 // ============================================================

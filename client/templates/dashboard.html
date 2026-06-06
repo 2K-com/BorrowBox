@@ -95,9 +95,9 @@
             <span class="nav-badge" id="notif-badge">3</span>
           </a>
 
-          <a class="sidebar-link" data-page="profile" href="#" data-tooltip="Profile">
+          <a class="sidebar-link" data-page="profile" href="#" data-tooltip="Profile Settings">
             <i class="nav-icon fas fa-user-circle"></i>
-            <span class="sidebar-link-text">Profile</span>
+            <span class="sidebar-link-text">Profile Settings</span>
           </a>
         </nav>
 
@@ -133,8 +133,6 @@
           <button class="topnav-menu-btn" aria-label="Toggle sidebar">
             <i class="fas fa-bars"></i>
           </button>
-
-          <span class="topnav-title">Dashboard</span>
 
           <div class="topnav-right">
             <div class="topnav-search">
@@ -383,6 +381,11 @@
           <section class="dash-page" id="page-listings">
             <div class="page-header">
               <div class="page-header-left">
+                <div class="breadcrumb-container">
+                  <span class="breadcrumb-item">Dashboard</span>
+                  <span class="breadcrumb-separator">/</span>
+                  <span class="breadcrumb-item active">Listings</span>
+                </div>
                 <h2>My Listings</h2>
                 <p>Items you've listed for borrowing</p>
               </div>
@@ -398,189 +401,202 @@
           <!-- /page-listings -->
 
           <!-- ==========================================
-           PAGE 4: ADD ITEM
+           PAGE 4: CREATE LISTING
            ========================================== -->
           <section class="dash-page" id="page-add-item">
             <div class="page-header">
               <div class="page-header-left">
-                <h2>Add New Item</h2>
-                <p>List an item for your campus to borrow</p>
+                <div class="breadcrumb-container">
+                  <span class="breadcrumb-item">Dashboard</span>
+                  <span class="breadcrumb-separator">/</span>
+                  <span class="breadcrumb-item active">Listings</span>
+                </div>
+                <h2>Create Listing</h2>
+                <p>List an item for your campus community</p>
               </div>
             </div>
 
             <form id="add-item-form">
-              <div class="add-item-grid">
-                <!-- Image Upload -->
-                <div>
-                  <div class="dash-card" style="padding: 0; overflow: hidden">
-                    <div
-                      class="upload-zone"
-                      style="border-radius: var(--radius-lg); border: none"
-                    >
-                      <i class="fas fa-cloud-arrow-up"></i>
-                      <p>Click to upload item photo</p>
-                      <small>JPG, PNG or WEBP · Max 5MB</small>
-                      <input
-                        type="file"
-                        id="item-image-input"
-                        accept="image/*"
-                        style="display: none"
-                      />
+              <div class="create-listing-layout">
+                <!-- Left Side: Form Details -->
+                <div class="create-listing-form-col">
+                  
+                  <!-- Top 2-Column: Photo Upload and Basic Info -->
+                  <div class="form-grid-2col">
+                    <!-- Photo Upload Card -->
+                    <div class="dash-card marketplace-card">
+                      <div class="card-header-row">
+                        <span class="card-title"><i class="fas fa-camera"></i> Media Upload</span>
+                      </div>
+                      <div class="upload-gallery-container">
+                        <!-- Main large preview area -->
+                        <div class="primary-preview-area" id="image-primary-preview">
+                          <i class="fas fa-cloud-arrow-up upload-icon"></i>
+                          <p>Click to upload primary photo</p>
+                          <small>JPG, PNG or WEBP · Max 5MB</small>
+                          <input type="file" id="item-image-input" accept="image/*" style="display: none" />
+                        </div>
+                        <!-- Multiple thumbnails row -->
+                        <div class="upload-thumbnails-row">
+                          <div class="thumbnail-slot primary active" id="thumb-slot-1" title="Primary Photo">
+                            <div class="slot-image-wrap">
+                              <i class="fas fa-plus"></i>
+                            </div>
+                          </div>
+                          <div class="thumbnail-slot" id="thumb-slot-2" title="Add secondary photo">
+                            <div class="slot-image-wrap">
+                              <i class="fas fa-plus"></i>
+                            </div>
+                          </div>
+                          <div class="thumbnail-slot" id="thumb-slot-3" title="Add secondary photo">
+                            <div class="slot-image-wrap">
+                              <i class="fas fa-plus"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Basic Information Card -->
+                    <div class="dash-card marketplace-card">
+                      <div class="card-header-row">
+                        <span class="card-title"><i class="fas fa-circle-info"></i> Basic Details</span>
+                      </div>
+                      
+                      <div class="dash-form-group">
+                        <label for="item-name">Listing Name <span class="required-star">*</span></label>
+                        <input id="item-name" type="text" placeholder="e.g. Canon DSLR Camera EOS 1500D" required />
+                      </div>
+
+                      <div class="dash-form-group">
+                        <label for="item-category">Category <span class="required-star">*</span></label>
+                        <select id="item-category" required>
+                          <option value="" disabled selected>Select a category</option>
+                          <option>Electronics</option>
+                          <option>Study Essentials</option>
+                          <option>Appliances</option>
+                          <option>Clothing</option>
+                          <option>Accessories</option>
+                          <option>Sports</option>
+                          <option>Instruments</option>
+                          <option>Other</option>
+                        </select>
+                      </div>
+
+                      <div class="dash-form-group">
+                        <label for="item-condition">Item Condition <span class="required-star">*</span></label>
+                        <select id="item-condition" required>
+                          <option value="" disabled selected>Select condition</option>
+                          <option>Like New</option>
+                          <option>Good</option>
+                          <option>Fair</option>
+                        </select>
+                      </div>
                     </div>
                   </div>
 
-                  <!-- Tips -->
-                  <div
-                    class="dash-card"
-                    style="
-                      margin-top: 1rem;
-                      background: rgba(109, 144, 185, 0.05);
-                      border-color: rgba(109, 144, 185, 0.2);
-                    "
-                  >
-                    <div class="card-title" style="margin-bottom: 0.75rem">
-                      <i
-                        class="fas fa-lightbulb"
-                        style="
-                          color: var(--quaternary-color);
-                          margin-right: 0.4rem;
-                        "
-                      ></i>
-                      Listing Tips
+                  <!-- Description Card -->
+                  <div class="dash-card marketplace-card">
+                    <div class="card-header-row">
+                      <span class="card-title"><i class="fas fa-align-left"></i> Description</span>
                     </div>
-                    <ul
-                      style="
-                        font-size: var(--fs-sm);
-                        color: var(--text-secondary);
-                        line-height: 1.8;
-                        padding-left: 1.25rem;
-                      "
-                    >
-                      <li>Use a clear photo in good lighting</li>
-                      <li>Mention the condition honestly</li>
-                      <li>Set a fair rent price for campus peers</li>
-                      <li>Keep deposit reasonable vs. item value</li>
-                    </ul>
+                    <div class="dash-form-group" style="margin-bottom: 0;">
+                      <label for="item-description">Describe your item <span class="required-star">*</span></label>
+                      <textarea id="item-description" placeholder="Describe your item details, model, accessories included, and guidelines..." required style="min-height: 120px;"></textarea>
+                    </div>
+                  </div>
+
+                  <!-- Pricing and Availability Cards in a row -->
+                  <div class="form-grid-2col">
+                    <!-- Pricing Card -->
+                    <div class="dash-card marketplace-card">
+                      <div class="card-header-row">
+                        <span class="card-title"><i class="fas fa-tag"></i> Rental Price & Deposit</span>
+                      </div>
+                      
+                      <div class="dash-form-group">
+                        <label for="item-rent">Rent Per Day (₹) <span class="required-star">*</span></label>
+                        <div class="price-input-wrap">
+                          <span class="price-symbol">₹</span>
+                          <input id="item-rent" type="number" min="1" placeholder="150" required />
+                        </div>
+                      </div>
+
+                      <div class="dash-form-group">
+                        <label for="item-deposit">Security Deposit (₹) <span class="required-star">*</span></label>
+                        <div class="price-input-wrap">
+                          <span class="price-symbol">₹</span>
+                          <input id="item-deposit" type="number" min="0" placeholder="1500" required />
+                        </div>
+                        <small class="form-tip">We recommend 5-10x the daily rate.</small>
+                      </div>
+                    </div>
+
+                    <!-- Availability Card -->
+                    <div class="dash-card marketplace-card">
+                      <div class="card-header-row">
+                        <span class="card-title"><i class="fas fa-calendar-days"></i> Booking Availability</span>
+                      </div>
+
+                      <div class="dash-form-group">
+                        <label for="item-from">Available From <span class="required-star">*</span></label>
+                        <input id="item-from" type="date" required />
+                      </div>
+
+                      <div class="dash-form-group">
+                        <label for="item-until">Available Until <span class="required-star">*</span></label>
+                        <input id="item-until" type="date" required />
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Cancel/Submit Actions -->
+                  <div class="create-listing-actions">
+                    <button type="submit" class="btn-primary-dash btn-lg-action">
+                      <i class="fas fa-plus-circle"></i> Create Listing
+                    </button>
+                    <button type="button" id="cancel-listing-btn" class="btn-secondary-dash btn-lg-action">
+                      <i class="fas fa-times"></i> Cancel
+                    </button>
                   </div>
                 </div>
 
-                <!-- Form Fields -->
-                <div class="dash-card">
-                  <div class="card-header-row" style="margin-bottom: 1.5rem">
-                    <span class="card-title">Item Details</span>
-                  </div>
-
-                  <div class="dash-form-group">
-                    <label for="item-name"
-                      >Item Name
-                      <span style="color: var(--secondary-color)"
-                        >*</span
-                      ></label
-                    >
-                    <input
-                      id="item-name"
-                      type="text"
-                      placeholder="e.g. Canon DSLR Camera EOS 1500D"
-                      required
-                    />
-                  </div>
-
-                  <div class="form-row">
-                    <div class="dash-form-group">
-                      <label for="item-category"
-                        >Category
-                        <span style="color: var(--secondary-color)"
-                          >*</span
-                        ></label
-                      >
-                      <select id="item-category" required>
-                        <option value="" disabled selected>
-                          Select a category
-                        </option>
-                        <option>Electronics</option>
-                        <option>Study Essentials</option>
-                        <option>Appliances</option>
-                        <option>Clothing</option>
-                        <option>Accessories</option>
-                        <option>Sports</option>
-                        <option>Instruments</option>
-                        <option>Other</option>
-                      </select>
+                <!-- Right Side: Live Listing Preview Card (Sticky) -->
+                <div class="create-listing-preview-col">
+                  <div class="preview-sticky-wrap">
+                    <div class="preview-header-label">Live Preview</div>
+                    
+                    <!-- Marketplace Catalog Product Card Mockup -->
+                    <div class="product-card preview-mock-card">
+                      <div class="card-image">
+                        <!-- Default emoji or mock camera image placeholder -->
+                        <div class="card-emoji-wrap" id="preview-image-placeholder">
+                          <i class="fas fa-camera" style="font-size: 3rem; color: var(--text-disabled); opacity: 0.5;"></i>
+                        </div>
+                        <img id="preview-image-actual" src="" style="display: none; width: 100%; height: 100%; object-fit: cover;" alt="Preview" />
+                        <span class="status-badge status-available card-status-badge">Available Now</span>
+                      </div>
+                      <div class="card-content">
+                        <div class="card-category-row">
+                          <span class="card-category" id="preview-category-text">Category</span>
+                        </div>
+                        <h3 class="card-title" id="preview-name-text">Listing Name</h3>
+                        
+                        <div class="card-price-row">
+                          <div class="price-tag">
+                            <span class="price-value" id="preview-rent-text">₹0</span>
+                            <span class="price-interval">/ day</span>
+                          </div>
+                        </div>
+                        <div class="card-deposit-row">
+                          <span>Security Deposit: <strong id="preview-deposit-text">₹0</strong></span>
+                        </div>
+                        
+                        <div class="preview-footer-info">
+                          <span class="avail-dates-lbl"><i class="fas fa-calendar-alt"></i> <span id="preview-avail-text">Dates not set</span></span>
+                        </div>
+                      </div>
                     </div>
-
-                    <div class="dash-form-group">
-                      <label for="item-condition">Condition</label>
-                      <select id="item-condition">
-                        <option value="" disabled selected>
-                          Select condition
-                        </option>
-                        <option>Like New</option>
-                        <option>Good</option>
-                        <option>Fair</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div class="dash-form-group">
-                    <label for="item-description">Description</label>
-                    <textarea
-                      id="item-description"
-                      placeholder="Describe your item — model, features, what's included, any wear…"
-                    ></textarea>
-                  </div>
-
-                  <div class="form-row">
-                    <div class="dash-form-group">
-                      <label for="item-rent"
-                        >Rent Per Day (₹)
-                        <span style="color: var(--secondary-color)"
-                          >*</span
-                        ></label
-                      >
-                      <input
-                        id="item-rent"
-                        type="number"
-                        min="1"
-                        placeholder="e.g. 150"
-                        required
-                      />
-                    </div>
-
-                    <div class="dash-form-group">
-                      <label for="item-deposit"
-                        >Security Deposit (₹)
-                        <span style="color: var(--secondary-color)"
-                          >*</span
-                        ></label
-                      >
-                      <input
-                        id="item-deposit"
-                        type="number"
-                        min="0"
-                        placeholder="e.g. 1500"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div class="form-row">
-                    <div class="dash-form-group">
-                      <label for="item-from">Available From</label>
-                      <input id="item-from" type="date" />
-                    </div>
-                    <div class="dash-form-group">
-                      <label for="item-until">Available Until</label>
-                      <input id="item-until" type="date" />
-                    </div>
-                  </div>
-
-                  <div style="display: flex; gap: 0.75rem; flex-wrap: wrap">
-                    <button type="submit" class="btn-primary-dash">
-                      <i class="fas fa-plus-circle"></i> List Item
-                    </button>
-                    <button type="reset" class="btn-secondary-dash">
-                      <i class="fas fa-rotate-left"></i> Reset
-                    </button>
                   </div>
                 </div>
               </div>
@@ -594,6 +610,11 @@
           <section class="dash-page" id="page-requests">
             <div class="page-header">
               <div class="page-header-left">
+                <div class="breadcrumb-container">
+                  <span class="breadcrumb-item">Dashboard</span>
+                  <span class="breadcrumb-separator">/</span>
+                  <span class="breadcrumb-item active">Requests</span>
+                </div>
                 <h2>Borrow Requests</h2>
                 <p>People who want to borrow your listed items</p>
               </div>
@@ -627,6 +648,11 @@
           <section class="dash-page" id="page-borrowings">
             <div class="page-header">
               <div class="page-header-left">
+                <div class="breadcrumb-container">
+                  <span class="breadcrumb-item">Dashboard</span>
+                  <span class="breadcrumb-separator">/</span>
+                  <span class="breadcrumb-item active">Borrowings</span>
+                </div>
                 <h2>Active Borrowings</h2>
                 <p>Items you are currently borrowing</p>
               </div>
@@ -647,6 +673,11 @@
           <section class="dash-page" id="page-history">
             <div class="page-header">
               <div class="page-header-left">
+                <div class="breadcrumb-container">
+                  <span class="breadcrumb-item">Dashboard</span>
+                  <span class="breadcrumb-separator">/</span>
+                  <span class="breadcrumb-item active">History</span>
+                </div>
                 <h2>Transaction History</h2>
                 <p>Your past borrowings and lendings</p>
               </div>
@@ -679,6 +710,11 @@
           <section class="dash-page" id="page-notifications">
             <div class="page-header">
               <div class="page-header-left">
+                <div class="breadcrumb-container">
+                  <span class="breadcrumb-item">Dashboard</span>
+                  <span class="breadcrumb-separator">/</span>
+                  <span class="breadcrumb-item active">Notifications</span>
+                </div>
                 <h2>Notifications</h2>
                 <p>Updates about your requests and listings</p>
               </div>
@@ -698,184 +734,251 @@
           <!-- ==========================================
            PAGE 9: PROFILE
            ========================================== -->
+          <!-- ==========================================
+           PAGE 9: PROFILE
+           ========================================== -->
           <section class="dash-page" id="page-profile">
-            <div class="page-header">
-              <div class="page-header-left">
-                <h2>My Profile</h2>
-                <p>Manage your account and preferences</p>
-              </div>
-            </div>
 
-            <div class="profile-layout">
-              <!-- Left: Avatar & Stats -->
-              <div class="dash-card profile-card-left">
-                <div class="profile-avatar-wrap">
-                  <div class="profile-avatar" id="profile-avatar-main">AS</div>
-                  <div class="profile-avatar-edit" title="Change photo">
-                    <i class="fas fa-camera"></i>
-                  </div>
-                </div>
-
-                <div class="profile-name" id="profile-name">Aditya Sharma</div>
-                <div class="profile-email" id="profile-email">
-                  aditya.sharma@college.edu
-                </div>
-
-                <div class="profile-rating">
-                  <i class="fas fa-star"></i>
-                  <span id="profile-rating">4.8 ★</span>
-                  <span
-                    style="color: var(--text-muted); font-size: var(--fs-xs)"
-                    >(18 reviews)</span
-                  >
-                </div>
-
-                <div class="profile-stat-mini-row">
-                  <div class="profile-stat-mini">
-                    <div
-                      class="profile-stat-mini-num"
-                      id="profile-listings-count"
-                    >
-                      7
-                    </div>
-                    <div class="profile-stat-mini-label">Listings</div>
-                  </div>
-                  <div class="profile-stat-mini">
-                    <div
-                      class="profile-stat-mini-num"
-                      id="profile-borrowings-count"
-                    >
-                      12
-                    </div>
-                    <div class="profile-stat-mini-label">Borrowed</div>
-                  </div>
-                </div>
-
-                <div
-                  style="
-                    font-size: var(--fs-xs);
-                    color: var(--text-muted);
-                    margin-top: 0.25rem;
-                  "
-                >
-                  <i
-                    class="fas fa-calendar"
-                    style="margin-right: 0.3rem; color: var(--quaternary-color)"
-                  ></i>
-                  Member since <span id="profile-since">January 2025</span>
-                </div>
-
-                <div
-                  style="
-                    display: flex;
-                    align-items: center;
-                    gap: 0.4rem;
-                    font-size: var(--fs-xs);
-                    color: #10b981;
-                  "
-                >
-                  <i class="fas fa-shield-check"></i>
-                  <span>College Email Verified</span>
-                </div>
-              </div>
-
-              <!-- Right: Edit Form -->
-              <div style="display: flex; flex-direction: column; gap: 1rem">
-                <div class="dash-card">
-                  <div class="card-header-row">
-                    <span class="card-title">Personal Information</span>
-                  </div>
-
-                  <div class="form-row">
-                    <div class="dash-form-group">
-                      <label>Full Name</label>
-                      <input
-                        id="edit-name"
-                        type="text"
-                        placeholder="Your full name"
-                      />
-                    </div>
-                    <div class="dash-form-group">
-                      <label>Phone Number</label>
-                      <input
-                        id="edit-phone"
-                        type="tel"
-                        placeholder="+91 XXXXX XXXXX"
-                      />
+            <div class="profile-settings-layout">
+              <!-- Left Sidebar: Profile Card & Quick Navigation -->
+              <aside class="profile-sidebar-card">
+                <!-- Avatar & Identity section -->
+                <div class="profile-header-section">
+                  <div class="profile-avatar-wrap-lg">
+                    <div class="profile-avatar-lg" id="profile-avatar-main">AS</div>
+                    <div class="profile-avatar-edit-overlay" title="Change photo">
+                      <i class="fas fa-camera"></i>
                     </div>
                   </div>
-
-                  <div class="dash-form-group">
-                    <label
-                      >College Email
-                      <span style="font-size: var(--fs-xs); color: #10b981"
-                        ><i class="fas fa-check-circle"></i> Verified</span
-                      ></label
-                    >
-                    <input
-                      id="edit-email"
-                      type="email"
-                      disabled
-                      style="
-                        background: #f8f9fa;
-                        color: var(--text-muted);
-                        cursor: not-allowed;
-                      "
-                    />
+                  <h3 class="profile-user-fullname" id="profile-name">Aditya Sharma</h3>
+                  <p class="profile-user-email" id="profile-email">aditya.sharma@college.edu</p>
+                  
+                  <div class="profile-rating-badge">
+                    <i class="fas fa-star"></i>
+                    <span id="profile-rating">4.8 ★</span>
+                    <span class="profile-rating-count">(18 reviews)</span>
                   </div>
+                </div>
 
-                  <div class="dash-form-group">
-                    <label>College / Institution</label>
-                    <input
-                      type="text"
-                      value="National Institute of Technology, Bhopal"
-                    />
+                <!-- Stats Divider -->
+                <div class="profile-divider-thin"></div>
+
+                <!-- Stats grid -->
+                <div class="profile-stats-grid">
+                  <div class="profile-stat-box">
+                    <span class="profile-stat-val" id="profile-listings-count">7</span>
+                    <span class="profile-stat-lbl">Listings</span>
                   </div>
-
-                  <div class="dash-form-group">
-                    <label>Bio (optional)</label>
-                    <textarea
-                      placeholder="Tell the community a bit about yourself…"
-                      style="min-height: 70px"
-                    ></textarea>
+                  <div class="profile-stat-box">
+                    <span class="profile-stat-val" id="profile-borrowings-count">12</span>
+                    <span class="profile-stat-lbl">Borrowed</span>
                   </div>
+                </div>
 
-                  <button id="save-profile-btn" class="btn-primary-dash">
-                    <i class="fas fa-save"></i> Save Changes
+                <!-- Additional Info -->
+                <div class="profile-divider-thin"></div>
+                <div class="profile-meta-details">
+                  <div class="profile-meta-row">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Member since <strong id="profile-since">January 2025</strong></span>
+                  </div>
+                  <div class="profile-meta-row verified">
+                    <i class="fas fa-shield-halved"></i>
+                    <span>Campus-Verified Identity</span>
+                  </div>
+                </div>
+
+                <div class="profile-divider-thin"></div>
+
+                <!-- Quick Navigation Tabs -->
+                <nav class="profile-settings-tabs">
+                  <button class="profile-tab-btn active" data-profile-tab="personal">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Personal Info</span>
                   </button>
-                </div>
+                  <button class="profile-tab-btn" data-profile-tab="security">
+                    <i class="fas fa-shield-halved"></i>
+                    <span>Security</span>
+                  </button>
+                  <button class="profile-tab-btn" data-profile-tab="preferences">
+                    <i class="fas fa-sliders"></i>
+                    <span>Preferences</span>
+                  </button>
+                </nav>
+              </aside>
 
-                <!-- Security -->
-                <div class="dash-card">
-                  <div class="card-header-row">
-                    <span class="card-title">Security</span>
+              <!-- Right Content Panel -->
+              <main class="profile-settings-content">
+                <!-- Section 1: Personal Information -->
+                <div class="profile-settings-pane active" id="profile-pane-personal">
+                  <div class="pane-header">
+                    <h3 class="pane-title">Personal Information</h3>
+                    <p class="pane-subtitle">Manage your public information and profile details</p>
                   </div>
-                  <div class="quick-stat-row">
-                    <div class="quick-stat-item">
-                      <span class="quick-stat-label"
-                        ><i class="fas fa-lock"></i> Password</span
-                      >
-                      <button
-                        class="btn-secondary-dash btn-sm"
-                        onclick="
-                          showToast('Change password — connect to backend')
-                        "
-                      >
-                        Change Password
+                  
+                  <div class="pane-body">
+                    <div class="form-grid-2col">
+                      <div class="dash-form-group">
+                        <label for="edit-name">Full Name</label>
+                        <input id="edit-name" type="text" placeholder="Your full name" />
+                      </div>
+                      <div class="dash-form-group">
+                        <label for="edit-phone">Phone Number</label>
+                        <input id="edit-phone" type="tel" placeholder="+91 XXXXX XXXXX" />
+                      </div>
+                    </div>
+
+                    <div class="dash-form-group">
+                      <label for="edit-email">
+                        College Email
+                        <span class="email-verified-tag">
+                          <i class="fas fa-check-circle"></i> Verified
+                        </span>
+                      </label>
+                      <input id="edit-email" type="email" disabled class="disabled-field" />
+                    </div>
+
+                    <div class="dash-form-group">
+                      <label for="edit-college">College / Institution</label>
+                      <input id="edit-college" type="text" value="National Institute of Technology, Bhopal" />
+                    </div>
+
+                    <div class="dash-form-group">
+                      <label for="edit-bio">Bio (optional)</label>
+                      <textarea id="edit-bio" placeholder="Tell the community a bit about yourself…" style="min-height: 90px"></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                      <button id="save-profile-btn" class="btn-primary-dash">
+                        <i class="fas fa-save"></i> Save Changes
                       </button>
                     </div>
-                    <div class="quick-stat-item">
-                      <span class="quick-stat-label"
-                        ><i class="fas fa-mobile-screen"></i> Two-Factor
-                        Auth</span
-                      >
-                      <span class="status-badge status-pending"
-                        >Coming Soon</span
-                      >
+                  </div>
+                </div>
+
+                <!-- Section 2: Security -->
+                <div class="profile-settings-pane" id="profile-pane-security">
+                  <div class="pane-header">
+                    <h3 class="pane-title">Account Security</h3>
+                    <p class="pane-subtitle">Manage your password, verification status, and credentials</p>
+                  </div>
+                  
+                  <div class="pane-body security-pane-layout">
+                    <!-- Password Option -->
+                    <div class="security-card">
+                      <div class="security-card-icon"><i class="fas fa-lock"></i></div>
+                      <div class="security-card-content">
+                        <h4>Account Password</h4>
+                        <p>Change your account password. We recommend using a unique password to protect your campus account.</p>
+                      </div>
+                      <div class="security-card-action">
+                        <button class="btn-secondary-dash btn-sm" onclick="showToast('Change password — connect to backend')">
+                          Change Password
+                        </button>
+                      </div>
+                    </div>
+
+                    <!-- Two-Factor Option -->
+                    <div class="security-card">
+                      <div class="security-card-icon"><i class="fas fa-shield-halved"></i></div>
+                      <div class="security-card-content">
+                        <h4>Two-Factor Authentication</h4>
+                        <p>Add an extra layer of security by requiring a verification code in addition to your password.</p>
+                      </div>
+                      <div class="security-card-action">
+                        <span class="status-badge status-pending">Coming Soon</span>
+                      </div>
+                    </div>
+
+                    <!-- Verification Badge -->
+                    <div class="security-card">
+                      <div class="security-card-icon verified"><i class="fas fa-envelope-circle-check"></i></div>
+                      <div class="security-card-content">
+                        <h4>Institutional Verification</h4>
+                        <p>Your college email address has been verified. You have full access to campus borrowings and listings.</p>
+                      </div>
+                      <div class="security-card-action">
+                        <span class="status-badge status-available">Verified</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+
+                <!-- Section 3: Account Preferences -->
+                <div class="profile-settings-pane" id="profile-pane-preferences">
+                  <div class="pane-header">
+                    <h3 class="pane-title">Account Preferences</h3>
+                    <p class="pane-subtitle">Customize theme preference, notifications, and options</p>
+                  </div>
+                  
+                  <div class="pane-body preferences-pane-layout">
+                    <!-- Theme Settings -->
+                    <div class="preference-section">
+                      <h4 class="preference-sec-title"><i class="fas fa-palette"></i> Interface Theme</h4>
+                      <p class="preference-sec-desc">Choose between a light theme or modern high-contrast dark theme.</p>
+                      <div class="theme-preference-selector">
+                        <button id="pref-theme-light" class="theme-select-card active" onclick="setDashboardTheme('light')">
+                          <i class="fas fa-sun"></i>
+                          <span>Light Mode</span>
+                        </button>
+                        <button id="pref-theme-dark" class="theme-select-card" onclick="setDashboardTheme('dark')">
+                          <i class="fas fa-moon"></i>
+                          <span>Dark Mode</span>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="profile-divider-thin"></div>
+
+                    <!-- Notification Preferences -->
+                    <div class="preference-section">
+                      <h4 class="preference-sec-title"><i class="fas fa-bell"></i> Notification Settings</h4>
+                      <p class="preference-sec-desc">Select which alerts you want to receive via email and system toast notifications.</p>
+                      <div class="preferences-checklist">
+                        <label class="preference-checkbox-label">
+                          <input type="checkbox" checked />
+                          <span class="preference-checkbox-custom"></span>
+                          <span class="preference-checkbox-text">
+                            <strong>Borrow Requests</strong>
+                            <small>Get notified when someone wants to borrow your listed items</small>
+                          </span>
+                        </label>
+
+                        <label class="preference-checkbox-label">
+                          <input type="checkbox" checked />
+                          <span class="preference-checkbox-custom"></span>
+                          <span class="preference-checkbox-text">
+                            <strong>Handover and Return Reminders</strong>
+                            <small>Receive updates when items are due or pickup schedules change</small>
+                          </span>
+                        </label>
+
+                        <label class="preference-checkbox-label">
+                          <input type="checkbox" />
+                          <span class="preference-checkbox-custom"></span>
+                          <span class="preference-checkbox-text">
+                            <strong>Community Updates</strong>
+                            <small>Weekly digest of top requested items in your campus network</small>
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+
+                    <div class="profile-divider-thin"></div>
+
+                    <!-- Account Deactivation Placeholders -->
+                    <div class="preference-section">
+                      <h4 class="preference-sec-title danger"><i class="fas fa-circle-exclamation"></i> Danger Zone</h4>
+                      <p class="preference-sec-desc">Permanently deactivate or close your student console account.</p>
+                      <div style="margin-top: 1rem;">
+                        <button class="btn-danger-dash btn-sm" onclick="showToast('Deactivate account — connect to backend')">
+                          Deactivate Console Account
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </main>
             </div>
           </section>
           <!-- /page-profile -->

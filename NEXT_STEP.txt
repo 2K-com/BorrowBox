@@ -1,0 +1,10 @@
+create virtual env in backend folder 
+and .env file 
+i have added in gitignore it wouldnt show on your computer
+
+WE will be using postgresql 
+
+1. create a account on postgresql neon 
+2. connect and update env
+3. update setting to connect 
+4. Run migrations
