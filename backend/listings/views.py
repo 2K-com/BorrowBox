@@ -1,6 +1,7 @@
 from rest_framework import generics, permissions
 from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
+from config.permissions import IsOwner
 from .models import Listing, Category
 from .serializers import ListingSerializer, CategorySerializer
 
@@ -39,17 +40,12 @@ class ListingListCreateView(generics.ListCreateAPIView):
 class ListingDetailView(generics.RetrieveUpdateDestroyAPIView):
     """
     GET: Fetch a single listing details (Public).
-    PUT/PATCH: Update your own listing (Protected - requires custom IsOwner permission later).
-    DELETE: Remove your own listing (Protected).
+    PUT/PATCH: Update your own listing (Protected - requires owner match).
+    DELETE: Remove your own listing (Protected - requires owner match).
     """
     queryset = Listing.objects.all()
     serializer_class = ListingSerializer
-
-    def get_permissions(self):
-        if self.request.method in ['PUT', 'PATCH', 'DELETE']:
-            # Temporary placeholder until partner provides custom IsOwner permission object
-            return [permissions.IsAuthenticated()]
-        return [permissions.AllowAny()]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwner]
 
 
 class MyListingsView(generics.ListAPIView):

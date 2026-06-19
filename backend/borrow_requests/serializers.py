@@ -21,4 +21,17 @@ class BorrowRequestSerializer(serializers.ModelSerializer):
         if data['start_date'] > data['end_date']:
             raise serializers.ValidationError(
                 "End date must be after the start date.")
+        
+        request = self.context.get('request')
+        if request and request.user:
+            if data['listing'].owner == request.user:
+                raise serializers.ValidationError(
+                    "You cannot borrow your own listing."
+                )
+        
+        if data['listing'].availability_status != 'AVAILABLE':
+            raise serializers.ValidationError(
+                "This listing is not currently available for borrowing."
+            )
+            
         return data

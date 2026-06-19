@@ -1,15 +1,17 @@
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework_simplejwt.views import TokenObtainPairView  # Add this import
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    # The JWT Token Endpoint
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-
     # Your Apps
+    path('api/auth/', include('users.urls')),
     path('api/listings/', include('listings.urls')),
     path('api/requests/', include('borrow_requests.urls')),
     path('api/transactions/', include('transactions.urls')),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
