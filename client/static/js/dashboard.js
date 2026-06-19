@@ -1,23 +1,120 @@
 // ============================================================
 // BORROWBOX DASHBOARD — dashboard.js
 // SPA navigation + placeholder data + UI interactions
-// No backend integration. Replace placeholder functions with
-// real API calls when backend is ready.
 // ============================================================
 
-document.addEventListener('DOMContentLoaded', () => {
+async function authenticatedFetch(url, options = {}) {
+    let accessToken = localStorage.getItem('access_token');
+    if (!accessToken) {
+        throw new Error('No access token found');
+    }
+
+    if (!options.headers) {
+        options.headers = {};
+    }
+    options.headers['Authorization'] = `Bearer ${accessToken}`;
+    if (!options.headers['Content-Type'] && !(options.body instanceof FormData)) {
+        options.headers['Content-Type'] = 'application/json';
+    }
+
+    let response = await fetch(url, options);
+
+    if (response.status === 401) {
+        const refreshToken = localStorage.getItem('refresh_token');
+        if (refreshToken) {
+            try {
+                const refreshRes = await fetch('http://127.0.0.1:8000/api/auth/token/refresh/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ refresh: refreshToken })
+                });
+
+                if (refreshRes.ok) {
+                    const data = await refreshRes.json();
+                    localStorage.setItem('access_token', data.access);
+                    
+                    // Retry original request
+                    options.headers['Authorization'] = `Bearer ${data.access}`;
+                    response = await fetch(url, options);
+                } else {
+                    handleSessionExpired();
+                }
+            } catch (err) {
+                console.error('Token refresh error:', err);
+                handleSessionExpired();
+            }
+        } else {
+            handleSessionExpired();
+        }
+    }
+
+    return response;
+}
+
+function handleSessionExpired() {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('username');
+    window.location.href = 'login.html';
+}
+
+async function initDashboardAuth() {
+    try {
+        const response = await authenticatedFetch('http://127.0.0.1:8000/api/auth/profile/');
+        if (!response.ok) {
+            handleSessionExpired();
+            return;
+        }
+
+        const data = await response.json();
+        
+        // Update global USER object
+        USER.name = data.full_name || localStorage.getItem('username') || 'Student';
+        USER.email = data.email || '';
+        USER.phone = data.phone_number || '';
+        
+        // Compute Initials
+        const parts = USER.name.split(' ');
+        let initials = '';
+        if (parts.length > 0 && parts[0]) initials += parts[0][0];
+        if (parts.length > 1 && parts[parts.length - 1]) initials += parts[parts.length - 1][0];
+        USER.initials = initials.toUpperCase() || 'S';
+
+        // Update welcome banner and top nav / sidebar user info
+        const welcomeName = document.getElementById('welcome-name');
+        if (welcomeName) welcomeName.textContent = USER.name.split(' ')[0];
+
+        // Avatar text
+        document.querySelectorAll('.profile-avatar, .profile-avatar-lg, .sidebar-avatar-sm, .topnav-avatar').forEach(el => {
+            el.textContent = USER.initials;
+        });
+
+        // User info text in sidebar
+        const sidebarUserName = document.querySelector('.sidebar-user-name');
+        if (sidebarUserName) sidebarUserName.textContent = USER.name;
+
+        // Initialize profile display in settings
+        initProfile();
+
+    } catch (err) {
+        console.error('initDashboardAuth error:', err);
+        handleSessionExpired();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
     initThemeToggle();
     initSidebarCollapse();
     initSidebarTooltips();
     initNavigation();
     initSidebarToggle();
+    await initDashboardAuth();
     initDashboardHome();
     initListings();
     initRequests();
     initBorrowings();
     initHistory();
     initNotifications();
-    initProfile();
     initAddItemForm();
     initTopnavSearch();
 });
@@ -73,7 +170,10 @@ function initNavigation() {
 
 function handleLogout() {
     if (confirm('Sign out of BorrowBox?')) {
-        window.location.href = '../templates/login.html';
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        localStorage.removeItem('username');
+        window.location.href = 'login.html';
     }
 }
 

@@ -15,9 +15,14 @@
     <link rel="stylesheet" href="../static/css/root.css" />
     <link rel="stylesheet" href="../static/css/dashboard.css" />
 
-    <!-- Theme and Sidebar Toggle Loader Script -->
+    <!-- Theme, Auth and Sidebar Toggle Loader Script -->
     <script>
       (function () {
+        if (!localStorage.getItem("access_token")) {
+          window.location.href = "login.html";
+          return;
+        }
+
         const theme = localStorage.getItem("borrowbox-theme") || "light";
         document.documentElement.setAttribute("data-theme", theme);
 

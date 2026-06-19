@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    initNavbarAuth();
+
     // 2. Dummy Data for Products
     const products = [
         { id: 1, title: "Scientific Calculator (Casio fx-991EX)", category: "study", price: 30, owner: "Rahul M.", block: "Block C", imageIcon: "fa-calculator" },
@@ -229,4 +231,24 @@ document.addEventListener('DOMContentLoaded', () => {
             updateCarouselUI();
         });
     });
+
+    function initNavbarAuth() {
+        const authBtn = document.querySelector('.btn-nav-primary');
+        if (!authBtn) return;
+
+        const token = localStorage.getItem('access_token');
+        if (token) {
+            authBtn.textContent = 'Sign Out';
+            authBtn.href = '#';
+            authBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (confirm('Sign out of BorrowBox?')) {
+                    localStorage.removeItem('access_token');
+                    localStorage.removeItem('refresh_token');
+                    localStorage.removeItem('username');
+                    window.location.reload();
+                }
+            });
+        }
+    }
 });

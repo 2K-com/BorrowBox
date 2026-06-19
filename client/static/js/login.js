@@ -3,6 +3,10 @@
 // Nordic Minimalist Architecture
 // ========================================
 
+if (localStorage.getItem('access_token')) {
+    window.location.href = 'dashboard.html';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initFormSwitching();
     initPasswordToggle();
@@ -345,7 +349,7 @@ function initFormValidation() {
     }
 }
 
-function handleSignIn() {
+async function handleSignIn() {
     const email = document.getElementById('signin-email').value.trim();
     const password = document.getElementById('signin-password').value;
 
@@ -357,34 +361,180 @@ function handleSignIn() {
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Authenticating...</span>';
     submitBtn.disabled = true;
 
-    setTimeout(() => {
+    const username = email.split('@')[0];
+
+    try {
+        const response = await fetch('http://127.0.0.1:8000/api/auth/login/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            localStorage.setItem('access_token', data.access);
+            localStorage.setItem('refresh_token', data.refresh);
+            localStorage.setItem('username', username);
+            
+            showNotification('Authentication successful.', 'success');
+            setTimeout(() => { window.location.href = 'dashboard.html'; }, 1000);
+        } else {
+            const errorMsg = data.detail || 'Invalid email or password.';
+            showNotification(errorMsg, 'error');
+            submitBtn.innerHTML = originalHTML;
+            submitBtn.disabled = false;
+        }
+    } catch (err) {
+        console.error('Login error:', err);
+        showNotification('Network connection failure. Make sure the server is running.', 'error');
         submitBtn.innerHTML = originalHTML;
         submitBtn.disabled = false;
-        showNotification('Authentication successful.', 'success');
-        setTimeout(() => { window.location.href = 'index.html'; }, 1000);
-    }, 1500);
+    }
 }
 
-function handleSignUp() {
+async function handleSignUp() {
+    const name = document.getElementById('signup-name').value.trim();
+    const email = document.getElementById('signup-email').value.trim();
+    const phone = document.getElementById('signup-phone').value.trim();
     const password = document.getElementById('signup-password').value;
     const confirmPassword = document.getElementById('signup-confirm-password').value;
     const termsAgreed = document.getElementById('terms-agreement').checked;
 
-    if (password !== confirmPassword) { showNotification('Passwords do not match', 'error'); return; }
-    if (password.length < 8) { showNotification('Password must be at least 8 characters', 'error'); return; }
-    if (!termsAgreed) { showNotification('You must agree to the protocol terms.', 'error'); return; }
+    if (!name || !email || !phone || !password || !confirmPassword) {
+        showNotification('Please fill in all fields', 'error');
+        return;
+    }
+    if (!isValidCollegeEmail(email)) {
+        showNotification('Please use a valid college email', 'error');
+        return;
+    }
+    if (!isValidPhone(phone)) {
+        showNotification('Please use a valid phone number', 'error');
+        return;
+    }
+    if (password !== confirmPassword) {
+        showNotification('Passwords do not match', 'error');
+        return;
+    }
+    if (password.length < 8) {
+        showNotification('Password must be at least 8 characters', 'error');
+        return;
+    }
+    if (!termsAgreed) {
+        showNotification('You must agree to the protocol terms.', 'error');
+        return;
+    }
 
     const submitBtn = document.querySelector('#signup-form .form-submit-btn[type="submit"]');
     const originalHTML = submitBtn.innerHTML;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Securing Vault...</span>';
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Creating account...</span>';
     submitBtn.disabled = true;
 
-    setTimeout(() => {
+    const username = email.split('@')[0];
+
+    try {
+        // 1. Register User
+        const registerRes = await fetch('http://127.0.0.1:8000/api/auth/register/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, email, password })
+        });
+
+        const registerData = await registerRes.json();
+        if (!registerRes.ok) {
+            let errorMsg = 'Registration failed.';
+            if (registerData.username) {
+                errorMsg = registerData.username[0];
+            } else if (registerData.email) {
+                errorMsg = registerData.email[0];
+            } else if (registerData.detail) {
+                errorMsg = registerData.detail;
+            } else if (typeof registerData === 'object') {
+                const firstKey = Object.keys(registerData)[0];
+                if (Array.isArray(registerData[firstKey])) {
+                    errorMsg = `${firstKey}: ${registerData[firstKey][0]}`;
+                } else {
+                    errorMsg = `${firstKey}: ${registerData[firstKey]}`;
+                }
+            }
+            showNotification(errorMsg, 'error');
+            submitBtn.innerHTML = originalHTML;
+            submitBtn.disabled = false;
+            return;
+        }
+
+        // 2. Auto-login
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Authenticating...</span>';
+        const loginRes = await fetch('http://127.0.0.1:8000/api/auth/login/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, password })
+        });
+
+        const loginData = await loginRes.json();
+        if (!loginRes.ok) {
+            const errorMsg = loginData.detail || 'Login failed after registration.';
+            showNotification(errorMsg, 'error');
+            submitBtn.innerHTML = originalHTML;
+            submitBtn.disabled = false;
+            return;
+        }
+
+        // Store tokens
+        localStorage.setItem('access_token', loginData.access);
+        localStorage.setItem('refresh_token', loginData.refresh);
+        localStorage.setItem('username', username);
+
+        // 3. Update User Profile
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Setting up profile...</span>';
+        const profileRes = await fetch('http://127.0.0.1:8000/api/auth/profile/', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${loginData.access}`
+            },
+            body: JSON.stringify({
+                email,
+                full_name: name,
+                phone_number: phone
+            })
+        });
+
+        const profileData = await profileRes.json();
+        if (!profileRes.ok) {
+            let errorMsg = 'Failed to update profile details.';
+            if (profileData.detail) {
+                errorMsg = profileData.detail;
+            } else if (typeof profileData === 'object') {
+                const firstKey = Object.keys(profileData)[0];
+                if (Array.isArray(profileData[firstKey])) {
+                    errorMsg = `${firstKey}: ${profileData[firstKey][0]}`;
+                } else {
+                    errorMsg = `${firstKey}: ${profileData[firstKey]}`;
+                }
+            }
+            showNotification(errorMsg, 'error');
+            submitBtn.innerHTML = originalHTML;
+            submitBtn.disabled = false;
+            return;
+        }
+
+        showNotification('Registration and profile setup complete!', 'success');
+        setTimeout(() => { window.location.href = 'dashboard.html'; }, 1000);
+
+    } catch (err) {
+        console.error('Registration error:', err);
+        showNotification('Network connection failure. Make sure the server is running.', 'error');
         submitBtn.innerHTML = originalHTML;
         submitBtn.disabled = false;
-        showNotification('Verification complete.', 'success');
-        setTimeout(() => { window.location.href = 'index.html'; }, 1000);
-    }, 2000);
+    }
 }
 
 function isValidCollegeEmail(email) {

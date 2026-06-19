@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initHowItWorks();
     initStructuredInventoryConsole();
     initTerminalBlock();
+    initNavbarAuth();
 });
 
 // 1. STICKY NAVBAR
@@ -284,5 +285,25 @@ function initTerminalBlock() {
                 counterElement.textContent = target; 
             }
         }, frameRate);
+    }
+}
+
+function initNavbarAuth() {
+    const authBtn = document.querySelector('.btn-nav-action');
+    if (!authBtn) return;
+
+    const token = localStorage.getItem('access_token');
+    if (token) {
+        authBtn.textContent = 'Sign Out';
+        authBtn.href = '#';
+        authBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (confirm('Sign out of BorrowBox?')) {
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('refresh_token');
+                localStorage.removeItem('username');
+                window.location.reload();
+            }
+        });
     }
 }
