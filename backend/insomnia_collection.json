@@ -1,0 +1,492 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-06-20T00:22:00.000Z",
+  "__export_source": "insomnia.desktop.app:v2023.5.8",
+  "resources": [
+    {
+      "_id": "wrk_1",
+      "parentId": null,
+      "modified": 1781913600000,
+      "created": 1781913600000,
+      "name": "BorrowBox API Collection",
+      "description": "API Collection for Peer-to-Peer Campus Rental Platform",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "env_1",
+      "parentId": "wrk_1",
+      "modified": 1781913600000,
+      "created": 1781913600000,
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://127.0.0.1:8000",
+        "jwt_token": "your_access_token_here",
+        "jwt_refresh_token": "your_refresh_token_here"
+      },
+      "dataPropertyOrder": {
+        "&": ["base_url", "jwt_token", "jwt_refresh_token"]
+      },
+      "color": null,
+      "isPrivate": false,
+      "_type": "environment"
+    },
+    {
+      "_id": "fld_auth",
+      "parentId": "wrk_1",
+      "modified": 1781913600000,
+      "created": 1781913600000,
+      "name": "Authentication & Profile",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1600000000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_listings",
+      "parentId": "wrk_1",
+      "modified": 1781913600000,
+      "created": 1781913600000,
+      "name": "Listings",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1500000000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_requests",
+      "parentId": "wrk_1",
+      "modified": 1781913600000,
+      "created": 1781913600000,
+      "name": "Borrow Requests",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1400000000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_transactions",
+      "parentId": "wrk_1",
+      "modified": 1781913600000,
+      "created": 1781913600000,
+      "name": "Transactions",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1300000000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_notifications",
+      "parentId": "wrk_1",
+      "modified": 1781913600000,
+      "created": 1781913600000,
+      "name": "Notifications",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1200000000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_dashboard",
+      "parentId": "wrk_1",
+      "modified": 1781913600000,
+      "created": 1781913600000,
+      "name": "Dashboard",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1100000000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_register",
+      "parentId": "fld_auth",
+      "modified": 1781913600000,
+      "created": 1781913600000,
+      "url": "{{ _.base_url }}/api/auth/register/",
+      "name": "Register",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"username\": \"student_a\",\n  \"email\": \"student_a@campus.edu\",\n  \"password\": \"SecurePassword123!\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1600000000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_login",
+      "parentId": "fld_auth",
+      "modified": 1781913600000,
+      "created": 1781913600000,
+      "url": "{{ _.base_url }}/api/auth/login/",
+      "name": "Login (Obtain JWT)",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"username\": \"student_a\",\n  \"password\": \"SecurePassword123!\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1500000000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_refresh",
+      "parentId": "fld_auth",
+      "modified": 1781913600000,
+      "created": 1781913600000,
+      "url": "{{ _.base_url }}/api/auth/token/refresh/",
+      "name": "Refresh Token",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"refresh\": \"{{ _.jwt_refresh_token }}\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1400000000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_get_profile",
+      "parentId": "fld_auth",
+      "modified": 1781913600000,
+      "created": 1781913600000,
+      "url": "{{ _.base_url }}/api/auth/profile/",
+      "name": "Get Profile",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.jwt_token }}"
+      },
+      "metaSortKey": -1300000000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_update_profile",
+      "parentId": "fld_auth",
+      "modified": 1781913600000,
+      "created": 1781913600000,
+      "url": "{{ _.base_url }}/api/auth/profile/",
+      "name": "Update Profile",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"student_a_new@campus.edu\",\n  \"full_name\": \"John Doe\",\n  \"phone_number\": \"+1234567890\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.jwt_token }}"
+      },
+      "metaSortKey": -1200000000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_list_listings",
+      "parentId": "fld_listings",
+      "modified": 1781913600000,
+      "created": 1781913600000,
+      "url": "{{ _.base_url }}/api/listings/",
+      "name": "List Listings (Public)",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "search",
+          "value": "Projector",
+          "disabled": true
+        }
+      ],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1500000000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_create_listing",
+      "parentId": "fld_listings",
+      "modified": 1781913600000,
+      "created": 1781913600000,
+      "url": "{{ _.base_url }}/api/listings/",
+      "name": "Create Listing",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"category\": 1,\n  \"title\": \"HD Projector\",\n  \"description\": \"Great projector for movie nights.\",\n  \"price_per_day\": \"15.00\",\n  \"condition\": \"GOOD\",\n  \"location\": \"Campus Commons\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.jwt_token }}"
+      },
+      "metaSortKey": -1400000000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_my_listings",
+      "parentId": "fld_listings",
+      "modified": 1781913600000,
+      "created": 1781913600000,
+      "url": "{{ _.base_url }}/api/listings/my/",
+      "name": "Get My Listings",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.jwt_token }}"
+      },
+      "metaSortKey": -1300000000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_create_request",
+      "parentId": "fld_requests",
+      "modified": 1781913600000,
+      "created": 1781913600000,
+      "url": "{{ _.base_url }}/api/requests/",
+      "name": "Create Borrow Request",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"listing\": 1,\n  \"start_date\": \"2026-07-01\",\n  \"end_date\": \"2026-07-03\",\n  \"message\": \"Need it for a presentation on Tuesday.\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.jwt_token }}"
+      },
+      "metaSortKey": -1400000000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_incoming_requests",
+      "parentId": "fld_requests",
+      "modified": 1781913600000,
+      "created": 1781913600000,
+      "url": "{{ _.base_url }}/api/requests/incoming/",
+      "name": "Get Incoming Requests",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.jwt_token }}"
+      },
+      "metaSortKey": -1300000000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_outgoing_requests",
+      "parentId": "fld_requests",
+      "modified": 1781913600000,
+      "created": 1781913600000,
+      "url": "{{ _.base_url }}/api/requests/outgoing/",
+      "name": "Get Outgoing Requests",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.jwt_token }}"
+      },
+      "metaSortKey": -1200000000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_accept_request",
+      "parentId": "fld_requests",
+      "modified": 1781913600000,
+      "created": 1781913600000,
+      "url": "{{ _.base_url }}/api/requests/1/accept/",
+      "name": "Accept Borrow Request",
+      "method": "PATCH",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.jwt_token }}"
+      },
+      "metaSortKey": -1100000000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_list_transactions",
+      "parentId": "fld_transactions",
+      "modified": 1781913600000,
+      "created": 1781913600000,
+      "url": "{{ _.base_url }}/api/transactions/",
+      "name": "List Transactions (Leases)",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.jwt_token }}"
+      },
+      "metaSortKey": -1300000000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_initiate_return",
+      "parentId": "fld_transactions",
+      "modified": 1781913600000,
+      "created": 1781913600000,
+      "url": "{{ _.base_url }}/api/transactions/1/return/",
+      "name": "Initiate Return (Borrower)",
+      "method": "PATCH",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.jwt_token }}"
+      },
+      "metaSortKey": -1200000000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_confirm_return",
+      "parentId": "fld_transactions",
+      "modified": 1781913600000,
+      "created": 1781913600000,
+      "url": "{{ _.base_url }}/api/transactions/1/confirm/",
+      "name": "Confirm Return (Owner)",
+      "method": "PATCH",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.jwt_token }}"
+      },
+      "metaSortKey": -1100000000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_list_notifications",
+      "parentId": "fld_notifications",
+      "modified": 1781913600000,
+      "created": 1781913600000,
+      "url": "{{ _.base_url }}/api/notifications/",
+      "name": "List Notifications",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.jwt_token }}"
+      },
+      "metaSortKey": -1200000000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_unread_notif_count",
+      "parentId": "fld_notifications",
+      "modified": 1781913600000,
+      "created": 1781913600000,
+      "url": "{{ _.base_url }}/api/notifications/unread-count/",
+      "name": "Get Unread Count",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.jwt_token }}"
+      },
+      "metaSortKey": -1100000000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_mark_notif_read",
+      "parentId": "fld_notifications",
+      "modified": 1781913600000,
+      "created": 1781913600000,
+      "url": "{{ _.base_url }}/api/notifications/1/read/",
+      "name": "Mark as Read",
+      "method": "PATCH",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.jwt_token }}"
+      },
+      "metaSortKey": -1000000000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_dashboard",
+      "parentId": "fld_dashboard",
+      "modified": 1781913600000,
+      "created": 1781913600000,
+      "url": "{{ _.base_url }}/api/dashboard/",
+      "name": "Get Dashboard Summary",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.jwt_token }}"
+      },
+      "metaSortKey": -1100000000,
+      "_type": "request"
+    }
+  ]
+}

@@ -19,6 +19,14 @@ class BorrowRequestCreateView(generics.CreateAPIView):
         listing = get_object_or_404(
             Listing, id=self.request.data.get('listing'))
         serializer.save(borrower=self.request.user, owner=listing.owner)
+        
+        from notifications.utils import create_notification
+        create_notification(
+            user=listing.owner,
+            title="New Borrow Request",
+            message=f"{self.request.user.username} wants to borrow your item.",
+            notification_type="REQUEST_RECEIVED"
+        )
 
 
 class IncomingRequestsView(generics.ListAPIView):
@@ -67,6 +75,15 @@ class AcceptRequestView(APIView):
                 status='ACTIVE'
             )
 
+            # Create notification for Borrower
+            from notifications.utils import create_notification
+            create_notification(
+                user=borrow_request.borrower,
+                title="Request Accepted",
+                message="Your borrow request has been accepted.",
+                notification_type="REQUEST_ACCEPTED"
+            )
+
         return Response({"status": "Request accepted, item reserved, and transaction initiated."})
 
 
@@ -82,6 +99,15 @@ class RejectRequestView(APIView):
 
         borrow_request.status = 'REJECTED'
         borrow_request.save()
+        
+        # Create notification for Borrower
+        from notifications.utils import create_notification
+        create_notification(
+            user=borrow_request.borrower,
+            title="Request Rejected",
+            message="Your borrow request has been rejected.",
+            notification_type="REQUEST_REJECTED"
+        )
         return Response({"status": "Request rejected."})
 
 

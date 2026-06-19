@@ -28,6 +28,17 @@ class BorrowRequestSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                     "You cannot borrow your own listing."
                 )
+            
+            # Check for existing PENDING request by this borrower for this listing
+            existing_pending = BorrowRequest.objects.filter(
+                borrower=request.user,
+                listing=data['listing'],
+                status='PENDING'
+            ).exists()
+            if existing_pending:
+                raise serializers.ValidationError(
+                    "You already have a pending borrow request for this listing."
+                )
         
         if data['listing'].availability_status != 'AVAILABLE':
             raise serializers.ValidationError(

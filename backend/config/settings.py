@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'listings',
     'borrow_requests',
     'transactions',
+    'notifications',
+    'dashboard',
 ]
 
 MIDDLEWARE = [
