@@ -117,6 +117,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initNotifications();
     initAddItemForm();
     initTopnavSearch();
+    initRecentActivity();
 });
 
 // ============================================================
@@ -292,207 +293,428 @@ const NOTIFICATIONS_DATA = [
 ];
 
 // ============================================================
-// PAGE: DASHBOARD HOME
+// PAGE: DASHBOARD HOME (Connected to Backend)
 // ============================================================
-function initDashboardHome() {
-    // User name in welcome
+async function initDashboardHome() {
     const welcomeName = document.getElementById('welcome-name');
     if (welcomeName) welcomeName.textContent = USER.name.split(' ')[0];
 
-    // Animate stat numbers
-    animateStatNumbers();
+    try {
+        const response = await authenticatedFetch('http://127.0.0.1:8000/api/transactions/stats/');
+        if (!response.ok) throw new Error(`API Error: ${response.status}`);
+        const stats = await response.json();
+
+        // 1. UPDATE STATS GRID (Bulletproof targeting by exact name)
+        const cards = document.querySelectorAll('.stat-card-body');
+        cards.forEach(card => {
+            const labelEl = card.querySelector('.stat-card-label');
+            const numberEl = card.querySelector('.stat-card-number');
+            if (!labelEl || !numberEl) return;
+
+            const label = labelEl.textContent.trim();
+            if (label === 'Active Listings') numberEl.setAttribute('data-target', stats.total_listings || 0);
+            if (label === 'Items Borrowed') numberEl.setAttribute('data-target', stats.active_borrowings || 0);
+            if (label === 'Pending Requests') numberEl.setAttribute('data-target', stats.pending_requests || 0);
+            if (label === 'Reputation Rating') numberEl.setAttribute('data-target', stats.reputation_rating || 0);
+
+            numberEl.textContent = '0'; // Reset before animation
+        });
+
+        // Trigger the animation
+        animateStatNumbers();
+
+        // 2. UPDATE QUICK OVERVIEW
+        const overviewValues = document.querySelectorAll('.quick-stat-val'); 
+        if (overviewValues[0]) overviewValues[0].textContent = `${stats.available_listings || 0} of ${stats.total_listings || 0} Available`;
+        if (overviewValues[1]) overviewValues[1].textContent = `${stats.active_borrowings || 0} Items`;
+        
+        if (overviewValues[2]) {
+            overviewValues[2].textContent = `${stats.returns_due_this_week || 0} Items`;
+            overviewValues[2].style.color = (stats.returns_due_this_week > 0) ? 'var(--secondary-color)' : '';
+        }
+
+        if (overviewValues[3]) overviewValues[3].textContent = `₹${(stats.total_rent_earned || 0).toLocaleString()}`;
+        if (overviewValues[4]) overviewValues[4].textContent = `₹${(stats.total_rent_paid || 0).toLocaleString()}`;
+        if (overviewValues[5]) overviewValues[5].textContent = `₹0`;
+        if (overviewValues[6]) overviewValues[6].textContent = stats.member_since || 'January 2025';
+
+    } catch (err) {
+        console.error('Dashboard Stats Error:', err);
+    }
 }
 
+// MAKE SURE THIS FUNCTION IS IN YOUR FILE:
 function animateStatNumbers() {
-    const statEls = document.querySelectorAll('.stat-number-anim');
+    const statEls = document.querySelectorAll('.stat-card-number');
     statEls.forEach(el => {
-        const target = parseInt(el.getAttribute('data-target'), 10);
+        const target = parseFloat(el.getAttribute('data-target')) || 0;
         let current = 0;
-        const step = Math.ceil(target / 30);
+        
+        if (target === 0) {
+            el.textContent = '0';
+            return;
+        }
+
+        const isFloat = target % 1 !== 0;
+        const step = isFloat ? target / 30 : Math.ceil(target / 30);
+
         const timer = setInterval(() => {
             current = Math.min(current + step, target);
-            el.textContent = current;
+            el.textContent = isFloat ? current.toFixed(1) : Math.round(current);
             if (current >= target) clearInterval(timer);
         }, 30);
     });
 }
 
+// ============================================================
+// RECENT ACTIVITY (With on-screen error reporting)
+// ============================================================
+async function initRecentActivity() {
+    const activityList = document.querySelector('.activity-list');
+    if (!activityList) return;
+
+    try {
+        const response = await authenticatedFetch('http://127.0.0.1:8000/api/notifications/');
+        if (!response.ok) throw new Error(`Notifications API failed with status: ${response.status}`);
+        
+        const notifications = await response.json();
+        const recentActivities = notifications.slice(0, 4);
+        
+        if (recentActivities.length === 0) {
+            activityList.innerHTML = '<div style="color: gray; padding: 20px; text-align: center;">No recent activity yet.</div>';
+            return;
+        }
+
+        const iconMap = {
+            'REQUEST_RECEIVED': { class: 'blue', icon: 'fa-hand-holding' },
+            'REQUEST_ACCEPTED': { class: 'green', icon: 'fa-check' },
+            'REQUEST_REJECTED': { class: 'red', icon: 'fa-times' },
+            'TRANSACTION_COMPLETED': { class: 'amber', icon: 'fa-rotate-left' },
+            'DEFAULT': { class: 'green', icon: 'fa-plus' }
+        };
+
+        activityList.innerHTML = recentActivities.map(activity => {
+            const style = iconMap[activity.notification_type] || iconMap['DEFAULT'];
+            const hours = Math.floor((new Date() - new Date(activity.created_at)) / (1000 * 60 * 60));
+            const timeStr = hours > 24 ? `${Math.floor(hours / 24)} days ago` : hours > 0 ? `${hours} hours ago` : 'Just now';
+
+            return `
+                <div class="activity-item">
+                    <div class="activity-icon ${style.class}">
+                        <i class="fas ${style.icon}"></i>
+                    </div>
+                    <div class="activity-text">
+                        <p>${activity.message}</p>
+                        <div class="activity-time">${timeStr}</div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+    } catch (err) {
+        console.error('Recent Activity Error:', err);
+        // Inject the exact error directly into your HTML panel so we can see what broke
+        activityList.innerHTML = `<div style="color: #ef4444; padding: 15px; border: 1px solid #ef4444; border-radius: 8px; margin: 10px;">
+            <strong>Data Fetch Failed:</strong> ${err.message}
+        </div>`;
+    }
+}
+
 // PAGE: BROWSE ITEMS REMOVED (Redirection to products.html handled by topnav/search catalog button)
 
 // ============================================================
-// PAGE: MY LISTINGS
+// PAGE: MY LISTINGS (Connected to Backend)
 // ============================================================
-function initListings() {
+async function initListings() {
     const grid = document.getElementById('listings-grid');
     if (!grid) return;
 
-    function renderListings(data) {
-        grid.innerHTML = data.map(item => `
-            <div class="inventory-card">
-                <div class="inventory-card-image-wrap">
-                    <img class="inventory-card-image" src="${item.image}" alt="${item.name}">
-                    <span class="status-badge status-${item.status} inventory-card-status-badge">
-                        ${capitalize(item.status)}
-                    </span>
-                </div>
-                <div class="inventory-card-details">
-                    <h3 class="inventory-card-name">${item.name}</h3>
-                    <div class="inventory-card-category">${item.category}</div>
-                    
-                    <div class="inventory-card-price-row">
-                        <span class="inventory-card-rent">${item.rent}</span>
-                        <span class="inventory-card-separator">•</span>
-                        <span class="inventory-card-deposit">${item.deposit} Deposit</span>
-                    </div>
-                    
-                    <div class="inventory-card-requests-row">
-                        <i class="fas fa-inbox"></i>
-                        <span>${item.requests} Pending Request${item.requests === 1 ? '' : 's'}</span>
-                    </div>
+    try {
+        const response = await authenticatedFetch('http://127.0.0.1:8000/api/listings/');
+        if (!response.ok) throw new Error('Failed to fetch listings');
+        
+        const dbData = await response.json();
+        
+        // Map Django database keys to match your frontend HTML template
+        const mappedData = dbData.map(item => ({
+            id: item.id,
+            image: '../static/images/dell_Laptop.jpg', // Fallback until media upload is wired
+            name: item.title,
+            category: item.category, // Ensure your serializer returns category name, or map ID here
+            rent: `₹${item.price_per_day}/day`,
+            deposit: '₹0', // Placeholder since deposit isn't in your DB model
+            status: 'available', 
+            requests: 0 // Placeholder until request counts are serialized
+        }));
 
-                    <div class="inventory-card-actions">
-                        <button class="btn-console-action" title="Edit listing" onclick="showToast('Edit listing — connect to backend')">
-                            <i class="fas fa-pen"></i> Edit
-                        </button>
-                        <button class="btn-console-action" title="View requests" onclick="showToast('View requests for ${item.name.replace(/'/g, "\\\'")}')">
-                            <i class="fas fa-inbox"></i> Requests (${item.requests})
-                        </button>
-                        <button class="btn-console-action danger" title="Delete listing" onclick="confirmDelete('${item.name.replace(/'/g, "\\\'")}')">
-                            <i class="fas fa-trash"></i> Delete
-                        </button>
-                    </div>
+        renderListings(mappedData, grid);
+    } catch (err) {
+        console.error(err);
+        grid.innerHTML = '<p>Error loading listings.</p>';
+    }
+}
+
+function renderListings(data, grid) {
+    if (data.length === 0) {
+        grid.innerHTML = '<p>You have no active listings.</p>';
+        return;
+    }
+
+    grid.innerHTML = data.map(item => `
+        <div class="inventory-card">
+            <div class="inventory-card-image-wrap">
+                <img class="inventory-card-image" src="${item.image}" alt="${item.name}">
+                <span class="status-badge status-${item.status} inventory-card-status-badge">
+                    ${capitalize(item.status)}
+                </span>
+            </div>
+            <div class="inventory-card-details">
+                <h3 class="inventory-card-name">${item.name}</h3>
+                <div class="inventory-card-category">Category ID: ${item.category}</div>
+                
+                <div class="inventory-card-price-row">
+                    <span class="inventory-card-rent">${item.rent}</span>
+                    <span class="inventory-card-separator">•</span>
+                    <span class="inventory-card-deposit">${item.deposit} Deposit</span>
+                </div>
+                
+                <div class="inventory-card-actions" style="margin-top: 15px;">
+                    <button class="btn-console-action danger" title="Delete listing" onclick="confirmDelete(${item.id}, '${item.name.replace(/'/g, "\\\'")}')">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
                 </div>
             </div>
-        `).join('');
-    }
-
-    renderListings(LISTINGS_DATA);
+        </div>
+    `).join('');
 }
 
-function confirmDelete(name) {
+window.confirmDelete = async function(id, name) {
     if (confirm(`Remove "${name}" from your listings?`)) {
-        showToast(`"${name}" removed — connect to backend to persist`);
+        try {
+            const response = await authenticatedFetch(`http://127.0.0.1:8000/api/listings/${id}/`, {
+                method: 'DELETE'
+            });
+            
+            if (response.ok || response.status === 204) {
+                showToast(`"${name}" deleted successfully.`);
+                initListings(); // Refresh grid from database
+            } else {
+                showToast('Failed to delete item.', 'error');
+            }
+        } catch (err) {
+            console.error(err);
+            showToast('Network error during deletion.', 'error');
+        }
     }
-}
+};
+// ============================================================
+// PAGE: BORROW REQUESTS (Connected to Backend)
+// ============================================================
+let CURRENT_REQUESTS = []; // Store globally for filtering
 
-// ============================================================
-// PAGE: BORROW REQUESTS
-// ============================================================
-function initRequests() {
+async function initRequests() {
     const list = document.getElementById('requests-list');
     if (!list) return;
 
-    const pendingCount = document.getElementById('requests-pending-count');
-    const pending = REQUESTS_DATA.filter(r => r.status === 'pending');
-    if (pendingCount) pendingCount.textContent = pending.length;
+    try {
+        // Fetch incoming requests (where the current user is the owner)
+        // Adjust the URL if your routing differs (e.g., /api/requests/incoming/)
+        const response = await authenticatedFetch('http://127.0.0.1:8000/api/requests/incoming/');
+        if (!response.ok) throw new Error('Failed to fetch requests');
+        
+        CURRENT_REQUESTS = await response.json();
+        
+        updatePendingCount(CURRENT_REQUESTS);
+        renderRequests(CURRENT_REQUESTS, list);
+        setupRequestFilters(list);
+    } catch (err) {
+        console.error('Error loading requests:', err);
+        list.innerHTML = '<p>Error loading requests. Ensure your backend is running.</p>';
+    }
+}
 
-    function renderRequests(data) {
-        list.innerHTML = data.map(req => `
+function updatePendingCount(data) {
+    const pendingCount = document.getElementById('requests-pending-count');
+    const pending = data.filter(r => r.status === 'PENDING');
+    if (pendingCount) pendingCount.textContent = pending.length;
+}
+
+function renderRequests(data, listElement) {
+    if (data.length === 0) {
+        listElement.innerHTML = '<p style="color: gray; padding: 20px;">No requests found.</p>';
+        return;
+    }
+
+    listElement.innerHTML = data.map(req => {
+        // Calculate days between dates securely
+        const start = new Date(req.start_date);
+        const end = new Date(req.end_date);
+        const days = Math.max(1, Math.ceil((end - start) / (1000 * 60 * 60 * 24)));
+        
+        // Formatting dates
+        const dateStr = `${start.toLocaleDateString('en-IN', {day:'numeric', month:'short'})} – ${end.toLocaleDateString('en-IN', {day:'numeric', month:'short', year:'numeric'})}`;
+        
+        // Extract borrower name safely
+        const borrowerName = req.borrower_username || `User #${req.borrower}`;
+        const avatarStr = borrowerName.substring(0, 2).toUpperCase();
+
+        return `
             <div class="request-card" id="req-${req.id}">
                 <div class="request-card-thumb-wrap">
-                    <img class="request-card-thumb" src="${req.image}" alt="${req.item}">
-                    <span class="status-badge status-${req.status} request-card-status-badge">
+                    <img class="request-card-thumb" src="../static/images/dell_Laptop.jpg" alt="Item Image">
+                    <span class="status-badge status-${req.status.toLowerCase()} request-card-status-badge">
                         ${capitalize(req.status)}
                     </span>
                 </div>
                 <div class="request-card-details">
                     <div class="request-card-header-row">
-                        <span class="request-item-name">${req.item}</span>
+                        <span class="request-item-name">Listing #${req.listing}</span>
                         <div class="request-card-borrower">
-                            <span class="request-borrower-avatar">${req.avatar}</span>
-                            <span>${req.borrower}</span>
+                            <span class="request-borrower-avatar">${avatarStr}</span>
+                            <span>${borrowerName}</span>
                         </div>
                     </div>
                     <div class="request-card-meta-row">
-                        <span class="request-meta-item"><i class="fas fa-calendar"></i> ${req.dates}</span>
-                        <span class="request-meta-item"><i class="fas fa-clock"></i> ${req.days} days</span>
-                        <span class="request-meta-item"><i class="fas fa-rupee-sign"></i> ${req.rent}</span>
+                        <span class="request-meta-item"><i class="fas fa-calendar"></i> ${dateStr}</span>
+                        <span class="request-meta-item"><i class="fas fa-clock"></i> ${days} days</span>
                     </div>
                 </div>
                 <div class="request-card-actions">
-                    ${req.status === 'pending' ? `
-                        <button class="btn-accept" onclick="handleRequest(${req.id},'accepted')">
+                    ${req.status === 'PENDING' ? `
+                        <button class="btn-accept" onclick="handleRequest(${req.id}, 'accept')">
                             <i class="fas fa-check"></i> Accept
                         </button>
-                        <button class="btn-reject" onclick="handleRequest(${req.id},'rejected')">
+                        <button class="btn-reject" onclick="handleRequest(${req.id}, 'reject')">
                             <i class="fas fa-times"></i> Reject
                         </button>
                     ` : ''}
                 </div>
             </div>
-        `).join('');
-    }
+        `;
+    }).join('');
+}
 
-    renderRequests(REQUESTS_DATA);
-
-    // Filter buttons
+function setupRequestFilters(listElement) {
     const filterBtns = document.querySelectorAll('[data-req-filter]');
+    // Remove old listeners by cloning
     filterBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            filterBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const f = btn.getAttribute('data-req-filter');
-            const filtered = f === 'all' ? REQUESTS_DATA : REQUESTS_DATA.filter(r => r.status === f);
-            renderRequests(filtered);
+        const newBtn = btn.cloneNode(true);
+        btn.parentNode.replaceChild(newBtn, btn);
+        
+        newBtn.addEventListener('click', () => {
+            document.querySelectorAll('[data-req-filter]').forEach(b => b.classList.remove('active'));
+            newBtn.classList.add('active');
+            
+            const f = newBtn.getAttribute('data-req-filter').toUpperCase();
+            const filtered = f === 'ALL' ? CURRENT_REQUESTS : CURRENT_REQUESTS.filter(r => r.status === f);
+            renderRequests(filtered, listElement);
         });
     });
 }
 
-// Expose globally so inline onclick works
-window.handleRequest = function (id, action) {
-    const req = REQUESTS_DATA.find(r => r.id === id);
-    if (!req) return;
-    req.status = action;
-    showToast(`Request from ${req.borrower} ${action}. Connect to backend to notify.`);
-    // Re-render
-    const list = document.getElementById('requests-list');
-    if (list) initRequests();
+// Global function to handle Accept/Reject API calls
+window.handleRequest = async function(id, action) {
+    if (!confirm(`Are you sure you want to ${action} this request?`)) return;
+
+    try {
+        const response = await authenticatedFetch(`http://127.0.0.1:8000/api/requests/${id}/${action}/`, {
+            method: 'PATCH'
+        });
+
+        if (response.ok) {
+            showToast(`Request successfully ${action}ed!`);
+            initRequests(); // Refresh the list from the database
+        } else {
+            const errData = await response.json();
+            showToast(errData.error || `Failed to ${action} request`, 'error');
+        }
+    } catch (err) {
+        console.error('Action error:', err);
+        showToast('Network error while processing request.', 'error');
+    }
 };
 
 // ============================================================
-// PAGE: ACTIVE BORROWINGS
+// PAGE: ACTIVE BORROWINGS & RENTALS (Connected to Backend)
 // ============================================================
-function initBorrowings() {
+async function initBorrowings() {
     const grid = document.getElementById('borrowings-grid');
     if (!grid) return;
 
-    grid.innerHTML = BORROWINGS_DATA.map(b => {
-        const pct = Math.round((b.daysLeft / b.totalDays) * 100);
-        const fillClass = pct <= 20 ? 'danger' : pct <= 40 ? 'warning' : '';
-        const daysClass = pct <= 20 ? 'danger' : pct <= 40 ? 'warning' : '';
+    try {
+        // Fetch all transactions for this user
+        const response = await authenticatedFetch('http://127.0.0.1:8000/api/transactions/');
+        if (!response.ok) throw new Error('Failed to fetch transactions');
+        
+        const allTransactions = await response.json();
+        
+        // Filter only the ACTIVE transactions
+        const activeTransactions = allTransactions.filter(t => t.status === 'ACTIVE');
+        
+        renderBorrowings(activeTransactions, grid);
+    } catch (err) {
+        console.error('Error loading active transactions:', err);
+        grid.innerHTML = '<p style="color: gray; padding: 20px;">Error loading active rentals. Ensure your backend is running.</p>';
+    }
+}
+
+function renderBorrowings(data, grid) {
+    if (data.length === 0) {
+        grid.innerHTML = '<p style="color: gray; padding: 20px;">You have no active borrowings or rentals right now.</p>';
+        return;
+    }
+
+    // Get current username to determine if they are the borrower or the owner
+    const currentUsername = USER.name.split(' ')[0]; // Fallback to local username
+
+    grid.innerHTML = data.map(b => {
+        // Calculate days safely
+        const start = new Date(b.start_date);
+        const end = new Date(b.end_date);
+        const today = new Date();
+        
+        const totalDays = Math.max(1, Math.ceil((end - start) / (1000 * 60 * 60 * 24)));
+        const daysLeft = Math.max(0, Math.ceil((end - today) / (1000 * 60 * 60 * 24)));
+        
+        const pct = Math.round(((totalDays - daysLeft) / totalDays) * 100);
+        const fillClass = daysLeft <= 2 ? 'danger' : daysLeft <= 4 ? 'warning' : '';
+        const daysClass = daysLeft <= 2 ? 'danger' : daysLeft <= 4 ? 'warning' : '';
+
+        // Safely extract item name and owner (adjust based on your API's JSON response keys)
+        const itemName = b.listing_title || `Listing #${b.listing}`;
+        const ownerName = b.owner_username || `User #${b.owner}`;
+
         return `
-            <div class="borrowing-card">
+            <div class="borrowing-card" id="transaction-${b.id}">
                 <div class="borrowing-card-image-wrap">
-                    <img class="borrowing-card-image" src="${b.image}" alt="${b.name}">
+                    <img class="borrowing-card-image" src="../static/images/dell_Laptop.jpg" alt="${itemName}">
                     <span class="borrowing-card-days-badge ${daysClass}">
-                        ${b.daysLeft} Day${b.daysLeft === 1 ? '' : 's'} Left
+                        ${daysLeft} Day${daysLeft === 1 ? '' : 's'} Left
                     </span>
                 </div>
                 <div class="borrowing-card-details">
-                    <h3 class="borrowing-card-title">${b.name}</h3>
-                    <div class="borrowing-card-owner">Owner: ${b.owner}</div>
+                    <h3 class="borrowing-card-title">${itemName}</h3>
+                    <div class="borrowing-card-owner">Owner: ${ownerName}</div>
                     
                     <div class="borrowing-card-meta">
                         <div class="borrowing-detail-row">
                             <span class="borrowing-detail-label"><i class="fas fa-calendar-check"></i> Pickup</span>
-                            <span class="borrowing-detail-value">${b.pickup}</span>
+                            <span class="borrowing-detail-value">${start.toLocaleDateString('en-IN', {day:'numeric', month:'short'})}</span>
                         </div>
                         <div class="borrowing-detail-row">
                             <span class="borrowing-detail-label"><i class="fas fa-calendar-times"></i> Return By</span>
-                            <span class="borrowing-detail-value">${b.returnDate}</span>
+                            <span class="borrowing-detail-value">${end.toLocaleDateString('en-IN', {day:'numeric', month:'short'})}</span>
                         </div>
                         <div class="borrowing-detail-row">
-                            <span class="borrowing-detail-label"><i class="fas fa-shield-alt"></i> Deposit</span>
-                            <span class="borrowing-detail-value">
-                                <span class="status-badge status-${b.deposit}">${capitalize(b.deposit)}</span>
-                            </span>
+                            <span class="borrowing-detail-label"><i class="fas fa-rupee-sign"></i> Rate</span>
+                            <span class="borrowing-detail-value">₹${b.price_per_day}/day</span>
                         </div>
                     </div>
                     
                     <div class="days-progress">
                         <div class="days-progress-label">
                             <span>Days remaining</span>
-                            <span style="color:${pct <= 20 ? 'var(--secondary-color)' : pct <= 40 ? '#D97706' : 'var(--text-main)'}; font-weight: var(--fw-semibold);">${b.daysLeft} / ${b.totalDays}</span>
+                            <span style="color:${daysLeft <= 2 ? 'var(--secondary-color)' : daysLeft <= 4 ? '#D97706' : 'var(--text-main)'}; font-weight: var(--fw-semibold);">${daysLeft} / ${totalDays}</span>
                         </div>
                         <div class="days-progress-bar">
                             <div class="days-progress-fill ${fillClass}" style="width:${pct}%"></div>
@@ -500,7 +722,7 @@ function initBorrowings() {
                     </div>
                     
                     <div class="borrowing-card-footer">
-                        <button class="btn-secondary-dash btn-sm" style="width:100%;justify-content:center;" onclick="showToast('Return flow — connect to backend')">
+                        <button class="btn-secondary-dash btn-sm" style="width:100%;justify-content:center;" onclick="markAsReturned(${b.id})">
                             <i class="fas fa-rotate-left"></i> Mark as Returned
                         </button>
                     </div>
@@ -510,86 +732,255 @@ function initBorrowings() {
     }).join('');
 }
 
+// Global function to trigger the Complete Transaction API
+// Replace your existing markAsReturned function with this:
+window.markAsReturned = async function(transactionId) {
+    // 1. Ask the user for a rating
+    let ratingInput = prompt("Transaction complete! Please rate the borrower from 1 to 5:");
+    
+    if (!ratingInput) return; // Cancelled
+    
+    let rating = parseInt(ratingInput);
+    if (isNaN(rating) || rating < 1 || rating > 5) {
+        alert("Invalid rating. Must be a number between 1 and 5.");
+        return;
+    }
+
+    try {
+        // 2. Send the transaction ID and the rating to the backend
+        const response = await authenticatedFetch(`http://127.0.0.1:8000/api/transactions/${transactionId}/complete/`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ rating: rating }) 
+        });
+
+        if (response.ok) {
+            showToast('Item returned and user rated!');
+            initBorrowings(); 
+            initDashboardHome(); // Refresh the top grid to show the new average!
+        } else {
+            const errData = await response.json();
+            showToast(errData.error || 'Failed to complete transaction', 'error');
+        }
+    } catch (err) {
+        console.error('Return item error:', err);
+        showToast('Network error while processing return.', 'error');
+    }
+};
+
 // ============================================================
-// PAGE: TRANSACTION HISTORY
+// PAGE: TRANSACTION HISTORY (Connected to Backend)
 // ============================================================
-function initHistory() {
+async function initHistory() {
     const tbody = document.getElementById('history-tbody');
     if (!tbody) return;
 
-    tbody.innerHTML = HISTORY_DATA.map(h => `
-        <tr>
-            <td>
-                <div class="history-item-info">
-                    <div class="history-thumb-wrap">
-                        <img class="history-thumb-image" src="${h.image}" alt="${h.name}">
-                    </div>
-                    <div>
-                        <div class="history-item-name">${h.name}</div>
-                        <div class="history-item-date">${h.date}</div>
-                    </div>
-                </div>
-            </td>
-            <td>
-                <span class="history-type-badge type-${h.type.toLowerCase()}">${h.type}</span>
-            </td>
-            <td class="amount-positive">${h.rent}</td>
-            <td class="amount-neutral">${h.deposit}</td>
-            <td><span class="status-badge status-returned">${capitalize(h.status)}</span></td>
-        </tr>
-    `).join('');
+    try {
+        // Fetch all transactions for this user
+        const response = await authenticatedFetch('http://127.0.0.1:8000/api/transactions/');
+        if (!response.ok) throw new Error('Failed to fetch transaction history');
+        
+        const allTransactions = await response.json();
+        
+        // Filter for completed or cancelled transactions (or show all based on your preference)
+        // For history, we usually want to see everything, or filter to past items.
+        // Let's show everything, but we will style the status.
+        
+        renderHistory(allTransactions, tbody);
+    } catch (err) {
+        console.error('Error loading history:', err);
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:gray;">Error loading history. Ensure your backend is running.</td></tr>';
+    }
 }
 
+function renderHistory(data, tbody) {
+    if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:gray;">No transaction history found.</td></tr>';
+        return;
+    }
+
+    // Sort by most recent start date first
+    data.sort((a, b) => new Date(b.start_date) - new Date(a.start_date));
+
+    // Get current username to determine if they are the borrower or owner
+    const currentUsername = USER.name.split(' ')[0] || localStorage.getItem('username');
+
+    tbody.innerHTML = data.map(h => {
+        // Format the date nicely
+        const startDate = new Date(h.start_date).toLocaleDateString('en-IN', {
+            day: 'numeric', month: 'short', year: 'numeric'
+        });
+
+        // Determine if the current user is borrowing or lending this item
+        const isOwner = h.owner_username === currentUsername || h.owner === parseInt(localStorage.getItem('user_id'));
+        const type = isOwner ? 'Lend' : 'Borrow';
+        const typeClass = isOwner ? 'type-lend' : 'type-borrow';
+        
+        // Safely extract item name
+        const itemName = h.listing_title || `Listing #${h.listing}`;
+
+        // Dynamic styling for rent column based on if you earned or spent it
+        const amountClass = isOwner ? 'amount-positive' : 'amount-neutral';
+        const amountPrefix = isOwner ? '+₹' : '₹';
+
+        return `
+            <tr>
+                <td>
+                    <div class="history-item-info">
+                        <div class="history-thumb-wrap">
+                            <img class="history-thumb-image" src="../static/images/dell_Laptop.jpg" alt="${itemName}">
+                        </div>
+                        <div>
+                            <div class="history-item-name">${itemName}</div>
+                            <div class="history-item-date">${startDate}</div>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <span class="history-type-badge ${typeClass}">${type}</span>
+                </td>
+                <td class="${amountClass}">${amountPrefix}${h.price_per_day}/day</td>
+                <td class="amount-neutral">₹0</td> <td><span class="status-badge status-${h.status.toLowerCase()}">${capitalize(h.status)}</span></td>
+            </tr>
+        `;
+    }).join('');
+}
 // ============================================================
-// PAGE: NOTIFICATIONS
+// PAGE: NOTIFICATIONS (Connected to Backend)
 // ============================================================
-function initNotifications() {
+async function initNotifications() {
     const list = document.getElementById('notif-list');
     if (!list) return;
 
-    const colorMap = { green: '#10B981', blue: 'var(--quaternary-color)', amber: '#F59E0B', red: 'var(--secondary-color)' };
+    try {
+        const response = await authenticatedFetch('http://127.0.0.1:8000/api/notifications/');
+        if (!response.ok) throw new Error('Failed to fetch notifications');
+        
+        const data = await response.json();
+        renderNotifications(data, list);
+        setupMarkAllRead(list);
+    } catch (err) {
+        console.error('Error loading notifications:', err);
+        list.innerHTML = '<div style="padding: 20px; color: gray; text-align: center;">Error loading notifications. Ensure the backend endpoint exists.</div>';
+    }
+}
 
-    list.innerHTML = NOTIFICATIONS_DATA.map(n => `
-        <div class="notif-item ${n.unread ? 'unread' : ''}" id="notif-${n.id}">
-            <div class="notif-icon ${n.iconClass}" style="background:rgba(0,0,0,0.04);">
-                <i class="fas ${n.icon}" style="color:${colorMap[n.iconClass]};"></i>
-            </div>
-            <div class="notif-content">
-                <div class="notif-title">${n.title}</div>
-                <div class="notif-desc">${n.desc}</div>
-            </div>
-            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.4rem;flex-shrink:0;">
-                <span class="notif-time">${n.time}</span>
-                ${n.unread ? '<span class="notif-unread-dot"></span>' : ''}
-            </div>
-        </div>
-    `).join('');
+function renderNotifications(data, list) {
+    if (data.length === 0) {
+        list.innerHTML = '<div style="padding: 20px; color: gray; text-align: center;">No new notifications.</div>';
+        updateNotificationBadge(0);
+        return;
+    }
 
-    // Mark read on click
-    list.querySelectorAll('.notif-item').forEach(el => {
-        el.addEventListener('click', () => {
-            el.classList.remove('unread');
-            const dot = el.querySelector('.notif-unread-dot');
-            if (dot) dot.remove();
+    // Map backend notification types to your frontend styling
+    const colorMap = {
+        'REQUEST_RECEIVED': { class: 'blue', icon: 'fa-hand-holding', hex: 'var(--quaternary-color)' },
+        'REQUEST_ACCEPTED': { class: 'green', icon: 'fa-check-circle', hex: '#10B981' },
+        'REQUEST_REJECTED': { class: 'red', icon: 'fa-times-circle', hex: 'var(--secondary-color)' },
+        'TRANSACTION_COMPLETED': { class: 'amber', icon: 'fa-rotate-left', hex: '#F59E0B' },
+        'DEFAULT': { class: 'blue', icon: 'fa-bell', hex: 'var(--quaternary-color)' }
+    };
+
+    list.innerHTML = data.map(n => {
+        const style = colorMap[n.notification_type] || colorMap['DEFAULT'];
+        const timeStr = new Date(n.created_at).toLocaleString('en-IN', {
+            month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+        });
+
+        return `
+            <div class="notif-item ${!n.is_read ? 'unread' : ''}" id="notif-${n.id}">
+                <div class="notif-icon ${style.class}" style="background:rgba(0,0,0,0.04);">
+                    <i class="fas ${style.icon}" style="color:${style.hex};"></i>
+                </div>
+                <div class="notif-content">
+                    <div class="notif-title">${n.title}</div>
+                    <div class="notif-desc">${n.message}</div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.4rem;flex-shrink:0;">
+                    <span class="notif-time">${timeStr}</span>
+                    ${!n.is_read ? '<span class="notif-unread-dot"></span>' : ''}
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    // Attach click events to mark individual notifications as read
+    list.querySelectorAll('.notif-item.unread').forEach(el => {
+        el.addEventListener('click', async () => {
+            const id = el.id.split('-')[1];
+            await markNotificationRead(id, el);
         });
     });
 
-    // Mark all read button
-    const markAllBtn = document.getElementById('mark-all-read');
-    if (markAllBtn) {
-        markAllBtn.addEventListener('click', () => {
-            list.querySelectorAll('.notif-item').forEach(el => {
-                el.classList.remove('unread');
-                el.querySelector('.notif-unread-dot')?.remove();
-            });
-            showToast('All notifications marked as read');
-        });
-    }
+    const unreadCount = data.filter(n => !n.is_read).length;
+    updateNotificationBadge(unreadCount);
+}
 
-    // Update top nav badge
-    const unreadCount = NOTIFICATIONS_DATA.filter(n => n.unread).length;
+function updateNotificationBadge(count) {
     const badge = document.getElementById('notif-badge');
-    if (badge) badge.textContent = unreadCount;
+    const dot = document.querySelector('.notif-dot'); // Sidebar red dot
+    
+    if (badge) {
+        badge.textContent = count;
+        badge.style.display = count > 0 ? 'flex' : 'none';
+    }
+    if (dot) {
+        dot.style.display = count > 0 ? 'block' : 'none';
+    }
+}
+
+async function markNotificationRead(id, element) {
+    try {
+        // Assumes your backend has an endpoint to mark items as read
+        const response = await authenticatedFetch(`http://127.0.0.1:8000/api/notifications/${id}/read/`, {
+            method: 'PATCH' 
+        });
+        
+        if (response.ok) {
+            element.classList.remove('unread');
+            const dot = element.querySelector('.notif-unread-dot');
+            if (dot) dot.remove();
+            
+            const badge = document.getElementById('notif-badge');
+            if (badge && badge.textContent) {
+                const newCount = Math.max(0, parseInt(badge.textContent) - 1);
+                updateNotificationBadge(newCount);
+            }
+        }
+    } catch (err) {
+        console.error('Failed to mark notification as read:', err);
+    }
+}
+
+function setupMarkAllRead(list) {
+    const markAllBtn = document.getElementById('mark-all-read');
+    if (!markAllBtn) return;
+
+    // Remove old listeners to prevent duplicates
+    const newBtn = markAllBtn.cloneNode(true);
+    markAllBtn.parentNode.replaceChild(newBtn, markAllBtn);
+
+    newBtn.addEventListener('click', async () => {
+        try {
+            const response = await authenticatedFetch('http://127.0.0.1:8000/api/notifications/read-all/', {
+                method: 'POST'
+            });
+            
+            if (response.ok) {
+                list.querySelectorAll('.notif-item.unread').forEach(el => {
+                    el.classList.remove('unread');
+                    el.querySelector('.notif-unread-dot')?.remove();
+                });
+                updateNotificationBadge(0);
+                showToast('All notifications marked as read');
+            }
+        } catch (err) {
+            console.error('Failed to mark all as read:', err);
+            showToast('Network error', 'error');
+        }
+    });
 }
 
 // ============================================================
@@ -863,45 +1254,68 @@ function initAddItemForm() {
     }
 
     // Form Submit (Creates a real mockup item in Listings Grid)
-    form.addEventListener('submit', (e) => {
+    // Form Submit (Sends POST to Django Backend)
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
+        
         const name = nameInput?.value?.trim();
-        const category = categorySelect?.value;
-        const condition = document.getElementById('item-condition')?.value;
+        const categoryText = categorySelect?.value;
+        const conditionText = document.getElementById('item-condition')?.value;
         const rent = rentInput?.value;
-        const deposit = depositInput?.value;
+        const desc = document.getElementById('item-description')?.value;
 
-        if (!name || !category || !rent || !deposit) {
+        if (!name || !categoryText || !rent || !desc) {
             showToast('Please fill in all required fields', 'error');
             return;
         }
 
-        // Add to global LISTINGS_DATA
-        const newItem = {
-            id: LISTINGS_DATA.length + 1,
-            // Fallback default image if none uploaded
-            image: uploadedImageSrc || '../static/images/dell_Laptop.jpg',
-            name: name,
-            category: category,
-            rent: `₹${rent}/day`,
-            deposit: `₹${deposit}`,
-            status: 'available',
-            requests: 0
+        // Map Category Text to Backend ID (Adjust IDs to match your DB)
+        const categoryMap = {
+            "Electronics": 1,
+            "Study Essentials": 2,
+            "Appliances": 3,
+            "Clothing": 4,
+            "Accessories": 5,
+            "Sports": 6,
+            "Instruments": 7,
+            "Other": 8
+        };
+        const categoryId = categoryMap[categoryText] || 1;
+
+        // Map Condition to Backend Choices
+        let conditionCode = 'GOOD';
+        if (conditionText === 'Like New') conditionCode = 'EXCELLENT';
+        else if (conditionText === 'Fair') conditionCode = 'FAIR';
+
+        const payload = {
+            title: name,
+            description: desc,
+            price_per_day: rent,
+            category: categoryId,
+            condition: conditionCode
         };
 
-        LISTINGS_DATA.unshift(newItem); // Add new listing to front of array
+        try {
+            const response = await authenticatedFetch('http://127.0.0.1:8000/api/listings/', {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            });
 
-        // Re-initialize Listings grid to show the new card instantly
-        initListings();
-
-        showToast(`"${name}" listing created successfully!`);
-        
-        // Reset form and preview states
-        form.reset();
-        resetPreview();
-
-        // Redirect back to Listings page
-        document.querySelector('.sidebar-link[data-page="listings"]')?.click();
+            if (response.status === 201) {
+                showToast(`"${name}" listed successfully!`);
+                form.reset();
+                resetPreview();
+                initListings(); // Pull fresh data from database
+                document.querySelector('.sidebar-link[data-page="listings"]')?.click();
+            } else {
+                const errorData = await response.json();
+                console.error('Validation errors:', errorData);
+                showToast('Failed to create listing. Check inputs.', 'error');
+            }
+        } catch (err) {
+            console.error('Submit error:', err);
+            showToast('Network error while saving.', 'error');
+        }
     });
 }
 
