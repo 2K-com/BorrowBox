@@ -10,6 +10,7 @@ class IsNotificationOwner(permissions.BasePermission):
     """
     Custom permission to ensure users can only access/modify their own notifications.
     """
+
     def has_object_permission(self, request, view, obj):
         return obj.user == request.user
 
@@ -36,10 +37,10 @@ class NotificationReadView(APIView):
     def patch(self, request, pk):
         notification = get_object_or_404(Notification, id=pk)
         self.check_object_permissions(request, notification)
-        
+
         notification.is_read = True
         notification.save()
-        
+
         serializer = NotificationSerializer(notification)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -52,5 +53,19 @@ class UnreadNotificationCountView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        count = Notification.objects.filter(user=request.user, is_read=False).count()
+        count = Notification.objects.filter(
+            user=request.user, is_read=False).count()
         return Response({"count": count}, status=status.HTTP_200_OK)
+
+
+class NotificationReadAllView(APIView):
+    """
+    POST /api/notifications/read-all/
+    Marks all unread notifications for the current user as read.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        updated_count = Notification.objects.filter(
+            user=request.user, is_read=False).update(is_read=True)
+        return Response({"status": "success", "updated_count": updated_count}, status=status.HTTP_200_OK)
