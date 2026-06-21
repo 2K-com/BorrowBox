@@ -26,6 +26,7 @@ class ListingSerializer(serializers.ModelSerializer):
             'price_per_day',
             'condition',
             'availability_status',
+            'security_deposit',
             'location',
             'image',
             'created_at'

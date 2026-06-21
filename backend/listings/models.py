@@ -41,6 +41,8 @@ class Listing(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     price_per_day = models.DecimalField(max_digits=8, decimal_places=2)
+    security_deposit = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0.00)
     condition = models.CharField(
         max_length=10, choices=CONDITION_CHOICES, default='GOOD')
     availability_status = models.CharField(

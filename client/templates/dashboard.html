@@ -607,6 +607,62 @@
               </div>
             </form>
           </section>
+          <div id="edit-item-modal" class="modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center;">
+  <div class="modal-content dash-card marketplace-card" style="width: 90%; max-width: 500px; padding: 24px; position: relative;">
+    
+    <div class="card-header-row" style="margin-bottom: 20px;">
+      <span class="card-title"><i class="fas fa-pen"></i> Edit Listing</span>
+      <button type="button" onclick="closeEditModal()" style="background:none; border:none; font-size:1.2rem; cursor:pointer; color: var(--text-color);">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <form id="edit-item-form">
+      <input type="hidden" id="edit-item-id">
+      
+      <div class="dash-form-group">
+        <label for="edit-item-title">Listing Name <span class="required-star">*</span></label>
+        <input id="edit-item-title" type="text" required />
+      </div>
+      
+      <div class="form-grid-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+        <div class="dash-form-group" style="margin-bottom: 0;">
+          <label for="edit-item-rent">Rent Per Day <span class="required-star">*</span></label>
+          <div class="price-input-wrap">
+            <span class="price-symbol">₹</span>
+            <input id="edit-item-rent" type="number" min="1" required />
+          </div>
+        </div>
+
+        <div class="dash-form-group" style="margin-bottom: 0;">
+          <label for="edit-item-deposit">Security Deposit <span class="required-star">*</span></label>
+          <div class="price-input-wrap">
+            <span class="price-symbol">₹</span>
+            <input id="edit-item-deposit" type="number" min="0" required />
+          </div>
+        </div>
+      </div>
+
+      <div class="dash-form-group" style="margin-top: 15px;">
+        <label for="edit-item-condition">Item Condition <span class="required-star">*</span></label>
+        <select id="edit-item-condition" required>
+          <option value="NEW">Like New</option>
+          <option value="GOOD">Good</option>
+          <option value="USED">Fair</option>
+        </select>
+      </div>
+
+      <div class="create-listing-actions" style="margin-top: 24px; display: flex; gap: 15px;">
+        <button type="submit" class="btn-primary-dash btn-lg-action" style="flex: 1;">
+          <i class="fas fa-save"></i> Save Changes
+        </button>
+        <button type="button" onclick="closeEditModal()" class="btn-secondary-dash btn-lg-action" style="flex: 1;">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
           <!-- /page-add-item -->
 
           <!-- ==========================================

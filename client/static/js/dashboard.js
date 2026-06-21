@@ -442,7 +442,7 @@ async function initListings() {
             name: item.title,
             category: item.category, // Ensure your serializer returns category name, or map ID here
             rent: `₹${item.price_per_day}/day`,
-            deposit: '₹0', // Placeholder since deposit isn't in your DB model
+            security_deposit: item.security_deposit,
             status: 'available', 
             requests: 0 // Placeholder until request counts are serialized
         }));
@@ -460,6 +460,7 @@ function renderListings(data, grid) {
         return;
     }
 
+
     grid.innerHTML = data.map(item => `
         <div class="inventory-card">
             <div class="inventory-card-image-wrap">
@@ -475,10 +476,11 @@ function renderListings(data, grid) {
                 <div class="inventory-card-price-row">
                     <span class="inventory-card-rent">${item.rent}</span>
                     <span class="inventory-card-separator">•</span>
-                    <span class="inventory-card-deposit">${item.deposit} Deposit</span>
+                    <span class="inventory-card-deposit">₹${item.security_deposit || '0.00'} Deposit</span>
                 </div>
                 
                 <div class="inventory-card-actions" style="margin-top: 15px;">
+                    <button class="btn-edit" onclick="openEditListing(${item.id})" style="flex: 1;">Edit</button>
                     <button class="btn-console-action danger" title="Delete listing" onclick="confirmDelete(${item.id}, '${item.name.replace(/'/g, "\\\'")}')">
                         <i class="fas fa-trash"></i> Delete
                     </button>
@@ -507,6 +509,69 @@ window.confirmDelete = async function(id, name) {
         }
     }
 };
+
+// ============================================================
+// EDIT LISTING LOGIC
+// ============================================================
+
+window.openEditListing = async function(id) {
+    try {
+        const response = await authenticatedFetch(`http://127.0.0.1:8000/api/listings/${id}/`);
+        if (!response.ok) throw new Error('Failed to fetch listing');
+        
+        const item = await response.json();
+        
+        // Populate modal fields
+        document.getElementById('edit-item-id').value = item.id;
+        document.getElementById('edit-item-title').value = item.title;
+        document.getElementById('edit-item-rent').value = item.price_per_day;
+        document.getElementById('edit-item-deposit').value = item.security_deposit || 0;
+        document.getElementById('edit-item-condition').value = item.condition;
+        
+        // Show modal
+        document.getElementById('edit-item-modal').style.display = 'flex';
+    } catch (err) {
+        console.error('Error fetching listing:', err);
+        showToast('Could not load listing data.', 'error');
+    }
+};
+
+window.closeEditModal = function() {
+    document.getElementById('edit-item-modal').style.display = 'none';
+    document.getElementById('edit-item-form').reset();
+};
+
+document.getElementById('edit-item-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const id = document.getElementById('edit-item-id').value;
+    const payload = {
+        title: document.getElementById('edit-item-title').value.trim(),
+        price_per_day: document.getElementById('edit-item-rent').value,
+        security_deposit: document.getElementById('edit-item-deposit').value,
+        condition: document.getElementById('edit-item-condition').value
+    };
+
+    try {
+        const response = await authenticatedFetch(`http://127.0.0.1:8000/api/listings/${id}/`, {
+            method: 'PATCH',
+            body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+            showToast('Listing updated successfully!');
+            closeEditModal();
+            initListings(); // Refresh inventory grid
+        } else {
+            const errorData = await response.json();
+            console.error('Update errors:', errorData);
+            showToast('Failed to update listing.', 'error');
+        }
+    } catch (err) {
+        console.error('Submit error:', err);
+        showToast('Network error while updating.', 'error');
+    }
+});
 // ============================================================
 // PAGE: BORROW REQUESTS (Connected to Backend)
 // ============================================================
@@ -1262,6 +1327,7 @@ function initAddItemForm() {
         const categoryText = categorySelect?.value;
         const conditionText = document.getElementById('item-condition')?.value;
         const rent = rentInput?.value;
+        const deposit = depositInput?.value || '0';
         const desc = document.getElementById('item-description')?.value;
 
         if (!name || !categoryText || !rent || !desc) {
@@ -1282,15 +1348,15 @@ function initAddItemForm() {
         };
         const categoryId = categoryMap[categoryText] || 1;
 
-        // Map Condition to Backend Choices
         let conditionCode = 'GOOD';
-        if (conditionText === 'Like New') conditionCode = 'EXCELLENT';
-        else if (conditionText === 'Fair') conditionCode = 'FAIR';
+        if (conditionText === 'Like New') conditionCode = 'NEW'; 
+        else if (conditionText === 'Fair') conditionCode = 'USED';
 
         const payload = {
             title: name,
             description: desc,
             price_per_day: rent,
+            security_deposit: deposit,
             category: categoryId,
             condition: conditionCode
         };
