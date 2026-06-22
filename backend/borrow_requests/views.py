@@ -18,8 +18,10 @@ class BorrowRequestCreateView(generics.CreateAPIView):
     def perform_create(self, serializer):
         listing = get_object_or_404(
             Listing, id=self.request.data.get('listing'))
-        serializer.save(borrower=self.request.user, owner=listing.owner)
-        
+        serializer.save(borrower=self.request.user,
+                        owner=listing.owner,
+                        status='PENDING')
+
         from notifications.utils import create_notification
         create_notification(
             user=listing.owner,
@@ -99,7 +101,7 @@ class RejectRequestView(APIView):
 
         borrow_request.status = 'REJECTED'
         borrow_request.save()
-        
+
         # Create notification for Borrower
         from notifications.utils import create_notification
         create_notification(

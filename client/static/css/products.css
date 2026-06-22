@@ -320,6 +320,56 @@ body {
 .btn-icon-only { padding: 0; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
 .flex-grow { flex-grow: 1; }
 
+/* Checkout Modal Styles */
+.checkout-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1050;
+    align-items: center;
+    justify-content: center;
+}
+
+.checkout-modal-content {
+    width: 90%;
+    max-width: 450px;
+    padding: 24px;
+    position: relative;
+    background: var(--bg-color, #ffffff);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.checkout-item-header {
+    background: var(--bg-secondary, #f8f9fa);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.checkout-summary {
+    border-top: 1px dashed #ccc;
+    padding-top: 15px;
+    margin-bottom: 20px;
+}
+
+.checkout-summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.checkout-summary-total {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-top: 10px;
+    border-top: 2px solid #eee;
+    padding-top: 10px;
+}
+
 @media (max-width: 900px) {
     .modal-layout { grid-template-columns: 1fr; }
     .modal-gallery { border-right: none; border-bottom: 1px solid var(--border-clean); }

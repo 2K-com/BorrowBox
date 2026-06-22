@@ -6,21 +6,68 @@
     <meta name="description" content="BorrowBox - Campus Catalog" />
     <title>BorrowBox | Campus Catalog</title>
 
-    <!-- Google Fonts: Inter -->
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <!-- Font Awesome for Icons -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
-    <!-- CSS -->
     <link rel="stylesheet" href="../static/css/products.css" />
+
+    <style>
+      .checkout-modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 1050;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .checkout-modal-content {
+        width: 90%;
+        max-width: 450px;
+        padding: 24px;
+        position: relative;
+        background: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .checkout-item-header {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+
+      .checkout-summary {
+        border-top: 1px dashed #ccc;
+        padding-top: 15px;
+        margin-bottom: 20px;
+      }
+
+      .checkout-summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+      }
+
+      .checkout-summary-total {
+        display: flex;
+        justify-content: space-between;
+        font-weight: bold;
+        font-size: 1.2rem;
+        margin-top: 10px;
+        border-top: 2px solid #eee;
+        padding-top: 10px;
+      }
+    </style>
   </head>
   <body>
-    <!-- Minimalist Global Navbar -->
     <nav class="navbar" id="mainNavbar">
       <div class="nav-container">
         <a href="index.html" class="brand-logo"
@@ -36,7 +83,6 @@
     </nav>
 
     <main class="catalog-main">
-      <!-- Header Section -->
       <header class="catalog-header">
         <div class="header-content">
           <h1>Campus Catalog</h1>
@@ -57,7 +103,6 @@
       </header>
 
       <div class="catalog-container">
-        <!-- Sidebar Filters -->
         <aside class="catalog-sidebar">
           <div class="filter-group">
             <h3>Categories</h3>
@@ -101,33 +146,23 @@
           </div>
         </aside>
 
-        <!-- Product Grid Area -->
         <section class="catalog-results">
           <div class="results-meta">
-            <span id="resultsCount">Showing all items</span>
+            <span id="resultsCount">Loading items...</span>
             <div class="sort-dropdown">
               <label for="sortSelect">Sort by:</label>
               <select id="sortSelect">
                 <option value="newest">Newest Listed</option>
                 <option value="price-low">Price: Low to High</option>
                 <option value="price-high">Price: High to Low</option>
-                <option value="popular">Most Popular</option>
               </select>
             </div>
           </div>
 
-          <!-- Dynamic Grid Injected via JS -->
-          <div class="product-grid" id="productGrid">
-            <!-- Products load here -->
-          </div>
-
-          <div class="load-more-container">
-            <button class="btn-secondary" id="loadMoreBtn">
-              Load More Items
-            </button>
-          </div>
+          <div class="product-grid" id="productGrid"></div>
         </section>
       </div>
+
       <div class="quick-view-overlay" id="quickViewModal">
         <div class="quick-view-container">
           <button class="close-modal-btn" id="closeModalBtn">
@@ -174,7 +209,7 @@
                 <div class="review-summary">
                   <i class="fas fa-star" style="color: #ffb020"></i>
                   <span class="rating-number">4.8</span>
-                  <span class="review-count">(12 reviews)</span>
+                  <span class="review-count">(0 reviews)</span>
                 </div>
               </div>
 
@@ -189,7 +224,7 @@
                   </h4>
                   <p>
                     <i class="fas fa-map-marker-alt"></i> Meetup:
-                    <span id="modalBlock">Block Name</span>
+                    <span id="modalBlock">Campus Network</span>
                   </p>
                 </div>
               </div>
@@ -198,20 +233,8 @@
 
               <div class="product-description">
                 <h3>Description</h3>
-                <p>
-                  This item is in great condition. Perfect for upcoming
-                  assignments or weekend projects. Please return it in the same
-                  condition it was borrowed.
-                </p>
-                <ul class="rule-list">
-                  <li>
-                    <i class="fas fa-clock"></i> Max rental period: 3 Days
-                  </li>
-                  <li>
-                    <i class="fas fa-shield-alt"></i> Security deposit required
-                    at meetup
-                  </li>
-                </ul>
+                <p id="modalDescription">Loading description...</p>
+                <ul class="rule-list"></ul>
               </div>
 
               <div class="modal-actions">
@@ -221,10 +244,132 @@
                 >
                   <i class="far fa-heart"></i>
                 </button>
-                <button class="btn-primary flex-grow">Request Booking</button>
+                <button id="modalRequestBtn" class="btn-primary flex-grow">
+                  Request Booking
+                </button>
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div id="borrow-item-modal" class="checkout-modal-overlay">
+        <div class="checkout-modal-content">
+          <div class="card-header-row" style="margin-bottom: 20px">
+            <span class="card-title" style="font-size: 1.3rem"
+              ><i class="fas fa-calendar-check"></i> Request to Borrow</span
+            >
+            <button
+              type="button"
+              onclick="closeBorrowModal()"
+              style="
+                background: none;
+                border: none;
+                font-size: 1.2rem;
+                cursor: pointer;
+                color: var(--text-color);
+              "
+            >
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+
+          <div class="checkout-item-header">
+            <h3
+              id="checkout-item-title"
+              style="margin: 0 0 5px 0; font-size: 1.1rem"
+            >
+              Item Name
+            </h3>
+            <div
+              style="
+                color: var(--text-secondary);
+                font-size: 0.9rem;
+                margin-bottom: 8px;
+              "
+            >
+              ₹<span id="checkout-item-rent">0</span> / day • ₹<span
+                id="checkout-item-deposit"
+                >0</span
+              >
+              Deposit
+            </div>
+            <div style="font-size: 0.85rem; color: #2e7d32; font-weight: 600">
+              <i class="fas fa-calendar-check"></i> Available:
+              <span id="checkout-avail-dates">Loading...</span>
+            </div>
+          </div>
+
+          <form id="borrow-request-form">
+            <div
+              class="form-grid-2col"
+              style="
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+                margin-bottom: 20px;
+              "
+            >
+              <div class="dash-form-group" style="margin-bottom: 0">
+                <label for="borrow-start-date"
+                  >Pickup Date <span class="required-star">*</span></label
+                >
+                <input
+                  id="borrow-start-date"
+                  type="date"
+                  required
+                  style="
+                    width: 100%;
+                    padding: 10px;
+                    border-radius: 6px;
+                    border: 1px solid #ccc;
+                  "
+                />
+              </div>
+
+              <div class="dash-form-group" style="margin-bottom: 0">
+                <label for="borrow-end-date"
+                  >Return Date <span class="required-star">*</span></label
+                >
+                <input
+                  id="borrow-end-date"
+                  type="date"
+                  required
+                  style="
+                    width: 100%;
+                    padding: 10px;
+                    border-radius: 6px;
+                    border: 1px solid #ccc;
+                  "
+                />
+              </div>
+            </div>
+
+            <div class="checkout-summary">
+              <div class="checkout-summary-row">
+                <span>Rental Math (<span id="calc-days">0</span> days)</span>
+                <span>₹<span id="calc-rent-total">0</span></span>
+              </div>
+              <div class="checkout-summary-row">
+                <span>Security Deposit (Refundable)</span>
+                <span>₹<span id="calc-deposit-total">0</span></span>
+              </div>
+              <div class="checkout-summary-total">
+                <span>Total to Pay</span>
+                <span style="color: var(--primary-color)"
+                  >₹<span id="calc-grand-total">0</span></span
+                >
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="btn-primary-dash btn-lg-action"
+              style="width: 100%; padding: 12px; font-size: 1.1rem"
+            >
+              Send Request to Owner
+            </button>
+          </form>
         </div>
       </div>
     </main>
