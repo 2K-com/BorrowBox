@@ -1,6 +1,7 @@
 from rest_framework import generics, permissions
 from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
+from django.db.models import Q  # Added for complex queries
 from config.permissions import IsOwner
 from .models import Listing, Category
 from .serializers import ListingSerializer, CategorySerializer
@@ -15,11 +16,9 @@ class CategoryListView(generics.ListAPIView):
 
 class ListingListCreateView(generics.ListCreateAPIView):
     """
-    GET: View all active marketplace listings (Public).
+    GET: View all active marketplace listings (plus own borrowed items if authenticated).
     POST: Create a new listing (Authenticated users only).
     """
-    queryset = Listing.objects.filter(
-        availability_status='AVAILABLE').order_by('-created_at')
     serializer_class = ListingSerializer
 
     # Configure filtering and global search mechanics
@@ -31,6 +30,18 @@ class ListingListCreateView(generics.ListCreateAPIView):
         if self.request.method == 'POST':
             return [permissions.IsAuthenticated()]
         return [permissions.AllowAny()]
+
+    def get_queryset(self):
+        user = self.request.user
+
+        # If logged in, return AVAILABLE items OR items owned by the user
+        if user.is_authenticated:
+            return Listing.objects.filter(
+                Q(availability_status='AVAILABLE') | Q(owner=user)
+            ).order_by('-created_at')
+
+        # If guest, strictly return AVAILABLE items
+        return Listing.objects.filter(availability_status='AVAILABLE').order_by('-created_at')
 
     def perform_create(self, serializer):
         # Automatically assign the logged-in user as the listing owner

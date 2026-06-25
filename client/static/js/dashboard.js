@@ -510,6 +510,8 @@ window.confirmDelete = async function(id, name) {
     }
 };
 
+
+
 // ============================================================
 // EDIT LISTING LOGIC
 // ============================================================
@@ -706,14 +708,20 @@ async function initBorrowings() {
     const grid = document.getElementById('borrowings-grid');
     if (!grid) return;
 
+    // 1. EVENT DELEGATION: Attach the listener to the grid itself, not the dynamic buttons.
+    // This guarantees the click is caught, even if the buttons are created seconds later.
+    grid.removeEventListener('click', handleReturnClick); 
+    grid.addEventListener('click', handleReturnClick);
+
     try {
-        // Fetch all transactions for this user
-        const response = await authenticatedFetch('http://127.0.0.1:8000/api/transactions/');
+        const token = localStorage.getItem('access_token');
+        const response = await fetch('http://127.0.0.1:8000/api/transactions/', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
         if (!response.ok) throw new Error('Failed to fetch transactions');
         
         const allTransactions = await response.json();
-        
-        // Filter only the ACTIVE transactions
         const activeTransactions = allTransactions.filter(t => t.status === 'ACTIVE');
         
         renderBorrowings(activeTransactions, grid);
@@ -729,23 +737,21 @@ function renderBorrowings(data, grid) {
         return;
     }
 
-    // Get current username to determine if they are the borrower or the owner
-    const currentUsername = USER.name.split(' ')[0]; // Fallback to local username
+    const currentUsername = localStorage.getItem('username') || 'User';
 
+    // 1. Draw the HTML
     grid.innerHTML = data.map(b => {
-        // Calculate days safely
         const start = new Date(b.start_date);
         const end = new Date(b.end_date);
         const today = new Date();
         
         const totalDays = Math.max(1, Math.ceil((end - start) / (1000 * 60 * 60 * 24)));
         const daysLeft = Math.max(0, Math.ceil((end - today) / (1000 * 60 * 60 * 24)));
-        
         const pct = Math.round(((totalDays - daysLeft) / totalDays) * 100);
+        
         const fillClass = daysLeft <= 2 ? 'danger' : daysLeft <= 4 ? 'warning' : '';
         const daysClass = daysLeft <= 2 ? 'danger' : daysLeft <= 4 ? 'warning' : '';
 
-        // Safely extract item name and owner (adjust based on your API's JSON response keys)
         const itemName = b.listing_title || `Listing #${b.listing}`;
         const ownerName = b.owner_username || `User #${b.owner}`;
 
@@ -779,7 +785,7 @@ function renderBorrowings(data, grid) {
                     <div class="days-progress">
                         <div class="days-progress-label">
                             <span>Days remaining</span>
-                            <span style="color:${daysLeft <= 2 ? 'var(--secondary-color)' : daysLeft <= 4 ? '#D97706' : 'var(--text-main)'}; font-weight: var(--fw-semibold);">${daysLeft} / ${totalDays}</span>
+                            <span style="color:${daysLeft <= 2 ? 'var(--secondary-color)' : daysLeft <= 4 ? '#D97706' : 'var(--text-main)'}; font-weight: 600;">${daysLeft} / ${totalDays}</span>
                         </div>
                         <div class="days-progress-bar">
                             <div class="days-progress-fill ${fillClass}" style="width:${pct}%"></div>
@@ -787,7 +793,7 @@ function renderBorrowings(data, grid) {
                     </div>
                     
                     <div class="borrowing-card-footer">
-                        <button class="btn-secondary-dash btn-sm" style="width:100%;justify-content:center;" onclick="markAsReturned(${b.id})">
+                        <button class="btn-secondary-dash btn-sm direct-return-btn" data-txn-id="${b.id}" style="width:100%;justify-content:center;">
                             <i class="fas fa-rotate-left"></i> Mark as Returned
                         </button>
                     </div>
@@ -795,123 +801,69 @@ function renderBorrowings(data, grid) {
             </div>
         `;
     }).join('');
-}
 
-// Global function to trigger the Complete Transaction API
-// Replace your existing markAsReturned function with this:
-window.markAsReturned = async function(transactionId) {
-    // 1. Ask the user for a rating
-    let ratingInput = prompt("Transaction complete! Please rate the borrower from 1 to 5:");
+    // 2. ATTACH THE LISTENERS DIRECTLY TO THE DOM
+    // This executes immediately after the HTML is drawn, bypassing all scope and CSP blockers.
+    const returnButtons = grid.querySelectorAll('.direct-return-btn');
     
-    if (!ratingInput) return; // Cancelled
-    
-    let rating = parseInt(ratingInput);
-    if (isNaN(rating) || rating < 1 || rating > 5) {
-        alert("Invalid rating. Must be a number between 1 and 5.");
-        return;
-    }
+    returnButtons.forEach(btn => {
+        btn.addEventListener('click', async function(e) {
+            e.preventDefault(); // Stop any default button behavior
+            
+            const transactionId = this.getAttribute('data-txn-id');
+            console.log("Direct click registered! ID:", transactionId);
 
-    try {
-        // 2. Send the transaction ID and the rating to the backend
-        const response = await authenticatedFetch(`http://127.0.0.1:8000/api/transactions/${transactionId}/complete/`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ rating: rating }) 
+            let ratingInput = prompt("Transaction complete! Please rate your experience from 1 to 5:");
+            if (!ratingInput) return; // User clicked Cancel
+            
+            let rating = parseInt(ratingInput);
+            if (isNaN(rating) || rating < 1 || rating > 5) {
+                alert("Invalid rating. Must be a number between 1 and 5.");
+                return;
+            }
+
+            try {
+                // Change button state to show it is working
+                this.textContent = "Processing...";
+                this.style.pointerEvents = "none";
+                this.style.opacity = "0.7";
+
+                const token = localStorage.getItem('access_token');
+                const response = await fetch(`http://127.0.0.1:8000/api/transactions/${transactionId}/complete/`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ rating: rating }) 
+                });
+
+                if (response.ok) {
+                    alert('Item returned successfully!');
+                    initBorrowings(); // Refresh the grid
+                } else {
+                    const errData = await response.json();
+                    alert(`Failed: ${errData.error || 'Could not complete transaction'}`);
+                    
+                    // Reset button if it fails
+                    this.innerHTML = '<i class="fas fa-rotate-left"></i> Mark as Returned';
+                    this.style.pointerEvents = "auto";
+                    this.style.opacity = "1";
+                }
+            } catch (err) {
+                console.error('Return error:', err);
+                alert('Network error while processing return. Is Django running?');
+                
+                // Reset button if it fails
+                this.innerHTML = '<i class="fas fa-rotate-left"></i> Mark as Returned';
+                this.style.pointerEvents = "auto";
+                this.style.opacity = "1";
+            }
         });
-
-        if (response.ok) {
-            showToast('Item returned and user rated!');
-            initBorrowings(); 
-            initDashboardHome(); // Refresh the top grid to show the new average!
-        } else {
-            const errData = await response.json();
-            showToast(errData.error || 'Failed to complete transaction', 'error');
-        }
-    } catch (err) {
-        console.error('Return item error:', err);
-        showToast('Network error while processing return.', 'error');
-    }
-};
-
-// ============================================================
-// PAGE: TRANSACTION HISTORY (Connected to Backend)
-// ============================================================
-async function initHistory() {
-    const tbody = document.getElementById('history-tbody');
-    if (!tbody) return;
-
-    try {
-        // Fetch all transactions for this user
-        const response = await authenticatedFetch('http://127.0.0.1:8000/api/transactions/');
-        if (!response.ok) throw new Error('Failed to fetch transaction history');
-        
-        const allTransactions = await response.json();
-        
-        // Filter for completed or cancelled transactions (or show all based on your preference)
-        // For history, we usually want to see everything, or filter to past items.
-        // Let's show everything, but we will style the status.
-        
-        renderHistory(allTransactions, tbody);
-    } catch (err) {
-        console.error('Error loading history:', err);
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:gray;">Error loading history. Ensure your backend is running.</td></tr>';
-    }
+    });
 }
 
-function renderHistory(data, tbody) {
-    if (data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:gray;">No transaction history found.</td></tr>';
-        return;
-    }
-
-    // Sort by most recent start date first
-    data.sort((a, b) => new Date(b.start_date) - new Date(a.start_date));
-
-    // Get current username to determine if they are the borrower or owner
-    const currentUsername = USER.name.split(' ')[0] || localStorage.getItem('username');
-
-    tbody.innerHTML = data.map(h => {
-        // Format the date nicely
-        const startDate = new Date(h.start_date).toLocaleDateString('en-IN', {
-            day: 'numeric', month: 'short', year: 'numeric'
-        });
-
-        // Determine if the current user is borrowing or lending this item
-        const isOwner = h.owner_username === currentUsername || h.owner === parseInt(localStorage.getItem('user_id'));
-        const type = isOwner ? 'Lend' : 'Borrow';
-        const typeClass = isOwner ? 'type-lend' : 'type-borrow';
-        
-        // Safely extract item name
-        const itemName = h.listing_title || `Listing #${h.listing}`;
-
-        // Dynamic styling for rent column based on if you earned or spent it
-        const amountClass = isOwner ? 'amount-positive' : 'amount-neutral';
-        const amountPrefix = isOwner ? '+₹' : '₹';
-
-        return `
-            <tr>
-                <td>
-                    <div class="history-item-info">
-                        <div class="history-thumb-wrap">
-                            <img class="history-thumb-image" src="../static/images/dell_Laptop.jpg" alt="${itemName}">
-                        </div>
-                        <div>
-                            <div class="history-item-name">${itemName}</div>
-                            <div class="history-item-date">${startDate}</div>
-                        </div>
-                    </div>
-                </td>
-                <td>
-                    <span class="history-type-badge ${typeClass}">${type}</span>
-                </td>
-                <td class="${amountClass}">${amountPrefix}${h.price_per_day}/day</td>
-                <td class="amount-neutral">₹0</td> <td><span class="status-badge status-${h.status.toLowerCase()}">${capitalize(h.status)}</span></td>
-            </tr>
-        `;
-    }).join('');
-}
+// NOTE: You can completely delete the old `window.markAsReturned = async function(...)` block from your code.
 // ============================================================
 // PAGE: NOTIFICATIONS (Connected to Backend)
 // ============================================================
