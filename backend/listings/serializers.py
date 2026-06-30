@@ -27,6 +27,8 @@ class ListingSerializer(serializers.ModelSerializer):
             'condition',
             'availability_status',
             'security_deposit',
+            'available_from',
+            'available_until',
             'location',
             'image',
             'created_at'

@@ -1330,6 +1330,28 @@ button {
   justify-content: center;
   gap: 6px;
 }
+.btn-edit {
+  flex: 1;
+  padding: 8px 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background-color: transparent;
+  border: 1px solid var(--border-clean);
+  color: var(--text-main);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn-edit:hover{
+  background-color: var(--text-main);
+  color: var(--surface-card);
+  border-color: var(--text-main);
+}
+
 
 .btn-console-action:hover {
   background-color: var(--text-main);

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import TransactionListView, TransactionDetailView, InitiateReturnView, ConfirmReturnView, CompleteTransactionView, DashboardStatsView
+from .views import TransactionListView, TransactionDetailView, InitiateReturnView, ConfirmReturnView, CompleteTransactionView, DashboardStatsView, CompleteTransactionView
 
 urlpatterns = [
     path('', TransactionListView.as_view(), name='transaction_list'),
@@ -10,5 +10,7 @@ urlpatterns = [
          name='transaction_confirm'),
     path('<int:pk>/complete/', CompleteTransactionView.as_view(),
          name='complete-transaction'),
-    path('stats/', DashboardStatsView.as_view(), name='dashboard-stats')
+    path('stats/', DashboardStatsView.as_view(), name='dashboard-stats'),
+    path('<int:pk>/complete/', CompleteTransactionView.as_view(),
+         name='transaction-complete')
 ]

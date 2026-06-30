@@ -18,8 +18,10 @@ class BorrowRequestCreateView(generics.CreateAPIView):
     def perform_create(self, serializer):
         listing = get_object_or_404(
             Listing, id=self.request.data.get('listing'))
-        serializer.save(borrower=self.request.user, owner=listing.owner)
-        
+        serializer.save(borrower=self.request.user,
+                        owner=listing.owner,
+                        status='PENDING')
+
         from notifications.utils import create_notification
         create_notification(
             user=listing.owner,
@@ -99,7 +101,7 @@ class RejectRequestView(APIView):
 
         borrow_request.status = 'REJECTED'
         borrow_request.save()
-        
+
         # Create notification for Borrower
         from notifications.utils import create_notification
         create_notification(
@@ -124,3 +126,45 @@ class CancelRequestView(APIView):
         borrow_request.status = 'CANCELLED'
         borrow_request.save()
         return Response({"status": "Request cancelled."})
+
+
+# ==========================================
+# NEW VIEW: MARK AS RETURNED
+# ==========================================
+class MarkReturnedView(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsListingOwner]
+
+    def patch(self, request, pk):
+        borrow_request = get_object_or_404(BorrowRequest, id=pk)
+        self.check_object_permissions(request, borrow_request)
+
+        if borrow_request.status != 'ACCEPTED':
+            return Response({"error": "Only currently borrowed (accepted) items can be returned."}, status=status.HTTP_400_BAD_REQUEST)
+
+        with transaction.atomic():
+            # 1. Update the request status
+            borrow_request.status = 'RETURNED'
+            borrow_request.save()
+
+            # 2. Free up the listing
+            listing = borrow_request.listing
+            listing.availability_status = 'AVAILABLE'
+            listing.save()
+
+            # 3. Complete the associated transaction
+            transaction_obj = Transaction.objects.filter(
+                borrow_request=borrow_request).first()
+            if transaction_obj:
+                transaction_obj.status = 'COMPLETED'
+                transaction_obj.save()
+
+            # 4. Notify the borrower
+            from notifications.utils import create_notification
+            create_notification(
+                user=borrow_request.borrower,
+                title="Item Returned",
+                message="The owner has confirmed the safe return of the item. Thank you!",
+                notification_type="ITEM_RETURNED"
+            )
+
+        return Response({"status": "Item successfully marked as returned and is available again."})

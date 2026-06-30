@@ -38,6 +38,9 @@ class Listing(models.Model):
         related_name='listings'
     )
 
+    available_from = models.DateField(null=True, blank=True)
+    available_until = models.DateField(null=True, blank=True)
+
     title = models.CharField(max_length=255)
     description = models.TextField()
     price_per_day = models.DecimalField(max_digits=8, decimal_places=2)

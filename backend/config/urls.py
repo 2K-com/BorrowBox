@@ -13,7 +13,9 @@ urlpatterns = [
     path('api/transactions/', include('transactions.urls')),
     path('api/notifications/', include('notifications.urls')),
     path('api/dashboard/', include('dashboard.urls')),
+    path('api/borrow_requests/', include('borrow_requests.urls'))
 ]
 
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

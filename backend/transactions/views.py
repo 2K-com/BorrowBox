@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
+from django.db import transaction  # Added for safe multi-table updates
 from .models import Transaction, Review
 from .serializers import TransactionSerializer
 from config.permissions import IsParticipant, IsBorrower, IsOwner
@@ -34,14 +35,14 @@ class InitiateReturnView(APIView):
     permission_classes = [permissions.IsAuthenticated, IsBorrower]
 
     def patch(self, request, pk):
-        transaction = get_object_or_404(Transaction, id=pk)
-        self.check_object_permissions(request, transaction)
+        transaction_obj = get_object_or_404(Transaction, id=pk)
+        self.check_object_permissions(request, transaction_obj)
 
-        if transaction.status != 'ACTIVE':
+        if transaction_obj.status != 'ACTIVE':
             return Response({"error": "Only active transactions can be returned."}, status=status.HTTP_400_BAD_REQUEST)
 
-        transaction.status = 'RETURN_PENDING'
-        transaction.save()
+        transaction_obj.status = 'RETURN_PENDING'
+        transaction_obj.save()
         return Response({"status": "Item marked as returned. Awaiting owner confirmation."})
 
 
@@ -50,47 +51,71 @@ class ConfirmReturnView(APIView):
     permission_classes = [permissions.IsAuthenticated, IsOwner]
 
     def patch(self, request, pk):
-        transaction = get_object_or_404(Transaction, id=pk)
-        self.check_object_permissions(request, transaction)
+        transaction_obj = get_object_or_404(Transaction, id=pk)
+        self.check_object_permissions(request, transaction_obj)
 
-        if transaction.status != 'RETURN_PENDING':
+        if transaction_obj.status != 'RETURN_PENDING':
             return Response({"error": "No return request is pending for this item."}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Complete transaction lifecycle
-        transaction.status = 'COMPLETED'
-        transaction.save()
+        with transaction.atomic():
+            # Complete transaction lifecycle
+            transaction_obj.status = 'COMPLETED'
+            transaction_obj.save()
 
-        # Release item back to public marketplace listings
-        listing = transaction.listing
-        listing.availability_status = 'AVAILABLE'
-        listing.save()
+            # Release item back to public marketplace listings
+            listing = transaction_obj.listing
+            listing.availability_status = 'AVAILABLE'
+            listing.save()
 
         return Response({"status": "Return confirmed. Transaction closed and item is listed again."})
 
 
 class CompleteTransactionView(APIView):
-    permission_classes = [permissions.IsAuthenticated, IsOwner]
+    """PATCH: Directly completes the transaction and processes the user rating."""
+    # Changed to IsParticipant so the Borrower can actually trigger this from the UI
+    permission_classes = [permissions.IsAuthenticated, IsParticipant]
 
     def patch(self, request, pk):
-        transaction = get_object_or_404(Transaction, pk=pk)
-        self.check_object_permissions(request, transaction)
+        transaction_obj = get_object_or_404(Transaction, pk=pk)
+        self.check_object_permissions(request, transaction_obj)
 
-        if transaction.status != 'ACTIVE':
+        if transaction_obj.status != 'ACTIVE':
             return Response(
                 {"error": "Only active transactions can be completed."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        # 1. Mark transaction as completed
-        transaction.status = 'COMPLETED'
-        transaction.save()
+        with transaction.atomic():
+            # 1. Mark transaction as completed
+            transaction_obj.status = 'COMPLETED'
+            transaction_obj.save()
 
-        # 2. Reset the listing availability
-        listing = transaction.listing
-        listing.availability_status = 'AVAILABLE'
-        listing.save()
+            # 2. Reset the listing availability
+            listing = transaction_obj.listing
+            listing.availability_status = 'AVAILABLE'
+            listing.save()
 
-        return Response({"status": "Item returned and transaction closed."}, status=status.HTTP_200_OK)
+            # 3. Mark the original Borrow Request as returned
+            if hasattr(transaction_obj, 'borrow_request') and transaction_obj.borrow_request:
+                borrow_request = transaction_obj.borrow_request
+                borrow_request.status = 'RETURNED'
+                borrow_request.save()
+
+            # 4. Extract and save the Rating
+            rating = request.data.get('rating')
+            if rating:
+                # Figure out who gets the rating (Borrower rates Owner, Owner rates Borrower)
+                receiver = transaction_obj.owner if request.user == transaction_obj.borrower else transaction_obj.borrower
+
+                Review.objects.create(
+                    transaction=transaction_obj,
+                    reviewer=request.user,
+                    receiver=receiver,
+                    rating=rating,
+                    comment="Automated rating from return process."
+                )
+
+        return Response({"status": "Item returned, transaction closed, and rating saved."}, status=status.HTTP_200_OK)
 
 
 class DashboardStatsView(APIView):

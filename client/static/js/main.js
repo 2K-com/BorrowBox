@@ -107,82 +107,114 @@ function initHowItWorks() {
     });
 }
 
-// 4. INVENTORY CONSOLE (Grid Fixes applied)
+
+// 4. STRUCTURED INVENTORY CONSOLE
+document.addEventListener('DOMContentLoaded', () => {
+    initStructuredInventoryConsole();
+});
+
 function initStructuredInventoryConsole() {
     const tabs = document.querySelectorAll('.structured-tab');
     const productGridContainer = document.getElementById('structuredProductGrid');
     if (tabs.length === 0 || !productGridContainer) return;
 
-    const campusCatalogMockDatabase = {
-        electronics: [
-            { name: "Lenovo LOQ-15IRX9", owner: "Kashyap P.", price: "₹950", tag: "High Perf", img: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=500" },
-            { name: "MacBook Pro M3", owner: "Design Club", price: "₹850", tag: "Verified", img: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500" },
-            { name: "Sony WH-1000XM4", owner: "Ritesh M.", price: "₹250", tag: "Top Rated", img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500" },
-            { name: "iPad Pro 11-inch", owner: "Yash M.", price: "₹400", tag: "Verified", img: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=500" },
-            { name: "Anker PowerBank 20k", owner: "LearnIT", price: "₹80", tag: "Available", img: "https://images.unsplash.com/photo-1609592424083-d9cc38ef617c?w=500" },
-            { name: "Raspberry Pi 4 Kit", owner: "Cyber Lab", price: "₹150", tag: "Hardware", img: "https://images.unsplash.com/photo-1601462904263-ce21eb6b2979?w=500" }
-        ],
-        textbooks: [
-            { name: "Core Java: Volume I", owner: "Dr. Pratistha M.", price: "₹40", tag: "Academic", img: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=500" },
-            { name: "Intro to Algorithms", owner: "Rahul S.", price: "₹60", tag: "IT Dept", img: "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=500" },
-            { name: "Cryptography & Sec", owner: "Cyber Lab", price: "₹50", tag: "Rare", img: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=500" },
-            { name: "Calculus II", owner: "Library", price: "₹30", tag: "Available", img: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=500" },
-            { name: "Network Principles", owner: "LearnIT", price: "₹45", tag: "Syllabus", img: "https://images.unsplash.com/photo-1555662100-6d25164bc9ba?w=500" },
-            { name: "Data Structures in C", owner: "Kashyap P.", price: "₹35", tag: "Available", img: "https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?w=500" }
-        ],
-        photography: [
-            { name: "Canon EOS R5 Body", owner: "Media Club", price: "₹1200", tag: "Premium", img: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500" },
-            { name: "DJI Mavic 3 Drone", owner: "Yash M.", price: "₹1500", tag: "Deposit Req", img: "https://images.unsplash.com/photo-1508614589041-895b88991e3e?w=500" },
-            { name: "Sigma 24-70mm", owner: "Kashyap P.", price: "₹500", tag: "Verified", img: "https://images.unsplash.com/photo-1617005082133-548c4dd27f35?w=500" },
-            { name: "Carbon Tripod", owner: "Puja M.", price: "₹150", tag: "Available", img: "https://images.unsplash.com/photo-1604347491176-5085a6a61ef7?w=500" },
-            { name: "Sony A7IV Mirrorless", owner: "Ritesh M.", price: "₹1100", tag: "Premium", img: "https://images.unsplash.com/photo-1519638831568-d9897f54ed69?w=500" },
-            { name: "Rode VideoMic Pro", owner: "Media Club", price: "₹200", tag: "Audio", img: "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=500" }
-        ],
-        sports: [
-            { name: "Wilson Basketball", owner: "Sports Complex", price: "₹70", tag: "Indoor", img: "https://images.unsplash.com/photo-1519766304817-4f37bda74a27?w=500" },
-            { name: "Yonex Astrox 99", owner: "Veena M.", price: "₹120", tag: "Verified", img: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=500" },
-            { name: "Quechua 3P Tent", owner: "LearnIT", price: "₹300", tag: "Cleaned", img: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=500" },
-            { name: "Football Case", owner: "Rakesh M.", price: "₹60", tag: "Available", img: "https://images.unsplash.com/photo-1517649763962-0c623066013b?w=500" },
-            { name: "Ferrari Team Cap", owner: "Kashyap P.", price: "₹40", tag: "F1 Merch", img: "https://images.unsplash.com/photo-1580242453538-2321852da24a?w=500" },
-            { name: "Everlast Gloves", owner: "Hostel Gym", price: "₹90", tag: "Cleaned", img: "https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?w=500" }
-        ],
-        music: [
-            { name: "Fender Strat", owner: "Music Society", price: "₹600", tag: "Studio", img: "https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=500" },
-            { name: "Novation Launchkey", owner: "Kashyap P.", price: "₹250", tag: "Verified", img: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=500" },
-            { name: "AT2020 Mic", owner: "Hostel B", price: "₹180", tag: "Mint", img: "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=500" },
-            { name: "Yamaha Acoustic", owner: "Rishit K.", price: "₹200", tag: "Available", img: "https://images.unsplash.com/photo-1550985543-f47f38aee64e?w=500" },
-            { name: "Focusrite Scarlett", owner: "Music Society", price: "₹150", tag: "Interface", img: "https://images.unsplash.com/photo-1612264663673-86105f252654?w=500" },
-            { name: "Roland SPD-SX", owner: "Hostel Band", price: "₹450", tag: "Available", img: "https://images.unsplash.com/photo-1519892300165-cb5542fb47c7?w=500" }
-        ]
-    };
+    let allLiveListings = []; // Will store the fetched data in memory for quick tab switching
 
+    // 1. Fetch Live Data from Django
+    async function fetchCatalogData() {
+        productGridContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Syncing campus network...</p>';
+        
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/listings/');
+            if (!response.ok) throw new Error('Network response was not ok');
+            
+            const data = await response.json();
+            const currentUser = localStorage.getItem('username');
+            
+            // Store only AVAILABLE items that the user doesn't own
+            allLiveListings = data.filter(item => 
+                item.availability_status === 'AVAILABLE' && 
+                item.owner_username !== currentUser
+            );
+
+            updateTabCounts(); // Update the numbers in the sidebar
+
+            // Render the initially active tab
+            const activeTab = document.querySelector('.structured-tab.active');
+            if (activeTab) {
+                renderActiveProductGroup(activeTab.getAttribute('data-target'));
+            } else {
+                renderActiveProductGroup('electronics');
+            }
+
+        } catch (error) {
+            console.error("[BorrowBox] Fetch error:", error);
+            productGridContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: red;">Failed to connect to the campus network.</p>';
+        }
+    }
+
+    // 2. Helper to dynamically update the numbers in the sidebar tabs
+    function updateTabCounts() {
+        tabs.forEach(tab => {
+            const target = tab.getAttribute('data-target');
+            const countSpan = tab.querySelector('.tab-count');
+            if (countSpan) {
+                const count = filterItemsByCategory(target).length;
+                countSpan.textContent = count === 1 ? '1 item' : `${count} items`;
+            }
+        });
+    }
+
+    // 3. Helper to map tab targets to actual API category names
+    function filterItemsByCategory(categoryKey) {
+        return allLiveListings.filter(item => {
+            const cat = (item.category_name || '').toLowerCase();
+            if (categoryKey === 'textbooks' && cat.includes('study')) return true;
+            if (categoryKey === 'clothing' && (cat.includes('apparel') || cat.includes('clothing'))) return true;
+            return cat.includes(categoryKey);
+        });
+    }
+
+    // 4. Render function preserving your exact HTML structure and animations
     function renderActiveProductGroup(categoryKey) {
-        const activeItems = campusCatalogMockDatabase[categoryKey];
-        if (!activeItems) return;
-
+        // Filter and limit to max 6 featured items per tab
+        const activeItems = filterItemsByCategory(categoryKey).slice(0, 6);
+        
         productGridContainer.innerHTML = '';
+
+        if (activeItems.length === 0) {
+            productGridContainer.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 2rem; color: #666;">No items available in this category yet.</p>`;
+            return;
+        }
 
         activeItems.forEach((product, idx) => {
             const cardNode = document.createElement('div');
             cardNode.className = 'sc-card';
             
+            // Animation Styles
             cardNode.style.opacity = '0';
             cardNode.style.transform = 'translateY(16px)';
             cardNode.style.transition = `opacity 0.4s ease-out ${idx * 0.05}s, transform 0.4s ease-out ${idx * 0.05}s, border-color 0.2s, box-shadow 0.2s`;
 
+            // Data Mapping
+            const badgeText = product.condition === 'NEW' ? 'HIGH PERF' : 'VERIFIED';
+            const imageHtml = product.image 
+                ? `<img src="${product.image}" alt="${product.title}" style="width: 100%; height: 100%; object-fit: cover;">`
+                : `<div style="height: 100%; display: flex; align-items: center; justify-content: center; background: #e0e0e0;"><i class="fas fa-camera" style="font-size: 2rem; color: #9e9e9e;"></i></div>`;
+
             cardNode.innerHTML = `
-                <div class="sc-image-box">
-                    <span class="sc-badge">${product.tag}</span>
-                    <img src="${product.img}" alt="${product.name}">
+                <div class="sc-image-box" style="height: 180px; position: relative;">
+                    <span class="sc-badge" style="position: absolute; top: 12px; left: 12px; z-index: 2; background: white; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">${badgeText}</span>
+                    ${imageHtml}
                 </div>
                 <div class="sc-content">
                     <div class="sc-header-row">
-                        <h3>${product.name}</h3>
-                        <div class="sc-price">${product.price}<span>/day</span></div>
+                        <h3>${product.title}</h3>
+                        <div class="sc-price">₹${product.price_per_day}<span>/day</span></div>
                     </div>
                     <div class="sc-meta-row">
-                        <span class="sc-owner"><i class="fas fa-user-circle"></i> ${product.owner}</span>
-                        <span class="sc-status">Verified <i class="fas fa-check-circle" style="color:var(--accent-secure);"></i></span>
+                        <span class="sc-owner"><i class="fas fa-user-circle"></i> ${product.owner_username || 'Student'}</span>
+                        <span class="sc-status">Verified <i class="fas fa-check-circle" style="color:var(--accent-secure, #28a745);"></i></span>
                     </div>
                     <button class="sc-action-btn">Reserve Item</button>
                 </div>
@@ -190,26 +222,22 @@ function initStructuredInventoryConsole() {
 
             productGridContainer.appendChild(cardNode);
 
-            // Bind Event: Primary Action
+            // Bind Event: Primary Action (Redirects to the catalog page to handle the real checkout modal)
             const reserveBtn = cardNode.querySelector('.sc-action-btn');
-            reserveBtn.addEventListener('click', (e) => {
-                e.stopPropagation(); 
-                console.log(`[BorrowBox] Routing checkout: ${product.name}`);
-                reserveBtn.textContent = "Processing...";
-                reserveBtn.style.backgroundColor = "var(--accent-secure)";
-                reserveBtn.style.borderColor = "var(--accent-secure)";
-                reserveBtn.style.color = "var(--surface-card)";
-                setTimeout(() => {
-                    reserveBtn.textContent = "Reserve Item";
-                    reserveBtn.style = "";
-                }, 1000);
-            });
+            if (reserveBtn) {
+                reserveBtn.addEventListener('click', (e) => {
+                    e.stopPropagation(); 
+                    reserveBtn.textContent = "Redirecting...";
+                    reserveBtn.style.backgroundColor = "var(--accent-secure, #28a745)";
+                    reserveBtn.style.borderColor = "var(--accent-secure, #28a745)";
+                    reserveBtn.style.color = "#fff";
+                    setTimeout(() => {
+                        window.location.href = `products.html?search=${encodeURIComponent(product.title)}`;
+                    }, 400);
+                });
+            }
 
-            // Bind Event: Full Card Click
-            cardNode.addEventListener('click', () => {
-                console.log(`[BorrowBox] Opening details: ${product.name}`);
-            });
-
+            // Trigger stagger animation
             requestAnimationFrame(() => {
                 cardNode.style.opacity = '1';
                 cardNode.style.transform = 'translateY(0)';
@@ -217,17 +245,21 @@ function initStructuredInventoryConsole() {
         });
     }
 
+    // 5. Setup Tab Listeners
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
             if (tab.classList.contains('active')) return;
+            
             tabs.forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
+            
             const selectedTarget = tab.getAttribute('data-target');
             renderActiveProductGroup(selectedTarget);
         });
     });
 
-    renderActiveProductGroup('electronics');
+    // 6. Kickoff the fetch!
+    fetchCatalogData();
 }
 
 // 5. TERMINAL BLOCK (Manifesto + Marquee)
