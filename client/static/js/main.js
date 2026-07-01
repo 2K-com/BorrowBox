@@ -169,8 +169,9 @@ function initStructuredInventoryConsole() {
     function filterItemsByCategory(categoryKey) {
         return allLiveListings.filter(item => {
             const cat = (item.category_name || '').toLowerCase();
-            if (categoryKey === 'textbooks' && cat.includes('study')) return true;
-            if (categoryKey === 'clothing' && (cat.includes('apparel') || cat.includes('clothing'))) return true;
+            if (categoryKey === 'textbooks' && (cat.includes('study') || cat.includes('books') || cat.includes('textbook'))) return true;
+            if (categoryKey === 'clothing' && (cat.includes('apparel') || cat.includes('clothing') || cat.includes('accessories'))) return true;
+            if (categoryKey === 'appliances' && (cat.includes('tools') || cat.includes('appliances'))) return true;
             return cat.includes(categoryKey);
         });
     }

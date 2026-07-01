@@ -121,10 +121,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const filtered = products.filter(p => {
             const apiCategory = (p.category_name || '').toLowerCase();
             
-            // Map HTML data-categories to API category names safely
             let matchCat = false;
             if (selectedCat === 'all') matchCat = true;
-            else if (selectedCat === 'apparel' && apiCategory.includes('clothing')) matchCat = true;
+            else if (selectedCat === 'study' && (apiCategory.includes('books') || apiCategory.includes('study') || apiCategory.includes('textbook'))) matchCat = true;
+            else if (selectedCat === 'apparel' && (apiCategory.includes('clothing') || apiCategory.includes('accessories') || apiCategory.includes('apparel'))) matchCat = true;
+            else if (selectedCat === 'appliances' && (apiCategory.includes('tools') || apiCategory.includes('appliances'))) matchCat = true;
             else if (apiCategory.includes(selectedCat)) matchCat = true;
 
             const matchPrice = parseFloat(p.price_per_day) <= maxPrice;

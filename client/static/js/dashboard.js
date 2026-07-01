@@ -430,7 +430,7 @@ async function initListings() {
     if (!grid) return;
 
     try {
-        const response = await authenticatedFetch('http://127.0.0.1:8000/api/listings/');
+        const response = await authenticatedFetch('http://127.0.0.1:8000/api/listings/my/');
         if (!response.ok) throw new Error('Failed to fetch listings');
         
         const dbData = await response.json();
@@ -438,12 +438,12 @@ async function initListings() {
         // Map Django database keys to match your frontend HTML template
         const mappedData = dbData.map(item => ({
             id: item.id,
-            image: '../static/images/dell_Laptop.jpg', // Fallback until media upload is wired
+            image: item.image || '../static/images/dell_Laptop.jpg', 
             name: item.title,
-            category: item.category, // Ensure your serializer returns category name, or map ID here
+            category: item.category_name || 'Uncategorized', 
             rent: `₹${item.price_per_day}/day`,
             security_deposit: item.security_deposit,
-            status: 'available', 
+            status: (item.availability_status || 'available').toLowerCase(), 
             requests: 0 // Placeholder until request counts are serialized
         }));
 
@@ -624,18 +624,20 @@ function renderRequests(data, listElement) {
         // Extract borrower name safely
         const borrowerName = req.borrower_username || `User #${req.borrower}`;
         const avatarStr = borrowerName.substring(0, 2).toUpperCase();
+        const itemName = (req.listing_details && req.listing_details.title) || `Listing #${req.listing}`;
+        const itemImage = (req.listing_details && req.listing_details.image) || "../static/images/dell_Laptop.jpg";
 
         return `
             <div class="request-card" id="req-${req.id}">
                 <div class="request-card-thumb-wrap">
-                    <img class="request-card-thumb" src="../static/images/dell_Laptop.jpg" alt="Item Image">
+                    <img class="request-card-thumb" src="${itemImage}" alt="${itemName}">
                     <span class="status-badge status-${req.status.toLowerCase()} request-card-status-badge">
                         ${capitalize(req.status)}
                     </span>
                 </div>
                 <div class="request-card-details">
                     <div class="request-card-header-row">
-                        <span class="request-item-name">Listing #${req.listing}</span>
+                        <span class="request-item-name">${itemName}</span>
                         <div class="request-card-borrower">
                             <span class="request-borrower-avatar">${avatarStr}</span>
                             <span>${borrowerName}</span>
@@ -708,17 +710,8 @@ async function initBorrowings() {
     const grid = document.getElementById('borrowings-grid');
     if (!grid) return;
 
-    // 1. EVENT DELEGATION: Attach the listener to the grid itself, not the dynamic buttons.
-    // This guarantees the click is caught, even if the buttons are created seconds later.
-    grid.removeEventListener('click', handleReturnClick); 
-    grid.addEventListener('click', handleReturnClick);
-
     try {
-        const token = localStorage.getItem('access_token');
-        const response = await fetch('http://127.0.0.1:8000/api/transactions/', {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        
+        const response = await authenticatedFetch('http://127.0.0.1:8000/api/transactions/');
         if (!response.ok) throw new Error('Failed to fetch transactions');
         
         const allTransactions = await response.json();
@@ -828,13 +821,8 @@ function renderBorrowings(data, grid) {
                 this.style.pointerEvents = "none";
                 this.style.opacity = "0.7";
 
-                const token = localStorage.getItem('access_token');
-                const response = await fetch(`http://127.0.0.1:8000/api/transactions/${transactionId}/complete/`, {
+                const response = await authenticatedFetch(`http://127.0.0.1:8000/api/transactions/${transactionId}/complete/`, {
                     method: 'PATCH',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
                     body: JSON.stringify({ rating: rating }) 
                 });
 
@@ -863,7 +851,65 @@ function renderBorrowings(data, grid) {
     });
 }
 
-// NOTE: You can completely delete the old `window.markAsReturned = async function(...)` block from your code.
+// ============================================================
+// PAGE: TRANSACTION HISTORY (Connected to Backend)
+// ============================================================
+async function initHistory() {
+    const tbody = document.getElementById('history-tbody');
+    if (!tbody) return;
+
+    try {
+        const response = await authenticatedFetch('http://127.0.0.1:8000/api/transactions/');
+        if (!response.ok) throw new Error('Failed to fetch transaction history');
+        
+        const data = await response.json();
+        renderHistory(data, tbody);
+    } catch (err) {
+        console.error('Error loading history:', err);
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: gray;">Error loading history.</td></tr>';
+    }
+}
+
+function renderHistory(data, tbody) {
+    if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: gray; padding: 20px;">No transaction history found.</td></tr>';
+        return;
+    }
+
+    const currentUsername = localStorage.getItem('username');
+
+    tbody.innerHTML = data.map(txn => {
+        const start = new Date(txn.start_date);
+        const end = new Date(txn.end_date);
+        const dateStr = start.toLocaleDateString('en-IN', {day:'numeric', month:'short'}) + ' – ' + end.toLocaleDateString('en-IN', {day:'numeric', month:'short', year:'numeric'});
+
+        const isBorrow = txn.borrower_username === currentUsername;
+        const typeStr = isBorrow ? 'Borrow' : 'Lend';
+        const typeClass = isBorrow ? 'type-borrow' : 'type-lend';
+
+        const itemName = txn.listing_title || `Listing #${txn.listing}`;
+        const amount = `₹${txn.total_amount || '0.00'}`;
+        const deposit = `₹${txn.security_deposit || '0.00'}`;
+
+        const statusClass = txn.status.toLowerCase();
+        const statusText = capitalize(txn.status);
+
+        return `
+            <tr>
+                <td>#${txn.id}</td>
+                <td>
+                    <div style="font-weight: 600; color: var(--text-main);">${itemName}</div>
+                </td>
+                <td>${dateStr}</td>
+                <td><span class="history-type-badge ${typeClass}">${typeStr}</span></td>
+                <td>${amount}</td>
+                <td>${deposit}</td>
+                <td><span class="status-badge status-${statusClass}">${statusText}</span></td>
+            </tr>
+        `;
+    }).join('');
+}
+
 // ============================================================
 // PAGE: NOTIFICATIONS (Connected to Backend)
 // ============================================================
@@ -1149,6 +1195,9 @@ function initAddItemForm() {
     // Reset preview to default state
     function resetPreview() {
         uploadedImageSrc = '';
+        if (fileInput) {
+            fileInput.value = '';
+        }
         if (primaryPreview) {
             primaryPreview.innerHTML = `
                 <i class="fas fa-cloud-arrow-up upload-icon"></i>
@@ -1287,16 +1336,15 @@ function initAddItemForm() {
             return;
         }
 
-        // Map Category Text to Backend ID (Adjust IDs to match your DB)
         const categoryMap = {
-            "Electronics": 1,
-            "Study Essentials": 2,
-            "Appliances": 3,
-            "Clothing": 4,
-            "Accessories": 5,
-            "Sports": 6,
-            "Instruments": 7,
-            "Other": 8
+            "Electronics": 1,      // Electronics (1)
+            "Study Essentials": 2, // Books (2)
+            "Sports": 3,           // Sports (3)
+            "Appliances": 5,       // Tools (5)
+            "Accessories": 6,      // Accessories (6)
+            "Clothing": 6,         // Accessories (6)
+            "Instruments": 5,      // Tools (5)
+            "Other": 6             // Accessories (6)
         };
         const categoryId = categoryMap[categoryText] || 1;
 
@@ -1304,19 +1352,28 @@ function initAddItemForm() {
         if (conditionText === 'Like New') conditionCode = 'NEW'; 
         else if (conditionText === 'Fair') conditionCode = 'USED';
 
-        const payload = {
-            title: name,
-            description: desc,
-            price_per_day: rent,
-            security_deposit: deposit,
-            category: categoryId,
-            condition: conditionCode
-        };
+        const formData = new FormData();
+        formData.append('title', name);
+        formData.append('description', desc);
+        formData.append('price_per_day', rent);
+        formData.append('security_deposit', deposit);
+        formData.append('category', categoryId);
+        formData.append('condition', conditionCode);
+        
+        if (fromInput?.value) {
+            formData.append('available_from', fromInput.value);
+        }
+        if (untilInput?.value) {
+            formData.append('available_until', untilInput.value);
+        }
+        if (fileInput && fileInput.files[0]) {
+            formData.append('image', fileInput.files[0]);
+        }
 
         try {
             const response = await authenticatedFetch('http://127.0.0.1:8000/api/listings/', {
                 method: 'POST',
-                body: JSON.stringify(payload)
+                body: formData
             });
 
             if (response.status === 201) {

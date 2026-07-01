@@ -152,9 +152,9 @@ class DashboardStatsView(APIView):
 
             # 4. Financial Aggregations
             rent_earned = Transaction.objects.filter(owner=user, status='COMPLETED').aggregate(
-                Sum('price_per_day'))['price_per_day__sum'] or 0
+                Sum('total_amount'))['total_amount__sum'] or 0
             rent_paid = Transaction.objects.filter(borrower=user, status='COMPLETED').aggregate(
-                Sum('price_per_day'))['price_per_day__sum'] or 0
+                Sum('total_amount'))['total_amount__sum'] or 0
             avg_rating_dict = Review.objects.filter(
                 receiver=user).aggregate(Avg('rating'))
             avg_rating = avg_rating_dict['rating__avg']
