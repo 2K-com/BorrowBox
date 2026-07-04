@@ -3,6 +3,64 @@
 // SPA navigation + placeholder data + UI interactions
 // ============================================================
 
+function getEmptyStateHtml(icon, title, message, buttonText = '', buttonOnclick = '') {
+    const btnHtml = buttonText
+        ? `<button class="btn-primary" onclick="${buttonOnclick}" style="margin-top: 16px; padding: 10px 20px; width: auto; font-size: 0.9rem; border-radius: 8px;">${buttonText}</button>`
+        : '';
+    return `
+        <div class="empty-state-container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 20px; background: var(--surface-card); border-radius: 16px; border: 1px dashed var(--border-clean); margin: 20px 0; width: 100%; box-sizing: border-box;">
+            <div class="empty-state-icon-wrap" style="width: 80px; height: 80px; border-radius: 50%; background: var(--bg-hover); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: var(--text-muted);">
+                <i class="fas ${icon}" style="font-size: 2.2rem; color: var(--accent-primary);"></i>
+            </div>
+            <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">${title}</h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted); max-width: 320px; line-height: 1.5; margin: 0 auto;">${message}</p>
+            ${btnHtml}
+        </div>
+    `;
+}
+
+function getSkeletonHtml(type) {
+    if (type === 'listing' || type === 'borrowing') {
+        return `
+            <div class="skeleton-card" style="background: var(--surface-card); border: 1px solid var(--border-clean); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px; height: 100%; min-height: 250px; box-sizing: border-box;">
+                <div class="skeleton-shimmer" style="height: 140px; background: var(--bg-hover); border-radius: 12px; position: relative; overflow: hidden;"></div>
+                <div class="skeleton-shimmer" style="height: 20px; width: 60%; background: var(--bg-hover); border-radius: 4px; position: relative; overflow: hidden;"></div>
+                <div class="skeleton-shimmer" style="height: 16px; width: 40%; background: var(--bg-hover); border-radius: 4px; position: relative; overflow: hidden;"></div>
+                <div class="skeleton-shimmer" style="height: 36px; background: var(--bg-hover); border-radius: 8px; margin-top: auto; position: relative; overflow: hidden;"></div>
+            </div>
+        `;
+    }
+    if (type === 'row') {
+        return `
+            <tr class="skeleton-row">
+                <td colspan="7" style="padding: 20px;">
+                    <div class="skeleton-shimmer" style="height: 24px; background: var(--bg-hover); border-radius: 4px; position: relative; overflow: hidden; width: 100%;"></div>
+                </td>
+            </tr>
+        `;
+    }
+    if (type === 'notification' || type === 'request') {
+        return `
+            <div class="skeleton-notif" style="display: flex; align-items: center; gap: 16px; padding: 16px 20px; background: var(--surface-card); border: 1px solid var(--border-clean); border-radius: 12px; margin-bottom: 12px; box-sizing: border-box; width: 100%;">
+                <div class="skeleton-shimmer" style="width: 40px; height: 40px; border-radius: 50%; background: var(--bg-hover); position: relative; overflow: hidden; flex-shrink: 0;"></div>
+                <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+                    <div class="skeleton-shimmer" style="height: 16px; width: 30%; background: var(--bg-hover); border-radius: 4px; position: relative; overflow: hidden;"></div>
+                    <div class="skeleton-shimmer" style="height: 14px; width: 80%; background: var(--bg-hover); border-radius: 4px; position: relative; overflow: hidden;"></div>
+                </div>
+            </div>
+        `;
+    }
+    if (type === 'stats') {
+        return `
+            <div class="skeleton-stat" style="background: var(--surface-card); border: 1px solid var(--border-clean); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 12px; box-sizing: border-box;">
+                <div class="skeleton-shimmer" style="height: 32px; width: 40%; background: var(--bg-hover); border-radius: 4px; position: relative; overflow: hidden;"></div>
+                <div class="skeleton-shimmer" style="height: 16px; width: 60%; background: var(--bg-hover); border-radius: 4px; position: relative; overflow: hidden;"></div>
+            </div>
+        `;
+    }
+    return '';
+}
+
 async function authenticatedFetch(url, options = {}) {
     let accessToken = localStorage.getItem('access_token');
     if (!accessToken) {
@@ -32,7 +90,7 @@ async function authenticatedFetch(url, options = {}) {
                 if (refreshRes.ok) {
                     const data = await refreshRes.json();
                     localStorage.setItem('access_token', data.access);
-                    
+
                     // Retry original request
                     options.headers['Authorization'] = `Bearer ${data.access}`;
                     response = await fetch(url, options);
@@ -67,12 +125,12 @@ async function initDashboardAuth() {
         }
 
         const data = await response.json();
-        
+
         // Update global USER object
         USER.name = data.full_name || localStorage.getItem('username') || 'Student';
         USER.email = data.email || '';
         USER.phone = data.phone_number || '';
-        
+
         // Compute Initials
         const parts = USER.name.split(' ');
         let initials = '';
@@ -118,6 +176,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     initAddItemForm();
     initTopnavSearch();
     initRecentActivity();
+    initRatingStars();
+    initReturnRatingForm();
+    initEditListingForm();
 });
 
 // ============================================================
@@ -143,6 +204,22 @@ function initNavigation() {
         if (pageId === 'notifications') {
             const dot = document.querySelector('.notif-dot');
             if (dot) dot.style.display = 'none';
+        }
+
+        // Auto-refresh data on tab switch
+        if (pageId === 'home') {
+            initDashboardHome();
+            initRecentActivity();
+        } else if (pageId === 'listings') {
+            initListings();
+        } else if (pageId === 'requests') {
+            initRequests();
+        } else if (pageId === 'borrowings') {
+            initBorrowings();
+        } else if (pageId === 'history') {
+            initHistory();
+        } else if (pageId === 'notifications') {
+            initNotifications();
         }
 
         // Close mobile sidebar
@@ -315,19 +392,32 @@ async function initDashboardHome() {
             if (label === 'Active Listings') numberEl.setAttribute('data-target', stats.total_listings || 0);
             if (label === 'Items Borrowed') numberEl.setAttribute('data-target', stats.active_borrowings || 0);
             if (label === 'Pending Requests') numberEl.setAttribute('data-target', stats.pending_requests || 0);
-            if (label === 'Reputation Rating') numberEl.setAttribute('data-target', stats.reputation_rating || 0);
 
-            numberEl.textContent = '0'; // Reset before animation
+            if (label === 'Reputation Rating') {
+                const rep = stats.reputation_rating || 0;
+                if (parseFloat(rep) === 0) {
+                    numberEl.setAttribute('data-target', 'New User');
+                    numberEl.classList.add('no-animate');
+                    numberEl.textContent = 'New User';
+                    numberEl.style.fontSize = '1.5rem';
+                } else {
+                    numberEl.setAttribute('data-target', rep);
+                    numberEl.classList.remove('no-animate');
+                    numberEl.style.fontSize = '';
+                }
+            } else {
+                numberEl.textContent = '0'; // Reset before animation
+            }
         });
 
         // Trigger the animation
         animateStatNumbers();
 
         // 2. UPDATE QUICK OVERVIEW
-        const overviewValues = document.querySelectorAll('.quick-stat-val'); 
+        const overviewValues = document.querySelectorAll('.quick-stat-val');
         if (overviewValues[0]) overviewValues[0].textContent = `${stats.available_listings || 0} of ${stats.total_listings || 0} Available`;
         if (overviewValues[1]) overviewValues[1].textContent = `${stats.active_borrowings || 0} Items`;
-        
+
         if (overviewValues[2]) {
             overviewValues[2].textContent = `${stats.returns_due_this_week || 0} Items`;
             overviewValues[2].style.color = (stats.returns_due_this_week > 0) ? 'var(--secondary-color)' : '';
@@ -347,9 +437,10 @@ async function initDashboardHome() {
 function animateStatNumbers() {
     const statEls = document.querySelectorAll('.stat-card-number');
     statEls.forEach(el => {
+        if (el.classList.contains('no-animate')) return;
         const target = parseFloat(el.getAttribute('data-target')) || 0;
         let current = 0;
-        
+
         if (target === 0) {
             el.textContent = '0';
             return;
@@ -376,10 +467,10 @@ async function initRecentActivity() {
     try {
         const response = await authenticatedFetch('http://127.0.0.1:8000/api/notifications/');
         if (!response.ok) throw new Error(`Notifications API failed with status: ${response.status}`);
-        
+
         const notifications = await response.json();
         const recentActivities = notifications.slice(0, 4);
-        
+
         if (recentActivities.length === 0) {
             activityList.innerHTML = '<div style="color: gray; padding: 20px; text-align: center;">No recent activity yet.</div>';
             return;
@@ -394,7 +485,7 @@ async function initRecentActivity() {
         };
 
         activityList.innerHTML = recentActivities.map(activity => {
-            const style = iconMap[activity.notification_type] || iconMap['DEFAULT'];
+            const style = iconMap[activity.type] || iconMap['DEFAULT'];
             const hours = Math.floor((new Date() - new Date(activity.created_at)) / (1000 * 60 * 60));
             const timeStr = hours > 24 ? `${Math.floor(hours / 24)} days ago` : hours > 0 ? `${hours} hours ago` : 'Just now';
 
@@ -429,21 +520,23 @@ async function initListings() {
     const grid = document.getElementById('listings-grid');
     if (!grid) return;
 
+    grid.innerHTML = getSkeletonHtml('listing').repeat(3);
+
     try {
         const response = await authenticatedFetch('http://127.0.0.1:8000/api/listings/my/');
         if (!response.ok) throw new Error('Failed to fetch listings');
-        
+
         const dbData = await response.json();
-        
+
         // Map Django database keys to match your frontend HTML template
         const mappedData = dbData.map(item => ({
             id: item.id,
-            image: item.image || '../static/images/dell_Laptop.jpg', 
+            image: formatImageUrl(item.image),
             name: item.title,
-            category: item.category_name || 'Uncategorized', 
+            category: item.category_name || 'Uncategorized',
             rent: `₹${item.price_per_day}/day`,
             security_deposit: item.security_deposit,
-            status: (item.availability_status || 'available').toLowerCase(), 
+            status: (item.availability_status || 'available').toLowerCase(),
             requests: 0 // Placeholder until request counts are serialized
         }));
 
@@ -456,7 +549,13 @@ async function initListings() {
 
 function renderListings(data, grid) {
     if (data.length === 0) {
-        grid.innerHTML = '<p>You have no active listings.</p>';
+        grid.innerHTML = getEmptyStateHtml(
+            'fa-boxes-packing',
+            'No active listings',
+            'You haven\'t listed any items for others to borrow yet.',
+            'Create a Listing',
+            'const modalBtn = document.getElementById("create-item-btn"); if (modalBtn) modalBtn.click(); else activatePage("listings");'
+        );
         return;
     }
 
@@ -471,7 +570,7 @@ function renderListings(data, grid) {
             </div>
             <div class="inventory-card-details">
                 <h3 class="inventory-card-name">${item.name}</h3>
-                <div class="inventory-card-category">Category ID: ${item.category}</div>
+                <div class="inventory-card-category">Category: ${item.category}</div>
                 
                 <div class="inventory-card-price-row">
                     <span class="inventory-card-rent">${item.rent}</span>
@@ -490,13 +589,13 @@ function renderListings(data, grid) {
     `).join('');
 }
 
-window.confirmDelete = async function(id, name) {
+window.confirmDelete = async function (id, name) {
     if (confirm(`Remove "${name}" from your listings?`)) {
         try {
             const response = await authenticatedFetch(`http://127.0.0.1:8000/api/listings/${id}/`, {
                 method: 'DELETE'
             });
-            
+
             if (response.ok || response.status === 204) {
                 showToast(`"${name}" deleted successfully.`);
                 initListings(); // Refresh grid from database
@@ -516,20 +615,62 @@ window.confirmDelete = async function(id, name) {
 // EDIT LISTING LOGIC
 // ============================================================
 
-window.openEditListing = async function(id) {
+window.openEditListing = async function (id) {
     try {
         const response = await authenticatedFetch(`http://127.0.0.1:8000/api/listings/${id}/`);
         if (!response.ok) throw new Error('Failed to fetch listing');
-        
+
         const item = await response.json();
-        
+
         // Populate modal fields
         document.getElementById('edit-item-id').value = item.id;
         document.getElementById('edit-item-title').value = item.title;
         document.getElementById('edit-item-rent').value = item.price_per_day;
         document.getElementById('edit-item-deposit').value = item.security_deposit || 0;
         document.getElementById('edit-item-condition').value = item.condition;
-        
+
+        // Reset inputs and previews
+        document.getElementById('edit-item-image-input').value = '';
+        document.getElementById('edit-item-image-input-2').value = '';
+        document.getElementById('edit-item-image-input-3').value = '';
+
+        const thumb1 = document.querySelector('#edit-thumb-slot-1 .slot-image-wrap');
+        const thumb2 = document.querySelector('#edit-thumb-slot-2 .slot-image-wrap');
+        const thumb3 = document.querySelector('#edit-thumb-slot-3 .slot-image-wrap');
+
+        const editThumb2 = document.getElementById('edit-thumb-slot-2');
+        const editThumb3 = document.getElementById('edit-thumb-slot-3');
+
+        if (editThumb2) editThumb2.classList.remove('active');
+        if (editThumb3) editThumb3.classList.remove('active');
+
+        // Load primary image
+        const editPreview = document.getElementById('edit-image-preview-area');
+        const primaryImgUrl = formatImageUrl(item.image);
+        if (editPreview) {
+            editPreview.innerHTML = `<img src="${primaryImgUrl}" style="width:100%; height:100%; object-fit:cover; border-radius:12px;" />`;
+        }
+        if (thumb1) {
+            thumb1.innerHTML = `<img src="${primaryImgUrl}" style="width:100%; height:100%; object-fit:cover; border-radius:6px;" />`;
+        }
+
+        // Load secondary images
+        if (thumb2) thumb2.innerHTML = `<i class="fas fa-plus"></i>`;
+        if (thumb3) thumb3.innerHTML = `<i class="fas fa-plus"></i>`;
+
+        if (item.images && Array.isArray(item.images)) {
+            if (item.images[0] && item.images[0].image && thumb2) {
+                const url = formatImageUrl(item.images[0].image);
+                thumb2.innerHTML = `<img src="${url}" style="width:100%; height:100%; object-fit:cover; border-radius:6px;" />`;
+                if (editThumb2) editThumb2.classList.add('active');
+            }
+            if (item.images[1] && item.images[1].image && thumb3) {
+                const url = formatImageUrl(item.images[1].image);
+                thumb3.innerHTML = `<img src="${url}" style="width:100%; height:100%; object-fit:cover; border-radius:6px;" />`;
+                if (editThumb3) editThumb3.classList.add('active');
+            }
+        }
+
         // Show modal
         document.getElementById('edit-item-modal').style.display = 'flex';
     } catch (err) {
@@ -538,26 +679,138 @@ window.openEditListing = async function(id) {
     }
 };
 
-window.closeEditModal = function() {
+window.closeEditModal = function () {
     document.getElementById('edit-item-modal').style.display = 'none';
     document.getElementById('edit-item-form').reset();
+
+    const input1 = document.getElementById('edit-item-image-input');
+    const input2 = document.getElementById('edit-item-image-input-2');
+    const input3 = document.getElementById('edit-item-image-input-3');
+
+    if (input1) input1.value = '';
+    if (input2) input2.value = '';
+    if (input3) input3.value = '';
+
+    const editPreview = document.getElementById('edit-image-preview-area');
+    if (editPreview) {
+        editPreview.innerHTML = `
+            <i class="fas fa-cloud-arrow-up upload-icon"></i>
+            <p>Click to upload primary photo</p>
+            <small>JPG, PNG or WEBP · Max 5MB</small>
+        `;
+    }
+
+    const thumb1 = document.querySelector('#edit-thumb-slot-1 .slot-image-wrap');
+    const thumb2 = document.querySelector('#edit-thumb-slot-2 .slot-image-wrap');
+    const thumb3 = document.querySelector('#edit-thumb-slot-3 .slot-image-wrap');
+
+    if (thumb1) thumb1.innerHTML = `<i class="fas fa-plus"></i>`;
+    if (thumb2) thumb2.innerHTML = `<i class="fas fa-plus"></i>`;
+    if (thumb3) thumb3.innerHTML = `<i class="fas fa-plus"></i>`;
+
+    const editThumb2 = document.getElementById('edit-thumb-slot-2');
+    const editThumb3 = document.getElementById('edit-thumb-slot-3');
+    if (editThumb2) editThumb2.classList.remove('active');
+    if (editThumb3) editThumb3.classList.remove('active');
 };
+
+function initEditListingForm() {
+    const editPreview = document.getElementById('edit-image-preview-area');
+    const input1 = document.getElementById('edit-item-image-input');
+    const input2 = document.getElementById('edit-item-image-input-2');
+    const input3 = document.getElementById('edit-item-image-input-3');
+
+    const editThumb1 = document.getElementById('edit-thumb-slot-1');
+    const editThumb2 = document.getElementById('edit-thumb-slot-2');
+    const editThumb3 = document.getElementById('edit-thumb-slot-3');
+
+    if (editPreview && input1) {
+        editPreview.addEventListener('click', () => input1.click());
+        input1.addEventListener('change', () => {
+            const file = input1.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    editPreview.innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover; border-radius:12px;" />`;
+                    const wrap = editThumb1 ? editThumb1.querySelector('.slot-image-wrap') : null;
+                    if (wrap) {
+                        wrap.innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover; border-radius:6px;" />`;
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    if (editThumb2 && input2) {
+        editThumb2.addEventListener('click', () => input2.click());
+        input2.addEventListener('change', () => {
+            const file = input2.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const wrap = editThumb2.querySelector('.slot-image-wrap');
+                    if (wrap) {
+                        wrap.innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover; border-radius:6px;" />`;
+                    }
+                    editThumb2.classList.add('active');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    if (editThumb3 && input3) {
+        editThumb3.addEventListener('click', () => input3.click());
+        input3.addEventListener('change', () => {
+            const file = input3.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const wrap = editThumb3.querySelector('.slot-image-wrap');
+                    if (wrap) {
+                        wrap.innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover; border-radius:6px;" />`;
+                    }
+                    editThumb3.classList.add('active');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+}
 
 document.getElementById('edit-item-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    
+
     const id = document.getElementById('edit-item-id').value;
-    const payload = {
-        title: document.getElementById('edit-item-title').value.trim(),
-        price_per_day: document.getElementById('edit-item-rent').value,
-        security_deposit: document.getElementById('edit-item-deposit').value,
-        condition: document.getElementById('edit-item-condition').value
-    };
+    const title = document.getElementById('edit-item-title').value.trim();
+    const rent = document.getElementById('edit-item-rent').value;
+    const deposit = document.getElementById('edit-item-deposit').value;
+    const condition = document.getElementById('edit-item-condition').value;
+    const imgInput = document.getElementById('edit-item-image-input');
+    const input2 = document.getElementById('edit-item-image-input-2');
+    const input3 = document.getElementById('edit-item-image-input-3');
+
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('price_per_day', rent);
+    formData.append('security_deposit', deposit);
+    formData.append('condition', condition);
+
+    if (imgInput && imgInput.files[0]) {
+        formData.append('image', imgInput.files[0]);
+    }
+    if (input2 && input2.files[0]) {
+        formData.append('secondary_images', input2.files[0]);
+    }
+    if (input3 && input3.files[0]) {
+        formData.append('secondary_images', input3.files[0]);
+    }
 
     try {
         const response = await authenticatedFetch(`http://127.0.0.1:8000/api/listings/${id}/`, {
             method: 'PATCH',
-            body: JSON.stringify(payload)
+            body: formData
         });
 
         if (response.ok) {
@@ -578,19 +831,22 @@ document.getElementById('edit-item-form')?.addEventListener('submit', async (e) 
 // PAGE: BORROW REQUESTS (Connected to Backend)
 // ============================================================
 let CURRENT_REQUESTS = []; // Store globally for filtering
+let ratingModalAction = 'return'; // Track if rating is for return or confirm step
 
 async function initRequests() {
     const list = document.getElementById('requests-list');
     if (!list) return;
+
+    list.innerHTML = getSkeletonHtml('request').repeat(3);
 
     try {
         // Fetch incoming requests (where the current user is the owner)
         // Adjust the URL if your routing differs (e.g., /api/requests/incoming/)
         const response = await authenticatedFetch('http://127.0.0.1:8000/api/requests/incoming/');
         if (!response.ok) throw new Error('Failed to fetch requests');
-        
+
         CURRENT_REQUESTS = await response.json();
-        
+
         updatePendingCount(CURRENT_REQUESTS);
         renderRequests(CURRENT_REQUESTS, list);
         setupRequestFilters(list);
@@ -608,7 +864,13 @@ function updatePendingCount(data) {
 
 function renderRequests(data, listElement) {
     if (data.length === 0) {
-        listElement.innerHTML = '<p style="color: gray; padding: 20px;">No requests found.</p>';
+        listElement.innerHTML = getEmptyStateHtml(
+            'fa-hand-holding',
+            'No requests found',
+            'When other students request to borrow your listings, they will show up here.',
+            'Explore Catalog',
+            "window.location.href='products.html'"
+        );
         return;
     }
 
@@ -617,46 +879,81 @@ function renderRequests(data, listElement) {
         const start = new Date(req.start_date);
         const end = new Date(req.end_date);
         const days = Math.max(1, Math.ceil((end - start) / (1000 * 60 * 60 * 24)));
-        
+
         // Formatting dates
-        const dateStr = `${start.toLocaleDateString('en-IN', {day:'numeric', month:'short'})} – ${end.toLocaleDateString('en-IN', {day:'numeric', month:'short', year:'numeric'})}`;
-        
+        const dateStr = `${start.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} – ${end.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}`;
+
         // Extract borrower name safely
         const borrowerName = req.borrower_username || `User #${req.borrower}`;
         const avatarStr = borrowerName.substring(0, 2).toUpperCase();
         const itemName = (req.listing_details && req.listing_details.title) || `Listing #${req.listing}`;
-        const itemImage = (req.listing_details && req.listing_details.image) || "../static/images/dell_Laptop.jpg";
+        const itemImage = (req.listing_details && req.listing_details.image) ? formatImageUrl(req.listing_details.image) : "../static/images/dell_Laptop.jpg";
+        const pricePerDay = (req.listing_details && req.listing_details.price_per_day) || '0';
+        const categoryName = (req.listing_details && req.listing_details.category_name) || 'Item';
+        const depositAmount = (req.listing_details && req.listing_details.security_deposit) || '0.00';
 
         return `
             <div class="request-card" id="req-${req.id}">
-                <div class="request-card-thumb-wrap">
-                    <img class="request-card-thumb" src="${itemImage}" alt="${itemName}">
-                    <span class="status-badge status-${req.status.toLowerCase()} request-card-status-badge">
-                        ${capitalize(req.status)}
-                    </span>
+                <div class="request-card-left">
+                    <div class="request-card-thumb-wrap">
+                        <img class="request-card-thumb" src="${itemImage}" alt="${itemName}">
+                    </div>
                 </div>
-                <div class="request-card-details">
-                    <div class="request-card-header-row">
-                        <span class="request-item-name">${itemName}</span>
-                        <div class="request-card-borrower">
-                            <span class="request-borrower-avatar">${avatarStr}</span>
-                            <span>${borrowerName}</span>
+                
+                <div class="request-card-center">
+                    <div class="request-card-title-row">
+                        <h3 class="request-item-name">${itemName}</h3>
+                        <span class="category-tag-inline">${categoryName}</span>
+                    </div>
+                    
+                    <div class="request-borrower-profile">
+                        <span class="request-borrower-avatar">${avatarStr}</span>
+                        <span class="request-borrower-name">${borrowerName}</span>
+                    </div>
+
+                    <div class="request-dates-info">
+                        <div class="date-group">
+                            <span class="date-label">Pickup:</span>
+                            <span class="date-val">${start.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
+                        </div>
+                        <div class="date-group">
+                            <span class="date-label">Return:</span>
+                            <span class="date-val">${end.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
+                        </div>
+                        <div class="date-group">
+                            <span class="date-label">Duration:</span>
+                            <span class="date-val highlighted-duration">${days} Day${days === 1 ? '' : 's'}</span>
                         </div>
                     </div>
-                    <div class="request-card-meta-row">
-                        <span class="request-meta-item"><i class="fas fa-calendar"></i> ${dateStr}</span>
-                        <span class="request-meta-item"><i class="fas fa-clock"></i> ${days} days</span>
+
+                    <div class="request-financial-info">
+                        <span class="price-per-day-info">₹${pricePerDay} / day</span>
+                        ${parseFloat(depositAmount) > 0 ? `<span class="deposit-info">• ₹${depositAmount} Deposit</span>` : ''}
                     </div>
                 </div>
-                <div class="request-card-actions">
+                
+                <div class="request-card-right">
                     ${req.status === 'PENDING' ? `
-                        <button class="btn-accept" onclick="handleRequest(${req.id}, 'accept')">
-                            <i class="fas fa-check"></i> Accept
-                        </button>
-                        <button class="btn-reject" onclick="handleRequest(${req.id}, 'reject')">
-                            <i class="fas fa-times"></i> Reject
-                        </button>
-                    ` : ''}
+                        <div class="request-pending-buttons">
+                            <button class="btn-request-accept" onclick="handleRequest(${req.id}, 'accept')">
+                                <i class="fas fa-check"></i> Accept
+                            </button>
+                            <button class="btn-request-reject" onclick="handleRequest(${req.id}, 'reject')">
+                                <i class="fas fa-times"></i> Reject
+                            </button>
+                        </div>
+                    ` : req.status === 'ACCEPTED' ? `
+                        <div class="request-accepted-status">
+                            <span class="status-indicator-accepted"><i class="fas fa-circle-check"></i> Accepted</span>
+                            <span class="status-subtext">Transaction Created</span>
+                            <a href="#" class="status-action-link" onclick="activatePage('borrowings'); return false;">View Transaction</a>
+                        </div>
+                    ` : `
+                        <div class="request-rejected-status">
+                            <span class="status-indicator-rejected"><i class="fas fa-circle-xmark"></i> Rejected</span>
+                            <span class="status-subtext">Request Closed</span>
+                        </div>
+                    `}
                 </div>
             </div>
         `;
@@ -669,11 +966,11 @@ function setupRequestFilters(listElement) {
     filterBtns.forEach(btn => {
         const newBtn = btn.cloneNode(true);
         btn.parentNode.replaceChild(newBtn, btn);
-        
+
         newBtn.addEventListener('click', () => {
             document.querySelectorAll('[data-req-filter]').forEach(b => b.classList.remove('active'));
             newBtn.classList.add('active');
-            
+
             const f = newBtn.getAttribute('data-req-filter').toUpperCase();
             const filtered = f === 'ALL' ? CURRENT_REQUESTS : CURRENT_REQUESTS.filter(r => r.status === f);
             renderRequests(filtered, listElement);
@@ -682,7 +979,7 @@ function setupRequestFilters(listElement) {
 }
 
 // Global function to handle Accept/Reject API calls
-window.handleRequest = async function(id, action) {
+window.handleRequest = async function (id, action) {
     if (!confirm(`Are you sure you want to ${action} this request?`)) return;
 
     try {
@@ -710,23 +1007,37 @@ async function initBorrowings() {
     const grid = document.getElementById('borrowings-grid');
     if (!grid) return;
 
+    grid.innerHTML = getSkeletonHtml('borrowing').repeat(3);
+
     try {
         const response = await authenticatedFetch('http://127.0.0.1:8000/api/transactions/');
         if (!response.ok) throw new Error('Failed to fetch transactions');
-        
+
         const allTransactions = await response.json();
-        const activeTransactions = allTransactions.filter(t => t.status === 'ACTIVE');
-        
+        const activeTransactions = allTransactions.filter(t => t.status === 'ACTIVE' || t.status === 'RETURN_PENDING');
+
         renderBorrowings(activeTransactions, grid);
     } catch (err) {
         console.error('Error loading active transactions:', err);
-        grid.innerHTML = '<p style="color: gray; padding: 20px;">Error loading active rentals. Ensure your backend is running.</p>';
+        grid.innerHTML = `
+            <div class="api-error-container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; text-align: center; width: 100%;">
+                <i class="fas fa-circle-exclamation" style="font-size: 2.5rem; color: #ef4444; margin-bottom: 16px;"></i>
+                <p style="font-size: 1rem; color: var(--text-secondary); margin-bottom: 16px;">Unable to load your borrowings.</p>
+                <button class="btn-primary" onclick="initBorrowings()" style="width: auto; padding: 10px 24px; border-radius: 8px; font-weight: 600;">Retry</button>
+            </div>
+        `;
     }
 }
 
 function renderBorrowings(data, grid) {
     if (data.length === 0) {
-        grid.innerHTML = '<p style="color: gray; padding: 20px;">You have no active borrowings or rentals right now.</p>';
+        grid.innerHTML = getEmptyStateHtml(
+            'fa-handshake',
+            'No active rentals',
+            'You are not currently borrowing or renting any items. Find peer listings on the campus catalog.',
+            'Browse Catalog',
+            "window.location.href='products.html'"
+        );
         return;
     }
 
@@ -737,37 +1048,57 @@ function renderBorrowings(data, grid) {
         const start = new Date(b.start_date);
         const end = new Date(b.end_date);
         const today = new Date();
-        
+
+        // Remove time portion for accurate date calculations
+        today.setHours(0, 0, 0, 0);
+        const endCopy = new Date(end);
+        endCopy.setHours(0, 0, 0, 0);
+
         const totalDays = Math.max(1, Math.ceil((end - start) / (1000 * 60 * 60 * 24)));
-        const daysLeft = Math.max(0, Math.ceil((end - today) / (1000 * 60 * 60 * 24)));
-        const pct = Math.round(((totalDays - daysLeft) / totalDays) * 100);
-        
+        const daysLeft = Math.ceil((endCopy - today) / (1000 * 60 * 60 * 24));
+        const pct = Math.round(((totalDays - Math.max(0, daysLeft)) / totalDays) * 100);
+
+        let daysLeftText = `${daysLeft} Day${daysLeft === 1 ? '' : 's'} Left`;
+        let daysClass = '';
+
+        if (daysLeft === 0) {
+            daysLeftText = 'Due Today';
+            daysClass = 'due-today';
+        } else if (daysLeft < 0) {
+            daysLeftText = 'Overdue';
+            daysClass = 'danger';
+        } else if (daysLeft <= 2) {
+            daysClass = 'danger';
+        } else if (daysLeft <= 4) {
+            daysClass = 'warning';
+        }
+
         const fillClass = daysLeft <= 2 ? 'danger' : daysLeft <= 4 ? 'warning' : '';
-        const daysClass = daysLeft <= 2 ? 'danger' : daysLeft <= 4 ? 'warning' : '';
 
         const itemName = b.listing_title || `Listing #${b.listing}`;
         const ownerName = b.owner_username || `User #${b.owner}`;
+        const imgUrl = (b.listing_details && b.listing_details.image) ? formatImageUrl(b.listing_details.image) : '../static/images/dell_Laptop.jpg';
 
         return `
             <div class="borrowing-card" id="transaction-${b.id}">
                 <div class="borrowing-card-image-wrap">
-                    <img class="borrowing-card-image" src="../static/images/dell_Laptop.jpg" alt="${itemName}">
+                    <img class="borrowing-card-image" src="${imgUrl}" alt="${itemName}">
                     <span class="borrowing-card-days-badge ${daysClass}">
-                        ${daysLeft} Day${daysLeft === 1 ? '' : 's'} Left
+                        ${daysLeftText}
                     </span>
                 </div>
                 <div class="borrowing-card-details">
                     <h3 class="borrowing-card-title">${itemName}</h3>
-                    <div class="borrowing-card-owner">Owner: ${ownerName}</div>
+                    <div class="borrowing-card-owner"><i class="fas fa-user-circle" style="color: var(--accent-primary); margin-right: 4px;"></i> Owner: ${ownerName}</div>
                     
                     <div class="borrowing-card-meta">
                         <div class="borrowing-detail-row">
                             <span class="borrowing-detail-label"><i class="fas fa-calendar-check"></i> Pickup</span>
-                            <span class="borrowing-detail-value">${start.toLocaleDateString('en-IN', {day:'numeric', month:'short'})}</span>
+                            <span class="borrowing-detail-value">${start.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
                         </div>
                         <div class="borrowing-detail-row">
                             <span class="borrowing-detail-label"><i class="fas fa-calendar-times"></i> Return By</span>
-                            <span class="borrowing-detail-value">${end.toLocaleDateString('en-IN', {day:'numeric', month:'short'})}</span>
+                            <span class="borrowing-detail-value">${end.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
                         </div>
                         <div class="borrowing-detail-row">
                             <span class="borrowing-detail-label"><i class="fas fa-rupee-sign"></i> Rate</span>
@@ -785,69 +1116,195 @@ function renderBorrowings(data, grid) {
                         </div>
                     </div>
                     
-                    <div class="borrowing-card-footer">
-                        <button class="btn-secondary-dash btn-sm direct-return-btn" data-txn-id="${b.id}" style="width:100%;justify-content:center;">
-                            <i class="fas fa-rotate-left"></i> Mark as Returned
-                        </button>
-                    </div>
+                    ${(() => {
+                const currentUsername = localStorage.getItem('username') || '';
+                const isBorrower = b.borrower_username === currentUsername;
+                const isOwner = b.owner_username === currentUsername;
+
+                if (b.status === 'ACTIVE') {
+                    if (isBorrower) {
+                        return `
+                                    <div class="borrowing-card-footer">
+                                        <button class="btn-secondary-dash btn-sm borrower-return-btn" data-txn-id="${b.id}" style="width:100%;justify-content:center;">
+                                            <i class="fas fa-rotate-left"></i> Mark as Returned
+                                        </button>
+                                    </div>
+                                `;
+                    } else {
+                        return `
+                                    <div class="borrowing-card-footer" style="text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 10px;">
+                                        <span>Item is currently with the borrower.</span>
+                                    </div>
+                                `;
+                    }
+                } else if (b.status === 'RETURN_PENDING') {
+                    if (isBorrower) {
+                        return `
+                                    <div class="borrowing-card-footer" style="text-align: center; color: #D97706; font-size: 0.9rem; font-weight: 600; padding: 10px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                        <i class="fas fa-hourglass-half"></i> Waiting for Owner Confirmation
+                                    </div>
+                                `;
+                    } else if (isOwner) {
+                        return `
+                                    <div class="borrowing-card-footer">
+                                        <button class="btn-primary btn-sm owner-confirm-return-btn" data-txn-id="${b.id}" style="width:100%;justify-content:center; background-color: #10B981; border-color: #10B981;">
+                                            <i class="fas fa-circle-check"></i> Confirm Return
+                                        </button>
+                                    </div>
+                                `;
+                    }
+                } else if (b.status === 'COMPLETED') {
+                    return `
+                                <div class="borrowing-card-footer" style="text-align: center; color: #10B981; font-size: 0.9rem; font-weight: 600; padding: 10px;">
+                                    <i class="fas fa-circle-check"></i> Completed
+                                </div>
+                            `;
+                }
+                return '';
+            })()}
                 </div>
             </div>
         `;
     }).join('');
 
-    // 2. ATTACH THE LISTENERS DIRECTLY TO THE DOM
-    // This executes immediately after the HTML is drawn, bypassing all scope and CSP blockers.
-    const returnButtons = grid.querySelectorAll('.direct-return-btn');
-    
+    // 2. Attach Return Button listeners to open the return-rating modal for borrower
+    const returnButtons = grid.querySelectorAll('.borrower-return-btn');
     returnButtons.forEach(btn => {
-        btn.addEventListener('click', async function(e) {
-            e.preventDefault(); // Stop any default button behavior
-            
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
             const transactionId = this.getAttribute('data-txn-id');
-            console.log("Direct click registered! ID:", transactionId);
 
-            let ratingInput = prompt("Transaction complete! Please rate your experience from 1 to 5:");
-            if (!ratingInput) return; // User clicked Cancel
-            
-            let rating = parseInt(ratingInput);
-            if (isNaN(rating) || rating < 1 || rating > 5) {
-                alert("Invalid rating. Must be a number between 1 and 5.");
-                return;
-            }
+            ratingModalAction = 'return';
 
-            try {
-                // Change button state to show it is working
-                this.textContent = "Processing...";
-                this.style.pointerEvents = "none";
-                this.style.opacity = "0.7";
+            // Set modal titles contextually
+            const titleEl = document.querySelector('#return-rating-modal .card-title');
+            if (titleEl) titleEl.innerHTML = '<i class="fas fa-rotate-left"></i> Mark as Returned';
 
-                const response = await authenticatedFetch(`http://127.0.0.1:8000/api/transactions/${transactionId}/complete/`, {
-                    method: 'PATCH',
-                    body: JSON.stringify({ rating: rating }) 
-                });
+            const submitBtn = document.querySelector('#return-rating-form button[type="submit"]');
+            if (submitBtn) submitBtn.textContent = 'Submit Return';
 
-                if (response.ok) {
-                    alert('Item returned successfully!');
-                    initBorrowings(); // Refresh the grid
-                } else {
-                    const errData = await response.json();
-                    alert(`Failed: ${errData.error || 'Could not complete transaction'}`);
-                    
-                    // Reset button if it fails
-                    this.innerHTML = '<i class="fas fa-rotate-left"></i> Mark as Returned';
-                    this.style.pointerEvents = "auto";
-                    this.style.opacity = "1";
-                }
-            } catch (err) {
-                console.error('Return error:', err);
-                alert('Network error while processing return. Is Django running?');
-                
-                // Reset button if it fails
-                this.innerHTML = '<i class="fas fa-rotate-left"></i> Mark as Returned';
-                this.style.pointerEvents = "auto";
-                this.style.opacity = "1";
-            }
+            document.getElementById('return-txn-id').value = transactionId;
+            document.getElementById('return-rating-val').value = 0;
+
+            // Reset stars selection
+            const stars = document.querySelectorAll('.star-rating-container .rating-star');
+            stars.forEach(s => {
+                s.classList.remove('fas');
+                s.classList.add('far');
+            });
+
+            const modal = document.getElementById('return-rating-modal');
+            if (modal) modal.style.display = 'flex';
         });
+    });
+
+    // 3. Attach Confirm Return Button listeners for owner to open rating modal
+    const confirmButtons = grid.querySelectorAll('.owner-confirm-return-btn');
+    confirmButtons.forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            const transactionId = this.getAttribute('data-txn-id');
+
+            ratingModalAction = 'confirm';
+
+            // Set modal titles contextually
+            const titleEl = document.querySelector('#return-rating-modal .card-title');
+            if (titleEl) titleEl.innerHTML = '<i class="fas fa-circle-check"></i> Confirm Receipt';
+
+            const submitBtn = document.querySelector('#return-rating-form button[type="submit"]');
+            if (submitBtn) submitBtn.textContent = 'Confirm & Complete';
+
+            document.getElementById('return-txn-id').value = transactionId;
+            document.getElementById('return-rating-val').value = 0;
+
+            // Reset stars selection
+            const stars = document.querySelectorAll('.star-rating-container .rating-star');
+            stars.forEach(s => {
+                s.classList.remove('fas');
+                s.classList.add('far');
+            });
+
+            const modal = document.getElementById('return-rating-modal');
+            if (modal) modal.style.display = 'flex';
+        });
+    });
+}
+
+window.closeReturnModal = function () {
+    const modal = document.getElementById('return-rating-modal');
+    if (modal) modal.style.display = 'none';
+};
+
+function initRatingStars() {
+    const stars = document.querySelectorAll('.star-rating-container .rating-star');
+    const ratingInput = document.getElementById('return-rating-val');
+
+    stars.forEach(star => {
+        star.addEventListener('click', function () {
+            const val = parseInt(this.getAttribute('data-rating'));
+            ratingInput.value = val;
+
+            stars.forEach(s => {
+                const sVal = parseInt(s.getAttribute('data-rating'));
+                if (sVal <= val) {
+                    s.classList.remove('far');
+                    s.classList.add('fas');
+                } else {
+                    s.classList.remove('fas');
+                    s.classList.add('far');
+                }
+            });
+        });
+    });
+}
+
+function initReturnRatingForm() {
+    const form = document.getElementById('return-rating-form');
+    if (!form) return;
+
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const transactionId = document.getElementById('return-txn-id').value;
+        const rating = parseInt(document.getElementById('return-rating-val').value);
+
+        if (!rating || rating < 1 || rating > 5) {
+            showToast('Please select a star rating (1 to 5).', 'error');
+            return;
+        }
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const oldText = submitBtn.textContent;
+
+        try {
+            submitBtn.textContent = 'Processing...';
+            submitBtn.disabled = true;
+
+            const endpoint = ratingModalAction === 'confirm' ? 'confirm' : 'return';
+            const response = await authenticatedFetch(`http://127.0.0.1:8000/api/transactions/${transactionId}/${endpoint}/`, {
+                method: 'PATCH',
+                body: JSON.stringify({ rating: rating })
+            });
+
+            if (response.ok) {
+                const msg = ratingModalAction === 'confirm' ? 'Return confirmed and transaction completed!' : 'Item marked as returned successfully!';
+                showToast(msg);
+                closeReturnModal();
+                initBorrowings(); // Refresh grid
+                initDashboardHome(); // Refresh statistics counts
+            } else {
+                const errData = await response.json();
+                const failMsg = ratingModalAction === 'confirm' ? 'Failed to confirm return.' : 'Failed to mark item as returned.';
+                showToast(errData.error || failMsg, 'error');
+            }
+        } catch (err) {
+            console.error('Error handling rating submission:', err);
+            const errType = ratingModalAction === 'confirm' ? 'confirming return' : 'marking item as returned';
+            showToast(`Network error while ${errType}.`, 'error');
+        } finally {
+            submitBtn.textContent = oldText;
+            submitBtn.disabled = false;
+        }
     });
 }
 
@@ -858,10 +1315,12 @@ async function initHistory() {
     const tbody = document.getElementById('history-tbody');
     if (!tbody) return;
 
+    tbody.innerHTML = getSkeletonHtml('row').repeat(5);
+
     try {
         const response = await authenticatedFetch('http://127.0.0.1:8000/api/transactions/');
         if (!response.ok) throw new Error('Failed to fetch transaction history');
-        
+
         const data = await response.json();
         renderHistory(data, tbody);
     } catch (err) {
@@ -871,8 +1330,19 @@ async function initHistory() {
 }
 
 function renderHistory(data, tbody) {
+    const tableWrap = document.querySelector('.history-table-wrap');
     if (data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: gray; padding: 20px;">No transaction history found.</td></tr>';
+        if (tableWrap) {
+            tableWrap.innerHTML = getEmptyStateHtml(
+                'fa-receipt',
+                'No transactions yet',
+                'Your history is currently empty. Start borrowing or lending items to build history.',
+                'Explore Catalog',
+                "window.location.href='products.html'"
+            );
+        } else {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: gray; padding: 20px;">No transaction history found.</td></tr>';
+        }
         return;
     }
 
@@ -881,13 +1351,13 @@ function renderHistory(data, tbody) {
     tbody.innerHTML = data.map(txn => {
         const start = new Date(txn.start_date);
         const end = new Date(txn.end_date);
-        const dateStr = start.toLocaleDateString('en-IN', {day:'numeric', month:'short'}) + ' – ' + end.toLocaleDateString('en-IN', {day:'numeric', month:'short', year:'numeric'});
+        const dateStr = start.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) + ' – ' + end.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
 
         const isBorrow = txn.borrower_username === currentUsername;
         const typeStr = isBorrow ? 'Borrow' : 'Lend';
         const typeClass = isBorrow ? 'type-borrow' : 'type-lend';
 
-        const itemName = txn.listing_title || `Listing #${txn.listing}`;
+        const itemName = (txn.listing_details && txn.listing_details.title) || txn.listing_title || `Listing #${txn.listing}`;
         const amount = `₹${txn.total_amount || '0.00'}`;
         const deposit = `₹${txn.security_deposit || '0.00'}`;
 
@@ -917,10 +1387,12 @@ async function initNotifications() {
     const list = document.getElementById('notif-list');
     if (!list) return;
 
+    list.innerHTML = getSkeletonHtml('notification').repeat(4);
+
     try {
         const response = await authenticatedFetch('http://127.0.0.1:8000/api/notifications/');
         if (!response.ok) throw new Error('Failed to fetch notifications');
-        
+
         const data = await response.json();
         renderNotifications(data, list);
         setupMarkAllRead(list);
@@ -932,7 +1404,13 @@ async function initNotifications() {
 
 function renderNotifications(data, list) {
     if (data.length === 0) {
-        list.innerHTML = '<div style="padding: 20px; color: gray; text-align: center;">No new notifications.</div>';
+        list.innerHTML = getEmptyStateHtml(
+            'fa-bell-slash',
+            'No notifications yet',
+            'We will alert you here when there are updates on your listings or borrow requests.',
+            'Back to Dashboard',
+            "activatePage('home')"
+        );
         updateNotificationBadge(0);
         return;
     }
@@ -947,7 +1425,7 @@ function renderNotifications(data, list) {
     };
 
     list.innerHTML = data.map(n => {
-        const style = colorMap[n.notification_type] || colorMap['DEFAULT'];
+        const style = colorMap[n.type] || colorMap['DEFAULT'];
         const timeStr = new Date(n.created_at).toLocaleString('en-IN', {
             month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
         });
@@ -984,7 +1462,7 @@ function renderNotifications(data, list) {
 function updateNotificationBadge(count) {
     const badge = document.getElementById('notif-badge');
     const dot = document.querySelector('.notif-dot'); // Sidebar red dot
-    
+
     if (badge) {
         badge.textContent = count;
         badge.style.display = count > 0 ? 'flex' : 'none';
@@ -998,14 +1476,14 @@ async function markNotificationRead(id, element) {
     try {
         // Assumes your backend has an endpoint to mark items as read
         const response = await authenticatedFetch(`http://127.0.0.1:8000/api/notifications/${id}/read/`, {
-            method: 'PATCH' 
+            method: 'PATCH'
         });
-        
+
         if (response.ok) {
             element.classList.remove('unread');
             const dot = element.querySelector('.notif-unread-dot');
             if (dot) dot.remove();
-            
+
             const badge = document.getElementById('notif-badge');
             if (badge && badge.textContent) {
                 const newCount = Math.max(0, parseInt(badge.textContent) - 1);
@@ -1030,14 +1508,11 @@ function setupMarkAllRead(list) {
             const response = await authenticatedFetch('http://127.0.0.1:8000/api/notifications/read-all/', {
                 method: 'POST'
             });
-            
+
             if (response.ok) {
-                list.querySelectorAll('.notif-item.unread').forEach(el => {
-                    el.classList.remove('unread');
-                    el.querySelector('.notif-unread-dot')?.remove();
-                });
                 updateNotificationBadge(0);
                 showToast('All notifications marked as read');
+                await initNotifications(); // Dynamic instant list update
             }
         } catch (err) {
             console.error('Failed to mark all as read:', err);
@@ -1086,15 +1561,15 @@ function initProfile() {
     // Tab switching logic
     const tabBtns = document.querySelectorAll('.profile-tab-btn');
     const panes = document.querySelectorAll('.profile-settings-pane');
-    
+
     tabBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             const targetTab = btn.getAttribute('data-profile-tab');
-            
+
             // Remove active from all buttons & panes
             tabBtns.forEach(b => b.classList.remove('active'));
             panes.forEach(p => p.classList.remove('active'));
-            
+
             // Add active to current
             btn.classList.add('active');
             const targetPane = document.getElementById('profile-pane-' + targetTab);
@@ -1135,7 +1610,7 @@ function initProfile() {
             // Propagate name to headers & welcome texts
             const welcomeName = document.getElementById('welcome-name');
             if (welcomeName) welcomeName.textContent = newName.split(' ')[0];
-            
+
             const profileName = document.getElementById('profile-name');
             if (profileName) profileName.textContent = newName;
 
@@ -1145,10 +1620,10 @@ function initProfile() {
 }
 
 // Global Theme Sync for Preferences Tab Cards
-window.setDashboardTheme = function(theme) {
+window.setDashboardTheme = function (theme) {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('borrowbox-theme', theme);
-    
+
     // update topnav icon if exists
     const toggleIcon = document.getElementById('theme-toggle-icon');
     const toggleBtn = document.getElementById('theme-toggle-btn');
@@ -1174,7 +1649,7 @@ window.setDashboardTheme = function(theme) {
             lightCard.classList.remove('active');
         }
     }
-    
+
     showToast(`Theme switched to ${theme === 'dark' ? 'Dark' : 'Light'} Mode`);
 };
 
@@ -1188,16 +1663,24 @@ function initAddItemForm() {
     let uploadedImageSrc = '';
 
     const fileInput = document.getElementById('item-image-input');
+    const fileInput2 = document.getElementById('item-image-input-2');
+    const fileInput3 = document.getElementById('item-image-input-3');
+
     const primaryPreview = document.getElementById('image-primary-preview');
+    const thumbSlot1 = document.getElementById('thumb-slot-1');
+    const thumbSlot2 = document.getElementById('thumb-slot-2');
+    const thumbSlot3 = document.getElementById('thumb-slot-3');
+
     const previewImg = document.getElementById('preview-image-actual');
     const previewPlaceholder = document.getElementById('preview-image-placeholder');
 
     // Reset preview to default state
     function resetPreview() {
         uploadedImageSrc = '';
-        if (fileInput) {
-            fileInput.value = '';
-        }
+        if (fileInput) fileInput.value = '';
+        if (fileInput2) fileInput2.value = '';
+        if (fileInput3) fileInput3.value = '';
+
         if (primaryPreview) {
             primaryPreview.innerHTML = `
                 <i class="fas fa-cloud-arrow-up upload-icon"></i>
@@ -1210,11 +1693,17 @@ function initAddItemForm() {
             previewImg.style.display = 'none';
             previewPlaceholder.style.display = 'flex';
         }
-        
-        const thumbSlot1 = document.querySelector('#thumb-slot-1 .slot-image-wrap');
-        if (thumbSlot1) {
-            thumbSlot1.innerHTML = `<i class="fas fa-plus"></i>`;
-        }
+
+        const wrap1 = thumbSlot1 ? thumbSlot1.querySelector('.slot-image-wrap') : null;
+        if (wrap1) wrap1.innerHTML = `<i class="fas fa-plus"></i>`;
+
+        const wrap2 = thumbSlot2 ? thumbSlot2.querySelector('.slot-image-wrap') : null;
+        if (wrap2) wrap2.innerHTML = `<i class="fas fa-plus"></i>`;
+        if (thumbSlot2) thumbSlot2.classList.remove('active');
+
+        const wrap3 = thumbSlot3 ? thumbSlot3.querySelector('.slot-image-wrap') : null;
+        if (wrap3) wrap3.innerHTML = `<i class="fas fa-plus"></i>`;
+        if (thumbSlot3) thumbSlot3.classList.remove('active');
 
         setTextById('preview-name-text', 'Listing Name');
         setTextById('preview-category-text', 'Category');
@@ -1226,17 +1715,17 @@ function initAddItemForm() {
     // Photo Upload click & change handlers
     if (primaryPreview && fileInput) {
         primaryPreview.addEventListener('click', () => fileInput.click());
-        
+
         fileInput.addEventListener('change', () => {
             const file = fileInput.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     uploadedImageSrc = e.target.result;
-                    
+
                     // Update primary preview area
                     primaryPreview.innerHTML = `<img src="${uploadedImageSrc}" style="width:100%; height:100%; object-fit:cover; border-radius:12px;" />`;
-                    
+
                     // Update live preview card
                     if (previewImg && previewPlaceholder) {
                         previewImg.src = uploadedImageSrc;
@@ -1245,10 +1734,46 @@ function initAddItemForm() {
                     }
 
                     // Update thumbnail slot 1
-                    const thumbSlot1 = document.querySelector('#thumb-slot-1 .slot-image-wrap');
-                    if (thumbSlot1) {
-                        thumbSlot1.innerHTML = `<img src="${uploadedImageSrc}" style="width:100%; height:100%; object-fit:cover; border-radius:6px;" />`;
+                    const wrap1 = thumbSlot1 ? thumbSlot1.querySelector('.slot-image-wrap') : null;
+                    if (wrap1) {
+                        wrap1.innerHTML = `<img src="${uploadedImageSrc}" style="width:100%; height:100%; object-fit:cover; border-radius:6px;" />`;
                     }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    if (thumbSlot2 && fileInput2) {
+        thumbSlot2.addEventListener('click', () => fileInput2.click());
+        fileInput2.addEventListener('change', () => {
+            const file = fileInput2.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const wrap = thumbSlot2.querySelector('.slot-image-wrap');
+                    if (wrap) {
+                        wrap.innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover; border-radius:6px;" />`;
+                    }
+                    thumbSlot2.classList.add('active');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    if (thumbSlot3 && fileInput3) {
+        thumbSlot3.addEventListener('click', () => fileInput3.click());
+        fileInput3.addEventListener('change', () => {
+            const file = fileInput3.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const wrap = thumbSlot3.querySelector('.slot-image-wrap');
+                    if (wrap) {
+                        wrap.innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover; border-radius:6px;" />`;
+                    }
+                    thumbSlot3.classList.add('active');
                 };
                 reader.readAsDataURL(file);
             }
@@ -1319,11 +1844,10 @@ function initAddItemForm() {
         });
     }
 
-    // Form Submit (Creates a real mockup item in Listings Grid)
     // Form Submit (Sends POST to Django Backend)
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
+
         const name = nameInput?.value?.trim();
         const categoryText = categorySelect?.value;
         const conditionText = document.getElementById('item-condition')?.value;
@@ -1349,7 +1873,7 @@ function initAddItemForm() {
         const categoryId = categoryMap[categoryText] || 1;
 
         let conditionCode = 'GOOD';
-        if (conditionText === 'Like New') conditionCode = 'NEW'; 
+        if (conditionText === 'Like New') conditionCode = 'NEW';
         else if (conditionText === 'Fair') conditionCode = 'USED';
 
         const formData = new FormData();
@@ -1359,7 +1883,7 @@ function initAddItemForm() {
         formData.append('security_deposit', deposit);
         formData.append('category', categoryId);
         formData.append('condition', conditionCode);
-        
+
         if (fromInput?.value) {
             formData.append('available_from', fromInput.value);
         }
@@ -1368,6 +1892,12 @@ function initAddItemForm() {
         }
         if (fileInput && fileInput.files[0]) {
             formData.append('image', fileInput.files[0]);
+        }
+        if (fileInput2 && fileInput2.files[0]) {
+            formData.append('secondary_images', fileInput2.files[0]);
+        }
+        if (fileInput3 && fileInput3.files[0]) {
+            formData.append('secondary_images', fileInput3.files[0]);
         }
 
         try {
@@ -1532,7 +2062,7 @@ function initSidebarTooltips() {
         el.addEventListener('mouseenter', () => {
             const isCollapsed = document.documentElement.getAttribute('data-sidebar') === 'collapsed';
             const isDesktop = window.innerWidth > 768;
-            
+
             if (!isCollapsed || !isDesktop) return;
 
             const text = el.getAttribute('data-tooltip');
@@ -1540,7 +2070,7 @@ function initSidebarTooltips() {
 
             const rect = el.getBoundingClientRect();
             tooltip.style.top = '0px'; // reset temp layout
-            
+
             const tooltipHeight = tooltip.offsetHeight || 28;
 
             tooltip.style.left = `${rect.right + 10}px`;
@@ -1552,4 +2082,10 @@ function initSidebarTooltips() {
             tooltip.style.opacity = '0';
         });
     });
+}
+
+function formatImageUrl(url) {
+    if (!url) return '../static/images/dell_Laptop.jpg';
+    if (url.startsWith('http://') || url.startsWith('https://')) return url;
+    return `http://127.0.0.1:8000${url}`;
 }

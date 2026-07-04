@@ -1,3 +1,9 @@
+function formatImageUrl(url) {
+    if (!url) return '../static/images/dell_Laptop.jpg';
+    if (url.startsWith('http://') || url.startsWith('https://')) return url;
+    return `http://127.0.0.1:8000${url}`;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // Execute modules safely
     initStickyNavbar();
@@ -169,10 +175,12 @@ function initStructuredInventoryConsole() {
     function filterItemsByCategory(categoryKey) {
         return allLiveListings.filter(item => {
             const cat = (item.category_name || '').toLowerCase();
-            if (categoryKey === 'textbooks' && (cat.includes('study') || cat.includes('books') || cat.includes('textbook'))) return true;
-            if (categoryKey === 'clothing' && (cat.includes('apparel') || cat.includes('clothing') || cat.includes('accessories'))) return true;
-            if (categoryKey === 'appliances' && (cat.includes('tools') || cat.includes('appliances'))) return true;
-            return cat.includes(categoryKey);
+            if (categoryKey === 'electronics') return cat === 'electronics';
+            if (categoryKey === 'textbooks') return cat === 'books';
+            if (categoryKey === 'clothing') return cat === 'accessories';
+            if (categoryKey === 'sports') return cat === 'sports';
+            if (categoryKey === 'appliances') return cat === 'tools';
+            return false;
         });
     }
 
@@ -200,7 +208,7 @@ function initStructuredInventoryConsole() {
             // Data Mapping
             const badgeText = product.condition === 'NEW' ? 'HIGH PERF' : 'VERIFIED';
             const imageHtml = product.image 
-                ? `<img src="${product.image}" alt="${product.title}" style="width: 100%; height: 100%; object-fit: cover;">`
+                ? `<img src="${formatImageUrl(product.image)}" alt="${product.title}" style="width: 100%; height: 100%; object-fit: cover;">`
                 : `<div style="height: 100%; display: flex; align-items: center; justify-content: center; background: #e0e0e0;"><i class="fas fa-camera" style="font-size: 2rem; color: #9e9e9e;"></i></div>`;
 
             cardNode.innerHTML = `

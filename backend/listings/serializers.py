@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Listing, Category
+from .models import Listing, Category, ListingImage
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -8,10 +8,17 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 
+class ListingImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ListingImage
+        fields = ['id', 'image']
+
+
 class ListingSerializer(serializers.ModelSerializer):
     # Read-only fields to send human-readable context to the frontend
     owner_username = serializers.ReadOnlyField(source='owner.username')
     category_name = serializers.ReadOnlyField(source='category.name')
+    images = ListingImageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Listing
@@ -31,6 +38,7 @@ class ListingSerializer(serializers.ModelSerializer):
             'available_until',
             'location',
             'image',
+            'images',
             'created_at'
         ]
         # Protect 'owner' so a malicious user can't spoof who is posting the listing

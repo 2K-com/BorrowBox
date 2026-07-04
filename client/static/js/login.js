@@ -543,8 +543,13 @@ function isValidCollegeEmail(email) {
 }
 
 function isValidPhone(phone) {
-    const cleaned = phone.replace(/\D/g, '');
-    return cleaned.length >= 10 && cleaned.length <= 11;
+    let cleaned = phone.replace(/\D/g, '');
+    if (cleaned.startsWith('91') && cleaned.length === 12) {
+        cleaned = cleaned.slice(2);
+    } else if (cleaned.startsWith('1') && cleaned.length === 11) {
+        cleaned = cleaned.slice(1);
+    }
+    return cleaned.length === 10;
 }
 
 // ========================================
@@ -581,15 +586,23 @@ notificationStyles.textContent = `
 `;
 document.head.appendChild(notificationStyles);
 
-// Auto-format phone number
+// Auto-format phone number (Indian format)
 const phoneInput = document.getElementById('signup-phone');
 if (phoneInput) {
     phoneInput.addEventListener('input', (e) => {
-        let value = e.target.value.replace(/\D/g, '');
-        if (value.length > 10) value = value.slice(0, 10);
-        if (value.length > 6) value = `+1 (${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6)}`;
-        else if (value.length > 3) value = `+1 (${value.slice(0, 3)}) ${value.slice(3)}`;
-        else if (value.length > 0) value = `+1 (${value}`;
-        e.target.value = value;
+        let raw = e.target.value;
+        if (raw.startsWith('+91')) {
+            raw = raw.slice(3);
+        }
+        let digits = raw.replace(/\D/g, '');
+        if (digits.length > 10) digits = digits.slice(0, 10);
+        
+        let formatted = '';
+        if (digits.length > 5) {
+            formatted = `+91 ${digits.slice(0, 5)} ${digits.slice(5)}`;
+        } else if (digits.length > 0) {
+            formatted = `+91 ${digits}`;
+        }
+        e.target.value = formatted;
     });
 }
