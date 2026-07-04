@@ -108,10 +108,12 @@
             <h3>Categories</h3>
             <ul class="category-list" id="categoryList">
               <li class="active" data-category="all">All Items</li>
-              <li data-category="electronics">Electronics & Tech</li>
-              <li data-category="study">Study Essentials</li>
-              <li data-category="apparel">Apparel & Formal</li>
-              <li data-category="appliances">Dorm Appliances</li>
+              <li data-category="electronics">Electronics</li>
+              <li data-category="books">Study Essentials</li>
+              <li data-category="accessories">Apparel & Accessories</li>
+              <li data-category="sports">Sports</li>
+              <li data-category="gaming">Gaming</li>
+              <li data-category="tools">Tools & Appliances</li>
             </ul>
           </div>
 
@@ -245,7 +247,7 @@
                   <i class="far fa-heart"></i>
                 </button>
                 <button id="modalRequestBtn" class="btn-primary flex-grow">
-                  Request Booking
+                  Request to Borrow
                 </button>
               </div>
             </div>
@@ -253,122 +255,66 @@
         </div>
       </div>
 
+      <!-- Redesigned Booking Confirmation Modal -->
       <div id="borrow-item-modal" class="checkout-modal-overlay">
         <div class="checkout-modal-content">
-          <div class="card-header-row" style="margin-bottom: 20px">
-            <span class="card-title" style="font-size: 1.3rem"
-              ><i class="fas fa-calendar-check"></i> Request to Borrow</span
-            >
-            <button
-              type="button"
-              onclick="closeBorrowModal()"
-              style="
-                background: none;
-                border: none;
-                font-size: 1.2rem;
-                cursor: pointer;
-                color: var(--text-color);
-              "
-            >
-              <i class="fas fa-times"></i>
-            </button>
+          <div class="checkout-modal-header">
+            <h2 class="checkout-modal-title"><i class="fas fa-calendar-check"></i> Request to Borrow</h2>
+            <button type="button" class="close-checkout-btn" onclick="closeBorrowModal()"><i class="fas fa-times"></i></button>
           </div>
-
-          <div class="checkout-item-header">
-            <h3
-              id="checkout-item-title"
-              style="margin: 0 0 5px 0; font-size: 1.1rem"
-            >
-              Item Name
-            </h3>
-            <div
-              style="
-                color: var(--text-secondary);
-                font-size: 0.9rem;
-                margin-bottom: 8px;
-              "
-            >
-              ₹<span id="checkout-item-rent">0</span> / day • ₹<span
-                id="checkout-item-deposit"
-                >0</span
-              >
-              Deposit
+          
+          <div class="checkout-item-summary-card">
+            <div class="checkout-item-image-wrap" id="checkout-item-image-container">
+              <!-- Dynamically populated image -->
             </div>
-            <div style="font-size: 0.85rem; color: #2e7d32; font-weight: 600">
-              <i class="fas fa-calendar-check"></i> Available:
-              <span id="checkout-avail-dates">Loading...</span>
+            <div class="checkout-item-info">
+              <h3 id="checkout-item-title">Item Name</h3>
+              <div class="checkout-item-meta">
+                <span class="meta-badge"><i class="fas fa-rupee-sign"></i> <span id="checkout-item-rent">0</span>/day</span>
+                <span class="meta-badge"><i class="fas fa-shield"></i> ₹<span id="checkout-item-deposit">0</span> Deposit</span>
+              </div>
+              <div class="checkout-item-availability">
+                <i class="fas fa-calendar-day"></i> Available: <span id="checkout-avail-dates">Loading...</span>
+              </div>
             </div>
           </div>
 
           <form id="borrow-request-form">
-            <div
-              class="form-grid-2col"
-              style="
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 15px;
-                margin-bottom: 20px;
-              "
-            >
-              <div class="dash-form-group" style="margin-bottom: 0">
-                <label for="borrow-start-date"
-                  >Pickup Date <span class="required-star">*</span></label
-                >
-                <input
-                  id="borrow-start-date"
-                  type="date"
-                  required
-                  style="
-                    width: 100%;
-                    padding: 10px;
-                    border-radius: 6px;
-                    border: 1px solid #ccc;
-                  "
-                />
+            <div class="form-grid-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+              <div class="dash-form-group" style="margin-bottom: 0;">
+                <label for="borrow-start-date">Pickup Date <span class="required-star">*</span></label>
+                <input id="borrow-start-date" type="date" required />
               </div>
-
-              <div class="dash-form-group" style="margin-bottom: 0">
-                <label for="borrow-end-date"
-                  >Return Date <span class="required-star">*</span></label
-                >
-                <input
-                  id="borrow-end-date"
-                  type="date"
-                  required
-                  style="
-                    width: 100%;
-                    padding: 10px;
-                    border-radius: 6px;
-                    border: 1px solid #ccc;
-                  "
-                />
+              <div class="dash-form-group" style="margin-bottom: 0;">
+                <label for="borrow-end-date">Return Date <span class="required-star">*</span></label>
+                <input id="borrow-end-date" type="date" required />
               </div>
             </div>
 
-            <div class="checkout-summary">
-              <div class="checkout-summary-row">
-                <span>Rental Math (<span id="calc-days">0</span> days)</span>
-                <span>₹<span id="calc-rent-total">0</span></span>
+            <div class="invoice-section">
+              <div class="invoice-header">
+                <span>Description</span>
+                <span>Amount</span>
               </div>
-              <div class="checkout-summary-row">
-                <span>Security Deposit (Refundable)</span>
-                <span>₹<span id="calc-deposit-total">0</span></span>
+              <div class="invoice-row">
+                <span>Rental fee (<span id="calc-days">0</span> days)</span>
+                <span>₹<span id="calc-rent-total">0.00</span></span>
               </div>
-              <div class="checkout-summary-total">
-                <span>Total to Pay</span>
-                <span style="color: var(--primary-color)"
-                  >₹<span id="calc-grand-total">0</span></span
-                >
+              <div class="invoice-row">
+                <span>Refundable security deposit</span>
+                <span>₹<span id="calc-deposit-total">0.00</span></span>
+              </div>
+              <div class="invoice-divider"></div>
+              <div class="invoice-total">
+                <span>Total amount</span>
+                <span style="color: var(--accent-primary);">₹<span id="calc-grand-total">0.00</span></span>
               </div>
             </div>
 
-            <button
-              type="submit"
-              class="btn-primary-dash btn-lg-action"
-              style="width: 100%; padding: 12px; font-size: 1.1rem"
-            >
-              Send Request to Owner
-            </button>
+            <div class="checkout-actions">
+              <button type="submit" class="btn-checkout-primary">Send Borrow Request</button>
+              <button type="button" class="btn-checkout-secondary" onclick="closeBorrowModal()">Cancel</button>
+            </div>
           </form>
         </div>
       </div>

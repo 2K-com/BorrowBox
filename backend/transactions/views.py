@@ -41,8 +41,30 @@ class InitiateReturnView(APIView):
         if transaction_obj.status != 'ACTIVE':
             return Response({"error": "Only active transactions can be returned."}, status=status.HTTP_400_BAD_REQUEST)
 
-        transaction_obj.status = 'RETURN_PENDING'
-        transaction_obj.save()
+        with transaction.atomic():
+            transaction_obj.status = 'RETURN_PENDING'
+            transaction_obj.save()
+
+            # Process rating if provided by borrower
+            rating = request.data.get('rating')
+            if rating:
+                Review.objects.filter(transaction=transaction_obj, reviewer=request.user).delete()
+                Review.objects.create(
+                    transaction=transaction_obj,
+                    reviewer=request.user,
+                    receiver=transaction_obj.owner,
+                    rating=rating
+                )
+
+            # Send notification to Owner
+            from notifications.utils import create_notification
+            create_notification(
+                user=transaction_obj.owner,
+                title="Return Requested",
+                message=f"The borrower has marked '{transaction_obj.listing.title}' as returned. Please confirm receipt.",
+                notification_type="REQUEST_RECEIVED"
+            )
+
         return Response({"status": "Item marked as returned. Awaiting owner confirmation."})
 
 
@@ -67,55 +89,44 @@ class ConfirmReturnView(APIView):
             listing.availability_status = 'AVAILABLE'
             listing.save()
 
-        return Response({"status": "Return confirmed. Transaction closed and item is listed again."})
-
-
-class CompleteTransactionView(APIView):
-    """PATCH: Directly completes the transaction and processes the user rating."""
-    # Changed to IsParticipant so the Borrower can actually trigger this from the UI
-    permission_classes = [permissions.IsAuthenticated, IsParticipant]
-
-    def patch(self, request, pk):
-        transaction_obj = get_object_or_404(Transaction, pk=pk)
-        self.check_object_permissions(request, transaction_obj)
-
-        if transaction_obj.status != 'ACTIVE':
-            return Response(
-                {"error": "Only active transactions can be completed."},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        with transaction.atomic():
-            # 1. Mark transaction as completed
-            transaction_obj.status = 'COMPLETED'
-            transaction_obj.save()
-
-            # 2. Reset the listing availability
-            listing = transaction_obj.listing
-            listing.availability_status = 'AVAILABLE'
-            listing.save()
-
-            # 3. Mark the original Borrow Request as returned
+            # Mark original Borrow Request as returned
             if hasattr(transaction_obj, 'borrow_request') and transaction_obj.borrow_request:
                 borrow_request = transaction_obj.borrow_request
                 borrow_request.status = 'RETURNED'
                 borrow_request.save()
 
-            # 4. Extract and save the Rating
+            # Process rating if provided by owner
             rating = request.data.get('rating')
             if rating:
-                # Figure out who gets the rating (Borrower rates Owner, Owner rates Borrower)
-                receiver = transaction_obj.owner if request.user == transaction_obj.borrower else transaction_obj.borrower
-
+                Review.objects.filter(transaction=transaction_obj, reviewer=request.user).delete()
                 Review.objects.create(
                     transaction=transaction_obj,
                     reviewer=request.user,
-                    receiver=receiver,
-                    rating=rating,
-                    comment="Automated rating from return process."
+                    receiver=transaction_obj.borrower, # Owner rates Borrower
+                    rating=rating
                 )
 
-        return Response({"status": "Item returned, transaction closed, and rating saved."}, status=status.HTTP_200_OK)
+            # Send notification to Borrower
+            from notifications.utils import create_notification
+            create_notification(
+                user=transaction_obj.borrower,
+                title="Return Confirmed",
+                message=f"The owner confirmed receipt of the item: {transaction_obj.listing.title}.",
+                notification_type="TRANSACTION_COMPLETED"
+            )
+
+        return Response({"status": "Return confirmed. Transaction closed and item is listed again."})
+
+
+class CompleteTransactionView(APIView):
+    """PATCH: Direct completion is disabled. Use return/confirm flow instead."""
+    permission_classes = [permissions.IsAuthenticated]
+
+    def patch(self, request, pk):
+        return Response(
+            {"error": "Direct completion is disabled. Use the two-step confirmation flow (return/confirm)."},
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 class DashboardStatsView(APIView):

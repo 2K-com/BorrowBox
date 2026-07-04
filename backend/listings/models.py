@@ -58,3 +58,11 @@ class Listing(models.Model):
 
     def __str__(self):
         return f"{self.title} - {self.availability_status}"
+
+
+class ListingImage(models.Model):
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='listings/')
+
+    def __str__(self):
+        return f"Image for {self.listing.title} ({self.id})"

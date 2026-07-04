@@ -8,6 +8,7 @@ class Notification(models.Model):
         ('REQUEST_ACCEPTED', 'Request Accepted'),
         ('REQUEST_REJECTED', 'Request Rejected'),
         ('SYSTEM', 'System'),
+        ('TRANSACTION_COMPLETED', 'Transaction Completed'),
     ]
 
     user = models.ForeignKey(
@@ -18,7 +19,7 @@ class Notification(models.Model):
     title = models.CharField(max_length=255)
     message = models.TextField()
     type = models.CharField(
-        max_length=20,
+        max_length=30,
         choices=TYPE_CHOICES,
         default='SYSTEM'
     )

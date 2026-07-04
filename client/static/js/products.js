@@ -2,6 +2,26 @@
 // BORROWBOX CATALOG LOGIC (Dynamic Version)
 // ========================================
 
+function formatImageUrl(url) {
+    if (!url) return '../static/images/dell_Laptop.jpg';
+    if (url.startsWith('http://') || url.startsWith('https://')) return url;
+    return `http://127.0.0.1:8000${url}`;
+}
+
+function getSkeletonHtml(type) {
+    if (type === 'card') {
+        return `
+            <div class="skeleton-card" style="background: var(--surface-card, #ffffff); border: 1px solid var(--border-clean, #e2e8f0); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px; height: 100%; min-height: 250px;">
+                <div class="skeleton-shimmer" style="height: 180px; background: var(--bg-hover, #f1f5f9); border-radius: 12px; position: relative; overflow: hidden;"></div>
+                <div class="skeleton-shimmer" style="height: 20px; width: 60%; background: var(--bg-hover, #f1f5f9); border-radius: 4px; position: relative; overflow: hidden;"></div>
+                <div class="skeleton-shimmer" style="height: 16px; width: 40%; background: var(--bg-hover, #f1f5f9); border-radius: 4px; position: relative; overflow: hidden;"></div>
+                <div class="skeleton-shimmer" style="height: 36px; background: var(--bg-hover, #f1f5f9); border-radius: 8px; margin-top: auto; position: relative; overflow: hidden;"></div>
+            </div>
+        `;
+    }
+    return '';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Navbar Scroll Effect
     const navbar = document.getElementById('mainNavbar');
@@ -44,19 +64,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // ============================================================
     async function fetchProducts() {
         if (!productGrid) return;
-        productGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Loading campus catalog...</p>';
+        productGrid.innerHTML = getSkeletonHtml('card').repeat(6);
 
         try {
             const response = await fetch('http://127.0.0.1:8000/api/listings/');
             if (!response.ok) throw new Error('Failed to fetch items');
             
             const listings = await response.json();
-            const currentUser = localStorage.getItem('username'); // Get logged-in user
             
-            // Filter: Must be AVAILABLE and NOT owned by the current user
+            // Filter: Must be AVAILABLE
             products = listings.filter(item => 
-                item.availability_status === 'AVAILABLE' && 
-                item.owner_username !== currentUser
+                item.availability_status === 'AVAILABLE'
             );
             
             filterProducts();
@@ -79,18 +97,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if(resultsCount) resultsCount.textContent = `Showing ${items.length} items`;
 
+        const currentUser = localStorage.getItem('username');
+
         items.forEach(product => {
             const card = document.createElement('div');
             card.className = 'product-card';
             
+            const isOwner = product.owner_username === currentUser;
+            const badgeText = isOwner ? 'Your Listing' : 'Available';
+            const badgeClass = isOwner ? 'status-badge owner' : 'status-badge';
+            
+            const actionButton = isOwner
+                ? `<button class="btn-primary open-modal-btn" disabled style="width: 100%; background: #94a3b8; cursor: not-allowed; border-color: #94a3b8;">Your Listing</button>`
+                : `<button class="btn-primary open-modal-btn" data-id="${product.id}" style="width: 100%;">Reserve Item</button>`;
+
             // Handle real image vs placeholder
             const imageDisplay = product.image 
-                ? `<img src="${product.image}" style="width: 100%; height: 100%; object-fit: cover;" alt="${product.title}" />` 
+                ? `<img src="${formatImageUrl(product.image)}" style="width: 100%; height: 100%; object-fit: cover;" alt="${product.title}" />` 
                 : `<div style="height: 100%; display: flex; align-items: center; justify-content: center; background: #f0f0f0;"><i class="fas fa-camera" style="font-size: 3rem; color: #ccc;"></i></div>`;
 
             card.innerHTML = `
                 <div class="card-image" style="height: 200px; overflow: hidden; position: relative;">
-                    <span class="status-badge" style="position: absolute; top: 10px; left: 10px; z-index: 2;">Available</span>
+                    <span class="${badgeClass}" style="position: absolute; top: 10px; left: 10px; z-index: 2;">${badgeText}</span>
                     ${imageDisplay}
                 </div>
                 <div class="card-content">
@@ -102,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div style="font-size: 0.85rem; color: #666; margin-bottom: 15px;">
                         Deposit: ₹${product.security_deposit || '0.00'}
                     </div>
-                    <button class="btn-primary open-modal-btn" data-id="${product.id}" style="width: 100%;">Reserve Item</button>
+                    ${actionButton}
                 </div>
             `;
             productGrid.appendChild(card);
@@ -123,10 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             let matchCat = false;
             if (selectedCat === 'all') matchCat = true;
-            else if (selectedCat === 'study' && (apiCategory.includes('books') || apiCategory.includes('study') || apiCategory.includes('textbook'))) matchCat = true;
-            else if (selectedCat === 'apparel' && (apiCategory.includes('clothing') || apiCategory.includes('accessories') || apiCategory.includes('apparel'))) matchCat = true;
-            else if (selectedCat === 'appliances' && (apiCategory.includes('tools') || apiCategory.includes('appliances'))) matchCat = true;
-            else if (apiCategory.includes(selectedCat)) matchCat = true;
+            else if (apiCategory === selectedCat) matchCat = true;
 
             const matchPrice = parseFloat(p.price_per_day) <= maxPrice;
             const matchQuery = !query || p.title.toLowerCase().includes(query) || apiCategory.includes(query);
@@ -205,8 +230,18 @@ document.addEventListener('DOMContentLoaded', () => {
         // 2. Dynamic Ratings
         const ratingNumber = document.querySelector('.rating-number');
         const reviewCount = document.querySelector('.review-count');
-        if (ratingNumber) ratingNumber.textContent = product.rating ? parseFloat(product.rating).toFixed(1) : 'New';
-        if (reviewCount) reviewCount.textContent = product.review_count ? `(${product.review_count} reviews)` : '(0 reviews)';
+        const starIcon = document.querySelector('.review-summary i.fa-star');
+        
+        const ratingVal = parseFloat(product.rating);
+        if (ratingVal && ratingVal > 0) {
+            if (ratingNumber) ratingNumber.textContent = ratingVal.toFixed(1);
+            if (reviewCount) reviewCount.textContent = product.review_count ? `(${product.review_count} reviews)` : '(1 review)';
+            if (starIcon) starIcon.style.display = 'inline-block';
+        } else {
+            if (ratingNumber) ratingNumber.textContent = 'New User';
+            if (reviewCount) reviewCount.textContent = '';
+            if (starIcon) starIcon.style.display = 'none'; // Hide star for new users
+        }
 
         // 3. Dynamic Rule List
         const ruleList = document.querySelector('.rule-list');
@@ -221,8 +256,48 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }
 
-        // Setup Carousel & Checkout Button
-        setupMockCarousel(product.image ? 'fa-image' : 'fa-box');
+        // Setup Carousel Images
+        const images = [];
+        if (product.image) {
+            images.push(formatImageUrl(product.image));
+        }
+        if (product.images && Array.isArray(product.images)) {
+            product.images.forEach(imgObj => {
+                if (imgObj.image) {
+                    images.push(formatImageUrl(imgObj.image));
+                }
+            });
+        }
+
+        // If no images at all, add a placeholder
+        if (images.length === 0) {
+            images.push('../static/images/dell_Laptop.jpg');
+        }
+
+        // Store globally for carousel actions
+        currentImages = images;
+        currentImageIndex = 0;
+        
+        // Update Thumbnails HTML dynamically
+        const thumbContainer = document.querySelector('.gallery-thumbnails');
+        if (thumbContainer) {
+            thumbContainer.innerHTML = currentImages.map((img, idx) => `
+                <div class="thumbnail ${idx === 0 ? 'active' : ''}" data-index="${idx}">
+                    <img src="${img}" style="width:100%; height:100%; object-fit:cover; border-radius:4px;" />
+                </div>
+            `).join('');
+            
+            // Re-bind thumbnail click events
+            const newThumbnails = thumbContainer.querySelectorAll('.thumbnail');
+            newThumbnails.forEach((thumb, index) => {
+                thumb.addEventListener('click', () => {
+                    currentImageIndex = index;
+                    updateCarouselUI();
+                });
+            });
+        }
+
+        updateCarouselUI();
 
         const reqBtn = document.getElementById('modalRequestBtn');
         if (reqBtn) {
@@ -258,53 +333,54 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Modal Carousel Logic
     let currentImageIndex = 0;
-    let currentIcons = [];
+    let currentImages = [];
     
-    const thumbnails = document.querySelectorAll('.thumbnail');
     const prevBtn = document.getElementById('prevImgBtn');
     const nextBtn = document.getElementById('nextImgBtn');
 
-    function setupMockCarousel(primaryIcon) {
-        currentIcons = [primaryIcon, 'fa-box-open', 'fa-tag'];
-        currentImageIndex = 0;
-        updateCarouselUI();
-    }
-
     function updateCarouselUI() {
-        if (!mainModalIcon) return;
-        mainModalIcon.style.opacity = 0;
+        const mainView = document.querySelector('.main-image-view');
+        if (!mainView) return;
         
+        let imgEl = mainView.querySelector('.main-carousel-image');
+        let iconEl = document.getElementById('mainModalIcon');
+        
+        if (iconEl) iconEl.style.display = 'none';
+        
+        if (!imgEl) {
+            imgEl = document.createElement('img');
+            imgEl.className = 'main-carousel-image';
+            imgEl.style.cssText = 'width: 100%; height: 100%; object-fit: cover; border-radius: 8px; transition: opacity 0.2s ease;';
+            mainView.appendChild(imgEl);
+        }
+        
+        imgEl.style.opacity = 0;
         setTimeout(() => {
-            mainModalIcon.className = `fas ${currentIcons[currentImageIndex]} main-icon`;
-            mainModalIcon.style.opacity = 1;
-        }, 200);
+            imgEl.src = currentImages[currentImageIndex];
+            imgEl.style.opacity = 1;
+        }, 150);
 
-        thumbnails.forEach((thumb, idx) => {
+        const thumbs = document.querySelectorAll('.gallery-thumbnails .thumbnail');
+        thumbs.forEach((thumb, idx) => {
             if(idx === currentImageIndex) thumb.classList.add('active');
             else thumb.classList.remove('active');
         });
     }
 
     if (prevBtn) {
-        prevBtn.addEventListener('click', () => {
-            currentImageIndex = (currentImageIndex === 0) ? currentIcons.length - 1 : currentImageIndex - 1;
+        prevBtn.onclick = () => {
+            currentImageIndex = (currentImageIndex === 0) ? currentImages.length - 1 : currentImageIndex - 1;
             updateCarouselUI();
-        });
+        };
     }
 
     if (nextBtn) {
-        nextBtn.addEventListener('click', () => {
-            currentImageIndex = (currentImageIndex === currentIcons.length - 1) ? 0 : currentImageIndex + 1;
+        nextBtn.onclick = () => {
+            currentImageIndex = (currentImageIndex === currentImages.length - 1) ? 0 : currentImageIndex + 1;
             updateCarouselUI();
-        });
+        };
     }
 
-    thumbnails.forEach((thumb, index) => {
-        thumb.addEventListener('click', () => {
-            currentImageIndex = index;
-            updateCarouselUI();
-        });
-    });
 
     function initNavbarAuth() {
         const authBtn = document.querySelector('.btn-nav-primary');
@@ -337,10 +413,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const checkoutTitle = document.getElementById('checkout-item-title');
         const checkoutRent = document.getElementById('checkout-item-rent');
         const checkoutDeposit = document.getElementById('checkout-item-deposit');
+        const checkoutImageContainer = document.getElementById('checkout-item-image-container');
         
         if(checkoutTitle) checkoutTitle.textContent = product.title;
         if(checkoutRent) checkoutRent.textContent = product.price_per_day;
         if(checkoutDeposit) checkoutDeposit.textContent = product.security_deposit || '0.00';
+        
+        if (checkoutImageContainer) {
+            const formatted = formatImageUrl(product.image);
+            checkoutImageContainer.innerHTML = `<img src="${formatted}" alt="${product.title}" style="width: 100%; height: 100%; object-fit: cover;" />`;
+        }
         
         // 1. Format and display the available dates
         const availText = document.getElementById('checkout-avail-dates');
@@ -392,12 +474,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Show Modal
         const borrowModal = document.getElementById('borrow-item-modal');
-        if(borrowModal) borrowModal.style.display = 'flex';
+        if(borrowModal) {
+            borrowModal.style.display = 'flex';
+            setTimeout(() => borrowModal.classList.add('active'), 10);
+        }
     };
 
     window.closeBorrowModal = function() {
         const borrowModal = document.getElementById('borrow-item-modal');
-        if(borrowModal) borrowModal.style.display = 'none';
+        if(borrowModal) {
+            borrowModal.classList.remove('active');
+            setTimeout(() => {
+                borrowModal.style.display = 'none';
+            }, 300);
+        }
         currentCheckoutItem = null;
     };
 

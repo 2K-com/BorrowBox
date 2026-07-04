@@ -2,7 +2,6 @@ from django.db import models
 from django.conf import settings
 from listings.models import Listing
 
-# CRITICAL: Ensure this class name is singular (no 's' at the end)
 
 
 class BorrowRequest(models.Model):
@@ -11,6 +10,7 @@ class BorrowRequest(models.Model):
         ('ACCEPTED', 'Accepted'),
         ('REJECTED', 'Rejected'),
         ('CANCELLED', 'Cancelled'),
+        ('RETURNED', 'Returned'),
     ]
 
     listing = models.ForeignKey(
