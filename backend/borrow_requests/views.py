@@ -62,7 +62,7 @@ class AcceptRequestView(APIView):
             borrow_request.save()
 
             listing = borrow_request.listing
-            listing.availability_status = 'BORROWED'
+            listing.availability_status = 'RENTED'
             listing.save()
 
             # Create the corresponding Transaction atomically

@@ -181,7 +181,7 @@ class NotificationsAndDashboardTests(APITestCase):
             category=self.category,
             title="Listing C",
             price_per_day=1.00,
-            availability_status="BORROWED"
+            availability_status="RENTED"
         )
         active_req = BorrowRequest.objects.create(
             listing=active_listing,

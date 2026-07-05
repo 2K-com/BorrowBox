@@ -17,7 +17,8 @@ body.dashboard-body {
   background-color: var(--bg-app);
   font-family: var(--font-secondary);
   font-size: var(--fs-base);
-  color: var(--text-light); /* Evaluates to dark in Light mode, white in Dark mode */
+  color: var(--text-light);
+  /* Evaluates to dark in Light mode, white in Dark mode */
   min-height: 100vh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
@@ -128,14 +129,14 @@ body.dashboard-body,
 .empty-state,
 .empty-state-icon,
 button {
-  transition: background-color var(--transition-base), 
-              border-color var(--transition-base), 
-              color var(--transition-base), 
-              box-shadow var(--transition-base),
-              opacity var(--transition-base),
-              transform var(--transition-base),
-              width var(--transition-base),
-              margin-left var(--transition-base);
+  transition: background-color var(--transition-base),
+    border-color var(--transition-base),
+    color var(--transition-base),
+    box-shadow var(--transition-base),
+    opacity var(--transition-base),
+    transform var(--transition-base),
+    width var(--transition-base),
+    margin-left var(--transition-base);
 }
 
 :root {
@@ -203,7 +204,8 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #FFFFFF; /* Brand icon is always high contrast white text */
+  color: #FFFFFF;
+  /* Brand icon is always high contrast white text */
   font-size: 1.1rem;
   flex-shrink: 0;
 }
@@ -416,6 +418,47 @@ button {
   pointer-events: none;
 }
 
+.topnav-marketplace-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 50px;
+  border: 1px solid var(--border-clean);
+  background-color: var(--surface-card);
+  color: var(--text-main);
+  text-decoration: none;
+  font-family: var(--font-primary);
+  font-size: var(--fs-sm, 0.88rem);
+  font-weight: 600;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+}
+
+.topnav-marketplace-btn i {
+  font-size: 0.95rem;
+  color: var(--accent-primary);
+  transition: transform 0.3s ease;
+}
+
+.topnav-marketplace-btn:hover {
+  border-color: var(--accent-primary);
+  background-color: var(--bg-hover);
+  color: var(--accent-primary);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(255, 79, 0, 0.08);
+}
+
+.topnav-marketplace-btn:hover i {
+  transform: rotate(15deg);
+}
+
+.topnav-marketplace-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
 /* Topbar Right Icons */
 .topnav-right {
   margin-left: auto;
@@ -563,6 +606,7 @@ button {
     opacity: 0;
     transform: translateY(8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -651,7 +695,8 @@ button {
 
 .btn-console-primary {
   background-color: var(--accent-primary);
-  color: #FFFFFF !important; /* Text on orange primary buttons is always white */
+  color: #FFFFFF !important;
+  /* Text on orange primary buttons is always white */
 }
 
 .btn-console-primary:hover {
@@ -662,7 +707,7 @@ button {
 .btn-console-secondary {
   background-color: transparent;
   color: var(--text-main);
-  border-color: var(--border-clean);
+  border-color: var(--text-secondary);
 }
 
 .btn-console-secondary:hover {
@@ -765,10 +810,22 @@ button {
   border-color: rgba(16, 185, 129, 0.2);
 }
 
-.status-rented, .status-borrowed {
+.status-borrowed {
   background-color: var(--bg-hover);
   color: var(--text-muted);
   border-color: var(--border-translucent);
+}
+
+.status-inactive {
+  background-color: var(--bg-hover);
+  color: var(--text-muted);
+  border-color: var(--border-translucent);
+}
+
+.status-rented {
+  background-color: rgba(245, 158, 11, 0.08);
+  color: #D97706;
+  border-color: rgba(245, 158, 11, 0.2);
 }
 
 .status-pending {
@@ -777,19 +834,22 @@ button {
   border-color: rgba(245, 158, 11, 0.2);
 }
 
-.status-accepted, .status-active {
+.status-accepted,
+.status-active {
   background-color: rgba(16, 185, 129, 0.08);
   color: #10B981;
   border-color: rgba(16, 185, 129, 0.2);
 }
 
-.status-rejected, .status-overdue {
+.status-rejected,
+.status-overdue {
   background-color: rgba(208, 64, 73, 0.08);
   color: var(--secondary-color);
   border-color: rgba(208, 64, 73, 0.2);
 }
 
-.status-returned, .status-paid {
+.status-returned,
+.status-paid {
   background-color: rgba(16, 185, 129, 0.08);
   color: #10B981;
   border-color: rgba(16, 185, 129, 0.2);
@@ -800,8 +860,8 @@ button {
 /* Welcome Banner */
 .welcome-banner {
   background-color: var(--bg-panel);
-  background-image: linear-gradient(var(--border-translucent) 1px, transparent 1px), 
-                    linear-gradient(90deg, var(--border-translucent) 1px, transparent 1px);
+  background-image: linear-gradient(var(--border-translucent) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border-translucent) 1px, transparent 1px);
   background-size: 32px 32px;
   border: 1px solid var(--border-clean);
   border-radius: var(--radius-lg);
@@ -934,10 +994,25 @@ button {
   background-color: var(--bg-hover);
 }
 
-.activity-icon.green { color: #10B981; border-color: rgba(16, 185, 129, 0.3); }
-.activity-icon.blue { color: var(--accent-primary); border-color: rgba(255, 79, 0, 0.3); }
-.activity-icon.amber { color: #D97706; border-color: rgba(245, 158, 11, 0.3); }
-.activity-icon.red { color: var(--secondary-color); border-color: rgba(208, 64, 73, 0.3); }
+.activity-icon.green {
+  color: #10B981;
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.activity-icon.blue {
+  color: var(--accent-primary);
+  border-color: rgba(255, 79, 0, 0.3);
+}
+
+.activity-icon.amber {
+  color: #D97706;
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.activity-icon.red {
+  color: var(--secondary-color);
+  border-color: rgba(208, 64, 73, 0.3);
+}
 
 .activity-text {
   flex: 1;
@@ -1117,7 +1192,8 @@ button {
   top: 12px;
   right: 12px;
   background-color: var(--bg-panel);
-  color: var(--text-light); /* Dark text in Light, White in Dark */
+  color: var(--text-light);
+  /* Dark text in Light, White in Dark */
   font-size: 0.65rem;
   font-weight: 700;
   padding: 4px 8px;
@@ -1330,6 +1406,7 @@ button {
   justify-content: center;
   gap: 6px;
 }
+
 .btn-edit {
   flex: 1;
   padding: 8px 10px;
@@ -1346,7 +1423,7 @@ button {
   gap: 6px;
 }
 
-.btn-edit:hover{
+.btn-edit:hover {
   background-color: var(--text-main);
   color: var(--surface-card);
   border-color: var(--text-main);
@@ -1578,7 +1655,8 @@ button {
   padding: 8px 16px;
   border-radius: var(--radius-sm);
   background-color: var(--primary-color);
-  color: var(--surface-card); /* Flips correctly in both themes */
+  color: var(--surface-card);
+  /* Flips correctly in both themes */
   border: 1px solid var(--primary-color);
   font-size: var(--fs-xs);
   font-weight: 700;
@@ -1920,10 +1998,21 @@ button {
   background-color: var(--bg-hover);
 }
 
-.notif-icon.green i { color: #10B981; }
-.notif-icon.blue i { color: var(--accent-primary); }
-.notif-icon.amber i { color: #D97706; }
-.notif-icon.red i { color: var(--secondary-color); }
+.notif-icon.green i {
+  color: #10B981;
+}
+
+.notif-icon.blue i {
+  color: var(--accent-primary);
+}
+
+.notif-icon.amber i {
+  color: #D97706;
+}
+
+.notif-icon.red i {
+  color: var(--secondary-color);
+}
 
 .notif-content {
   flex: 1;
@@ -2193,6 +2282,7 @@ button {
     opacity: 0;
     transform: translateY(6px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -2424,12 +2514,12 @@ button {
   background-color: var(--surface-card);
 }
 
-.preference-checkbox-label input[type="checkbox"]:checked + .preference-checkbox-custom {
+.preference-checkbox-label input[type="checkbox"]:checked+.preference-checkbox-custom {
   border-color: var(--accent-primary);
   background-color: var(--accent-primary);
 }
 
-.preference-checkbox-label input[type="checkbox"]:checked + .preference-checkbox-custom::after {
+.preference-checkbox-label input[type="checkbox"]:checked+.preference-checkbox-custom::after {
   content: "";
   position: absolute;
   left: 5px;
@@ -2592,7 +2682,7 @@ button {
   .request-card-actions {
     width: 100%;
   }
-  
+
   .request-card-actions button {
     flex: 1;
     justify-content: center;
@@ -2619,7 +2709,7 @@ button {
     flex-direction: column;
     gap: 8px;
   }
-  
+
   .welcome-actions button {
     width: 100%;
   }
@@ -2635,7 +2725,7 @@ button {
     align-items: flex-start;
     gap: 12px;
   }
-  
+
   .page-header button {
     width: 100%;
     justify-content: center;
@@ -2677,7 +2767,7 @@ button {
     width: var(--sidebar-width);
     transition: width var(--transition-sidebar);
   }
-  
+
   .dash-main {
     margin-left: var(--sidebar-width);
     transition: margin-left var(--transition-sidebar);
@@ -2685,12 +2775,12 @@ button {
 
   /* Link labels smooth opacity transition */
   .sidebar-link {
-    transition: background-color var(--transition-base), 
-                border-color var(--transition-base), 
-                color var(--transition-base), 
-                box-shadow var(--transition-base),
-                gap var(--transition-sidebar),
-                padding var(--transition-sidebar);
+    transition: background-color var(--transition-base),
+      border-color var(--transition-base),
+      color var(--transition-base),
+      box-shadow var(--transition-base),
+      gap var(--transition-sidebar),
+      padding var(--transition-sidebar);
   }
 
   .sidebar-link-text {
@@ -2713,14 +2803,14 @@ button {
     max-height: 40px;
     opacity: 1;
     overflow: hidden;
-    transition: opacity var(--transition-sidebar), 
-                max-height var(--transition-sidebar), 
-                padding var(--transition-sidebar), 
-                margin var(--transition-sidebar),
-                font-size var(--transition-sidebar),
-                color var(--transition-sidebar),
-                background-color var(--transition-sidebar),
-                height var(--transition-sidebar);
+    transition: opacity var(--transition-sidebar),
+      max-height var(--transition-sidebar),
+      padding var(--transition-sidebar),
+      margin var(--transition-sidebar),
+      font-size var(--transition-sidebar),
+      color var(--transition-sidebar),
+      background-color var(--transition-sidebar),
+      height var(--transition-sidebar);
   }
 
   html[data-sidebar="collapsed"] .sidebar-section-label {
@@ -2826,7 +2916,7 @@ button {
     justify-content: center;
     height: auto;
   }
-  
+
   .sidebar-brand {
     transition: padding var(--transition-sidebar), gap var(--transition-sidebar);
   }
@@ -2858,6 +2948,7 @@ button {
     font-size: 0.95rem;
     transition: font-size var(--transition-sidebar);
   }
+
   html[data-sidebar="collapsed"] .sidebar-link .nav-icon {
     font-size: 1.25rem;
   }
@@ -2868,6 +2959,7 @@ button {
     font-size: 1.1rem;
     transition: width var(--transition-sidebar), height var(--transition-sidebar), font-size var(--transition-sidebar);
   }
+
   html[data-sidebar="collapsed"] .sidebar-brand-icon {
     width: 42px;
     height: 42px;
@@ -2880,6 +2972,7 @@ button {
     font-size: 0.85rem;
     transition: width var(--transition-sidebar), height var(--transition-sidebar), font-size var(--transition-sidebar);
   }
+
   html[data-sidebar="collapsed"] .sidebar-avatar-sm {
     width: 40px;
     height: 40px;
@@ -2911,11 +3004,11 @@ button {
     align-items: flex-start;
     gap: 12px;
   }
-  
+
   .security-card-action {
     width: 100%;
   }
-  
+
   .security-card-action button,
   .security-card-action .status-badge {
     width: 100%;
@@ -2961,7 +3054,8 @@ button {
 .preview-mock-card {
   max-width: 320px;
   width: 100%;
-  pointer-events: none; /* Make it pure preview */
+  pointer-events: none;
+  /* Make it pure preview */
 }
 
 .preview-footer-info {
@@ -3124,18 +3218,18 @@ button {
   .create-listing-layout {
     grid-template-columns: 1fr;
   }
-  
+
   .create-listing-preview-col {
     width: 100%;
     order: -1;
     margin-bottom: 16px;
   }
-  
+
   .preview-sticky-wrap {
     position: relative;
     top: 0;
   }
-  
+
   .preview-mock-card {
     max-width: 320px;
     margin: 0 auto;
@@ -3147,6 +3241,7 @@ button {
   position: relative;
   overflow: hidden;
 }
+
 .skeleton-shimmer::after {
   position: absolute;
   top: 0;
@@ -3154,16 +3249,15 @@ button {
   bottom: 0;
   left: 0;
   transform: translateX(-100%);
-  background-image: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.2) 20%,
-    rgba(255, 255, 255, 0.5) 60%,
-    rgba(255, 255, 255, 0) 100%
-  );
+  background-image: linear-gradient(90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.2) 20%,
+      rgba(255, 255, 255, 0.5) 60%,
+      rgba(255, 255, 255, 0) 100%);
   animation: shimmer 1.5s infinite;
   content: '';
 }
+
 @keyframes shimmer {
   100% {
     transform: translateX(100%);
@@ -3342,7 +3436,8 @@ button {
   width: 100%;
 }
 
-.btn-request-accept, .btn-request-reject {
+.btn-request-accept,
+.btn-request-reject {
   width: 100%;
   padding: 10px 16px;
   border-radius: 8px;
@@ -3375,7 +3470,8 @@ button {
   background-color: #dc2626;
 }
 
-.request-accepted-status, .request-rejected-status {
+.request-accepted-status,
+.request-rejected-status {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -3420,6 +3516,7 @@ button {
   .request-card {
     flex-direction: column;
   }
+
   .request-card-right {
     border-left: none;
     border-top: 1px solid var(--border-clean);
@@ -3443,19 +3540,23 @@ button {
   transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s, border-color 0.2s;
   position: relative;
 }
+
 .notif-item:hover {
   transform: translateY(-1px);
   box-shadow: var(--shadow-sm);
 }
+
 .notif-item.unread {
   background-color: rgba(249, 115, 22, 0.05) !important;
   border-left: 4px solid #f97316 !important;
   box-shadow: 0 4px 12px rgba(249, 115, 22, 0.08) !important;
 }
+
 .notif-item.unread:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(249, 115, 22, 0.12) !important;
 }
+
 .notif-unread-dot {
   width: 8px;
   height: 8px;
@@ -3465,7 +3566,26 @@ button {
 }
 
 /* Tinted background recent activity icons */
-.activity-icon.green { color: #10B981; background-color: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.2); }
-.activity-icon.blue { color: var(--accent-primary); background-color: rgba(99, 102, 241, 0.1); border-color: rgba(99, 102, 241, 0.2); }
-.activity-icon.amber { color: #D97706; background-color: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.2); }
-.activity-icon.red { color: var(--secondary-color); background-color: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.2); }
+.activity-icon.green {
+  color: #10B981;
+  background-color: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.activity-icon.blue {
+  color: var(--accent-primary);
+  background-color: rgba(99, 102, 241, 0.1);
+  border-color: rgba(99, 102, 241, 0.2);
+}
+
+.activity-icon.amber {
+  color: #D97706;
+  background-color: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.activity-icon.red {
+  color: var(--secondary-color);
+  background-color: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.2);
+}

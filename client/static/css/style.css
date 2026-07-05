@@ -455,3 +455,31 @@ html {
 @media (max-width: 1024px) { .hero-main-title { font-size: 2.75rem; } .manifesto-headline { font-size: 3.25rem; } .marquee-text { font-size: 3rem; } .footer-matrix { grid-template-columns: 1fr 1fr; gap: 40px; } .brand-col { grid-column: span 2; } }
 @media (max-width: 968px) { .structured-layout-engine { flex-direction: column; } .structured-sidebar-panel { width: 100%; position: static; } .structured-category-nav { flex-direction: row; overflow-x: auto; } .structured-tab { flex-shrink: 0; } .workflow-steps-wrapper { flex-direction: column; gap: 40px; align-items: center; } #connectionLine { width: 2px; height: 100%; top: 0; left: 50%; transform: translateX(-50%); } .connection-line-fill { width: 100%; height: 0; transition: height 0.4s ease; } }
 @media (max-width: 640px) { .hero-main-title { font-size: 2.25rem; } .grid-3x2-matrix { grid-template-columns: 1fr; } .manifesto-content { padding: 100px 0 60px; } .manifesto-headline { font-size: 2.25rem; } .manifesto-lead { font-size: 1.1rem; } .manifesto-metrics-grid { flex-direction: column; gap: 32px; } .marquee-text { font-size: 2.5rem; } .footer-matrix { grid-template-columns: 1fr; } .brand-col { grid-column: span 1; } .footer-baseline { flex-direction: column; gap: 16px; text-align: center; } }
+
+/* 4 columns matrix preview on landing page */
+.grid-4x2-matrix {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    flex-grow: 1;
+}
+
+.structured-tab {
+    cursor: default !important;
+}
+
+@media (max-width: 1400px) {
+    .grid-4x2-matrix {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+@media (max-width: 968px) {
+    .grid-4x2-matrix {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 640px) {
+    .grid-4x2-matrix {
+        grid-template-columns: 1fr;
+    }
+}

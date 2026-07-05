@@ -48,8 +48,8 @@ class Transaction(models.Model):
 
 
 class Review(models.Model):
-    transaction = models.OneToOneField(
-        'Transaction', on_delete=models.CASCADE, related_name='review')
+    transaction = models.ForeignKey(
+        'Transaction', on_delete=models.CASCADE, related_name='reviews')
     reviewer = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name='reviews_given', on_delete=models.CASCADE)
     receiver = models.ForeignKey(

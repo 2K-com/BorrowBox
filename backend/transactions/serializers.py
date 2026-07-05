@@ -7,6 +7,7 @@ class TransactionSerializer(serializers.ModelSerializer):
     borrower_username = serializers.ReadOnlyField(source='borrower.username')
     owner_username = serializers.ReadOnlyField(source='owner.username')
     listing_details = ListingSerializer(source='listing', read_only=True)
+    security_deposit = serializers.ReadOnlyField(source='listing.security_deposit')
 
     class Meta:
         model = Transaction
@@ -24,6 +25,7 @@ class TransactionSerializer(serializers.ModelSerializer):
             'price_per_day',
             'total_days',
             'total_amount',
+            'security_deposit',
             'status',
             'created_at'
         ]

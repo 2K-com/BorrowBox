@@ -21,7 +21,7 @@ class Listing(models.Model):
 
     AVAILABILITY_CHOICES = [
         ('AVAILABLE', 'Available'),
-        ('BORROWED', 'Borrowed'),
+        ('RENTED', 'Rented'),
         ('INACTIVE', 'Inactive'),
     ]
 

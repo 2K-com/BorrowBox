@@ -48,7 +48,7 @@
       <aside class="dash-sidebar">
         <!-- Brand Wrapper -->
         <div class="sidebar-brand-wrapper">
-          <a class="sidebar-brand" data-page="home" href="#">
+          <a class="sidebar-brand" href="index.html" style="transition: opacity 0.25s ease;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
             <div class="sidebar-brand-icon">
               <i class="fas fa-layer-group"></i>
             </div>
@@ -85,6 +85,11 @@
           <a class="sidebar-link" data-page="borrowings" href="#" data-tooltip="Active Borrowings">
             <i class="nav-icon fas fa-arrows-rotate"></i>
             <span class="sidebar-link-text">Active Borrowings</span>
+          </a>
+
+          <a class="sidebar-link" data-page="rentals" href="#" data-tooltip="Active Rentals">
+            <i class="nav-icon fas fa-handshake"></i>
+            <span class="sidebar-link-text">Active Rentals</span>
           </a>
 
           <span class="sidebar-section-label">Account</span>
@@ -140,10 +145,11 @@
           </button>
 
           <div class="topnav-right">
-            <div class="topnav-search">
-              <i class="fas fa-magnifying-glass topnav-search-icon"></i>
-              <input type="search" placeholder="Search items, users…" />
-            </div>
+            <!-- Marketplace Button -->
+            <a href="products.html" class="topnav-marketplace-btn">
+              <i class="fas fa-compass"></i>
+              <span>Marketplace</span>
+            </a>
 
             <button
               id="theme-toggle-btn"
@@ -549,7 +555,7 @@
               </div>
             </form>
           </section>
-          <div id="edit-item-modal" class="modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center;">
+          <div id="edit-item-modal" class="modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; overflow-y: auto; padding: 40px 10px; justify-content: center; align-items: flex-start;">
   <div class="modal-content dash-card marketplace-card" style="width: 90%; max-width: 500px; padding: 24px; position: relative;">
     
     <div class="card-header-row" style="margin-bottom: 20px;">
@@ -625,6 +631,38 @@
           <option value="GOOD">Good</option>
           <option value="USED">Fair</option>
         </select>
+      </div>
+
+      <!-- Availability Settings -->
+      <div style="margin: 20px 0; border-top: 1px solid var(--border-clean); padding-top: 15px;">
+        <h4 style="font-size: 0.95rem; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; color: var(--text-main);">
+          <i class="fas fa-calendar-alt"></i> Availability Settings
+        </h4>
+        
+        <div class="dash-form-group" style="margin-bottom: 15px;">
+          <label for="edit-item-status">Status <span class="required-star">*</span></label>
+          <select id="edit-item-status" required>
+            <option value="AVAILABLE">Available</option>
+            <option value="INACTIVE">Unavailable</option>
+            <option value="RENTED" disabled>Currently Rented (System Managed)</option>
+          </select>
+        </div>
+
+        <div class="dash-form-group" style="margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+          <input type="checkbox" id="edit-item-indefinite" style="width: auto; margin: 0; cursor: pointer;" />
+          <label for="edit-item-indefinite" style="margin: 0; font-weight: 500; cursor: pointer;">Available indefinitely</label>
+        </div>
+
+        <div id="edit-date-range-container" class="form-grid-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+          <div class="dash-form-group" style="margin-bottom: 0;">
+            <label for="edit-item-avail-from">Available From</label>
+            <input id="edit-item-avail-from" type="date" />
+          </div>
+          <div class="dash-form-group" style="margin-bottom: 0;">
+            <label for="edit-item-avail-until">Available Until</label>
+            <input id="edit-item-avail-until" type="date" />
+          </div>
+        </div>
       </div>
 
       <div class="create-listing-actions" style="margin-top: 24px; display: flex; gap: 15px;">
@@ -736,6 +774,27 @@
           <!-- /page-borrowings -->
 
           <!-- ==========================================
+           PAGE 6A: ACTIVE RENTALS
+           ========================================== -->
+          <section class="dash-page" id="page-rentals">
+            <div class="page-header">
+              <div class="page-header-left">
+                <div class="breadcrumb-container">
+                  <span class="breadcrumb-item">Dashboard</span>
+                  <span class="breadcrumb-separator">/</span>
+                  <span class="breadcrumb-item active">Rentals</span>
+                </div>
+                <h2>Active Rentals</h2>
+                <p>Items you have lent out to other students</p>
+              </div>
+            </div>
+
+            <div class="borrowings-grid" id="rentals-grid">
+              <!-- Populated by JS -->
+            </div>
+          </section>
+
+          <!-- ==========================================
            PAGE 7: TRANSACTION HISTORY
            ========================================== -->
           <section class="dash-page" id="page-history">
@@ -804,9 +863,6 @@
           <!-- ==========================================
            PAGE 9: PROFILE
            ========================================== -->
-          <!-- ==========================================
-           PAGE 9: PROFILE
-           ========================================== -->
           <section class="dash-page" id="page-profile">
 
             <div class="profile-settings-layout">
@@ -815,33 +871,18 @@
                 <!-- Avatar & Identity section -->
                 <div class="profile-header-section">
                   <div class="profile-avatar-wrap-lg">
-                    <div class="profile-avatar-lg" id="profile-avatar-main">AS</div>
+                    <div class="profile-avatar-lg" id="profile-avatar-main">--</div>
                     <div class="profile-avatar-edit-overlay" title="Change photo">
                       <i class="fas fa-camera"></i>
                     </div>
                   </div>
-                  <h3 class="profile-user-fullname" id="profile-name">Aditya Sharma</h3>
-                  <p class="profile-user-email" id="profile-email">aditya.sharma@college.edu</p>
+                  <h3 class="profile-user-fullname" id="profile-name">Loading...</h3>
+                  <p class="profile-user-email" id="profile-email">...</p>
                   
                   <div class="profile-rating-badge">
                     <i class="fas fa-star"></i>
-                    <span id="profile-rating">4.8 ★</span>
-                    <span class="profile-rating-count">(18 reviews)</span>
-                  </div>
-                </div>
-
-                <!-- Stats Divider -->
-                <div class="profile-divider-thin"></div>
-
-                <!-- Stats grid -->
-                <div class="profile-stats-grid">
-                  <div class="profile-stat-box">
-                    <span class="profile-stat-val" id="profile-listings-count">7</span>
-                    <span class="profile-stat-lbl">Listings</span>
-                  </div>
-                  <div class="profile-stat-box">
-                    <span class="profile-stat-val" id="profile-borrowings-count">12</span>
-                    <span class="profile-stat-lbl">Borrowed</span>
+                    <span id="profile-rating">--</span>
+                    <span class="profile-rating-count" id="profile-reviews-count">...</span>
                   </div>
                 </div>
 
@@ -850,7 +891,7 @@
                 <div class="profile-meta-details">
                   <div class="profile-meta-row">
                     <i class="fas fa-calendar-alt"></i>
-                    <span>Member since <strong id="profile-since">January 2025</strong></span>
+                    <span>Member since <strong id="profile-since">...</strong></span>
                   </div>
                   <div class="profile-meta-row verified">
                     <i class="fas fa-shield-halved"></i>
@@ -890,11 +931,11 @@
                     <div class="form-grid-2col">
                       <div class="dash-form-group">
                         <label for="edit-name">Full Name</label>
-                        <input id="edit-name" type="text" placeholder="Your full name" />
+                        <input id="edit-name" type="text" placeholder="Your full name" disabled class="disabled-field" />
                       </div>
                       <div class="dash-form-group">
                         <label for="edit-phone">Phone Number</label>
-                        <input id="edit-phone" type="tel" placeholder="+91 XXXXX XXXXX" />
+                        <input id="edit-phone" type="tel" placeholder="+91 XXXXX XXXXX" disabled class="disabled-field" />
                       </div>
                     </div>
 
@@ -910,7 +951,7 @@
 
                     <div class="dash-form-group">
                       <label for="edit-college">College / Institution</label>
-                      <input id="edit-college" type="text" value="National Institute of Technology, Bhopal" />
+                      <input id="edit-college" type="text" value="" placeholder="Your College" disabled class="disabled-field" />
                     </div>
 
                     <div class="dash-form-group">

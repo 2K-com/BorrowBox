@@ -58,7 +58,130 @@ function getSkeletonHtml(type) {
             </div>
         `;
     }
+    if (type === 'profile') {
+        return `
+            <div class="skeleton-profile" style="display: flex; flex-direction: column; gap: 20px; padding: 20px; box-sizing: border-box; width: 100%;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <div class="skeleton-shimmer" style="height: 16px; width: 40%; background: var(--bg-hover); border-radius: 4px; margin-bottom: 8px; position: relative; overflow: hidden;"></div>
+                        <div class="skeleton-shimmer" style="height: 40px; background: var(--bg-hover); border-radius: 8px; position: relative; overflow: hidden;"></div>
+                    </div>
+                    <div>
+                        <div class="skeleton-shimmer" style="height: 16px; width: 40%; background: var(--bg-hover); border-radius: 4px; margin-bottom: 8px; position: relative; overflow: hidden;"></div>
+                        <div class="skeleton-shimmer" style="height: 40px; background: var(--bg-hover); border-radius: 8px; position: relative; overflow: hidden;"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="skeleton-shimmer" style="height: 16px; width: 30%; background: var(--bg-hover); border-radius: 4px; margin-bottom: 8px; position: relative; overflow: hidden;"></div>
+                    <div class="skeleton-shimmer" style="height: 40px; background: var(--bg-hover); border-radius: 8px; position: relative; overflow: hidden;"></div>
+                </div>
+                <div>
+                    <div class="skeleton-shimmer" style="height: 16px; width: 30%; background: var(--bg-hover); border-radius: 4px; margin-bottom: 8px; position: relative; overflow: hidden;"></div>
+                    <div class="skeleton-shimmer" style="height: 40px; background: var(--bg-hover); border-radius: 8px; position: relative; overflow: hidden;"></div>
+                </div>
+                <div>
+                    <div class="skeleton-shimmer" style="height: 16px; width: 20%; background: var(--bg-hover); border-radius: 4px; margin-bottom: 8px; position: relative; overflow: hidden;"></div>
+                    <div class="skeleton-shimmer" style="height: 90px; background: var(--bg-hover); border-radius: 8px; position: relative; overflow: hidden;"></div>
+                </div>
+            </div>
+        `;
+    }
     return '';
+}
+
+function getErrorStateHtml(message, retryCallbackName) {
+    return `
+        <div class="error-state" style="text-align: center; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px; background: var(--surface-card); border: 1px solid var(--border-clean); border-radius: 12px; width: 100%; box-sizing: border-box; margin: 20px 0;">
+            <div style="font-size: 2.5rem; color: var(--secondary-color);">
+                <i class="fas fa-circle-exclamation"></i>
+            </div>
+            <h4 style="margin: 0; font-size: 1.1rem; font-weight: 600; color: var(--text-main);">${message}</h4>
+            <button class="btn-console btn-console-primary" onclick="${retryCallbackName}()" style="padding: 8px 20px; font-size: 0.9rem; cursor: pointer; border-radius: 8px;">
+                <i class="fas fa-arrows-rotate"></i> Retry
+            </button>
+        </div>
+    `;
+}
+
+function getTableErrorStateHtml(message, retryCallbackName, colSpan = 7) {
+    return `
+        <tr>
+            <td colspan="${colSpan}" style="padding: 40px 20px; text-align: center;">
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;">
+                    <div style="font-size: 2rem; color: var(--secondary-color);">
+                        <i class="fas fa-circle-exclamation"></i>
+                    </div>
+                    <span style="font-weight: 600; color: var(--text-main);">${message}</span>
+                    <button class="btn-console btn-console-primary" onclick="${retryCallbackName}()" style="padding: 6px 16px; font-size: 0.85rem; margin-top: 5px; cursor: pointer; border-radius: 8px;">
+                        <i class="fas fa-arrows-rotate"></i> Retry
+                    </button>
+                </div>
+            </td>
+        </tr>
+    `;
+}
+
+function showAllSkeletons() {
+    // 1. Stat cards numbers
+    const cardNumbers = document.querySelectorAll('.stat-card-number');
+    cardNumbers.forEach(num => {
+        num.innerHTML = `<div class="skeleton-shimmer" style="height: 28px; width: 50px; background: var(--bg-hover); border-radius: 4px; display: inline-block; position: relative; overflow: hidden;"></div>`;
+    });
+
+    // 2. Quick stats vals
+    const quickVals = document.querySelectorAll('.quick-stat-val');
+    quickVals.forEach(val => {
+        val.innerHTML = `<div class="skeleton-shimmer" style="height: 16px; width: 30px; background: var(--bg-hover); border-radius: 4px; display: inline-block; position: relative; overflow: hidden;"></div>`;
+    });
+
+    // 3. Recent Activity list
+    const activityList = document.querySelector('.activity-list');
+    if (activityList) {
+        activityList.innerHTML = `<div class="skeleton-shimmer" style="height: 50px; margin-bottom: 12px; border-radius: 8px; position: relative; overflow: hidden;"></div>`.repeat(4);
+    }
+
+    // 4. My Listings grid
+    const listingsGrid = document.getElementById('listings-grid');
+    if (listingsGrid) {
+        listingsGrid.innerHTML = getSkeletonHtml('listing').repeat(3);
+    }
+
+    // 5. Borrow Requests list
+    const requestsList = document.getElementById('requests-list');
+    if (requestsList) {
+        requestsList.innerHTML = getSkeletonHtml('request').repeat(3);
+    }
+
+    // 6. Active Borrowings grid
+    const borrowingsGrid = document.getElementById('borrowings-grid');
+    if (borrowingsGrid) {
+        borrowingsGrid.innerHTML = getSkeletonHtml('borrowing').repeat(3);
+    }
+
+    // 7. Active Rentals grid
+    const rentalsGrid = document.getElementById('rentals-grid');
+    if (rentalsGrid) {
+        rentalsGrid.innerHTML = getSkeletonHtml('borrowing').repeat(3);
+    }
+
+    // 8. Transaction History table body
+    const historyTbody = document.getElementById('history-tbody');
+    if (historyTbody) {
+        historyTbody.innerHTML = getSkeletonHtml('row').repeat(5);
+    }
+
+    // 9. Notifications list
+    const notificationsList = document.getElementById('notif-list');
+    if (notificationsList) {
+        notificationsList.innerHTML = getSkeletonHtml('notification').repeat(4);
+    }
+
+    // 10. Profile Settings Personal Pane body (save original HTML for restoration)
+    const profilePaneBody = document.querySelector('#profile-pane-personal .pane-body');
+    if (profilePaneBody && !window.originalProfileBody) {
+        window.originalProfileBody = profilePaneBody.innerHTML;
+        profilePaneBody.innerHTML = getSkeletonHtml('profile');
+    }
 }
 
 async function authenticatedFetch(url, options = {}) {
@@ -130,6 +253,7 @@ async function initDashboardAuth() {
         USER.name = data.full_name || localStorage.getItem('username') || 'Student';
         USER.email = data.email || '';
         USER.phone = data.phone_number || '';
+        USER.bio = data.bio || '';
 
         // Compute Initials
         const parts = USER.name.split(' ');
@@ -137,6 +261,18 @@ async function initDashboardAuth() {
         if (parts.length > 0 && parts[0]) initials += parts[0][0];
         if (parts.length > 1 && parts[parts.length - 1]) initials += parts[parts.length - 1][0];
         USER.initials = initials.toUpperCase() || 'S';
+
+        // Fetch reputation and member since from stats API
+        try {
+            const statsResponse = await authenticatedFetch('http://127.0.0.1:8000/api/transactions/stats/');
+            if (statsResponse.ok) {
+                const statsData = await statsResponse.json();
+                USER.rating = statsData.reputation_rating !== undefined ? statsData.reputation_rating : 0.0;
+                USER.memberSince = statsData.member_since || 'January 2025';
+            }
+        } catch (statsErr) {
+            console.error('Failed to fetch user stats:', statsErr);
+        }
 
         // Update welcome banner and top nav / sidebar user info
         const welcomeName = document.getElementById('welcome-name');
@@ -166,11 +302,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     initSidebarTooltips();
     initNavigation();
     initSidebarToggle();
+    
+    // Show all skeleton loaders immediately to prevent any hardcoded layout flicker
+    showAllSkeletons();
+    
+    // Expose loaders to window for retry handlers
+    window.initDashboardHome = initDashboardHome;
+    window.initRecentActivity = initRecentActivity;
+    window.initListings = initListings;
+    window.initRequests = initRequests;
+    window.initBorrowings = initBorrowings;
+    window.initRentals = initRentals;
+    window.initHistory = initHistory;
+    window.initNotifications = initNotifications;
+    
     await initDashboardAuth();
     initDashboardHome();
     initListings();
     initRequests();
     initBorrowings();
+    initRentals();
     initHistory();
     initNotifications();
     initAddItemForm();
@@ -299,75 +450,9 @@ function initTopnavSearch() {
 }
 
 // ============================================================
-// PLACEHOLDER DATA
+// GLOBAL STATE
 // ============================================================
-
-const USER = {
-    name: 'Aditya Sharma',
-    initials: 'AS',
-    email: 'aditya.sharma@college.edu',
-    phone: '+91 98765 43210',
-    rating: 4.8,
-    totalListings: 7,
-    totalBorrowings: 12,
-    memberSince: 'January 2025',
-};
-
-const LISTINGS_DATA = [
-    { id: 1, image: '../static/images/dell_Laptop.jpg', name: 'Dell Laptop (i5)', category: 'Electronics', rent: '₹200/day', deposit: '₹2000', status: 'available', requests: 3 },
-    { id: 2, image: '../static/images/dslr.jpg', name: 'Canon DSLR Camera', category: 'Electronics', rent: '₹500/day', deposit: '₹5000', status: 'rented', requests: 1 },
-    { id: 3, image: '../static/images/bag.jpg', name: 'Travel Backpack 45L', category: 'Accessories', rent: '₹80/day', deposit: '₹500', status: 'available', requests: 0 },
-    { id: 4, image: '../static/images/books.jpg', name: 'Engineering Textbooks (Set)', category: 'Study', rent: '₹60/day', deposit: '₹300', status: 'available', requests: 5 },
-    { id: 5, image: '../static/images/guitar.jpg', name: 'Acoustic Guitar', category: 'Instruments', rent: '₹150/day', deposit: '₹1500', status: 'rented', requests: 0 },
-    { id: 6, image: '../static/images/projector.jpg', name: 'Portable Projector', category: 'Electronics', rent: '₹300/day', deposit: '₹3000', status: 'available', requests: 2 },
-];
-
-const BROWSE_DATA = [
-    { emoji: '🎧', name: 'Premium Noise-Cancelling Headphones', category: 'Electronics', rent: '₹150/day', deposit: '₹1500', available: true },
-    { emoji: '🧳', name: 'Cabin Trolley Bag', category: 'Accessories', rent: '₹120/day', deposit: '₹800', available: true },
-    { emoji: '📖', name: 'Data Structures & Algorithms Book', category: 'Study', rent: '₹30/day', deposit: '₹150', available: false },
-    { emoji: '🏸', name: 'Badminton Racket Set', category: 'Sports', rent: '₹50/day', deposit: '₹300', available: true },
-    { emoji: '☕', name: 'Portable Coffee Maker', category: 'Appliances', rent: '₹60/day', deposit: '₹400', available: true },
-    { emoji: '📐', name: 'Drafting Board & Kit', category: 'Study', rent: '₹80/day', deposit: '₹600', available: true },
-    { emoji: '🎮', name: 'Gaming Controller (PS5)', category: 'Electronics', rent: '₹100/day', deposit: '₹800', available: false },
-    { emoji: '💡', name: 'LED Study Lamp', category: 'Appliances', rent: '₹30/day', deposit: '₹200', available: true },
-    { emoji: '🎒', name: 'Hiking Backpack 60L', category: 'Accessories', rent: '₹90/day', deposit: '₹600', available: true },
-    { emoji: '🔊', name: 'Bluetooth Party Speaker', category: 'Electronics', rent: '₹70/day', deposit: '₹500', available: true },
-    { emoji: '🌡️', name: 'Digital Thermometer', category: 'Appliances', rent: '₹25/day', deposit: '₹150', available: true },
-    { emoji: '📹', name: 'Webcam HD 1080p', category: 'Electronics', rent: '₹50/day', deposit: '₹300', available: true },
-];
-
-const REQUESTS_DATA = [
-    { id: 1, image: '../static/images/dell_Laptop.jpg', item: 'Dell Laptop (i5)', borrower: 'Priya Mehta', avatar: 'PM', dates: '28 May – 2 Jun 2026', days: 5, rent: '₹1,000', status: 'pending' },
-    { id: 2, image: '../static/images/books.jpg', item: 'Engineering Textbooks (Set)', borrower: 'Rahul Singh', avatar: 'RS', dates: '30 May – 5 Jun 2026', days: 6, rent: '₹360', status: 'pending' },
-    { id: 3, image: '../static/images/projector.jpg', item: 'Portable Projector', borrower: 'Sneha Patil', avatar: 'SP', dates: '1 Jun – 3 Jun 2026', days: 2, rent: '₹600', status: 'accepted' },
-    { id: 4, image: '../static/images/books.jpg', item: 'Engineering Textbooks (Set)', borrower: 'Arjun Nair', avatar: 'AN', dates: '3 Jun – 8 Jun 2026', days: 5, rent: '₹300', status: 'rejected' },
-];
-
-const BORROWINGS_DATA = [
-    { id: 1, image: '../static/images/headphone.png', name: 'Sony WH-1000XM5 Headphones', owner: 'Vikram Desai', pickup: '22 May 2026', returnDate: '29 May 2026', deposit: 'paid', daysLeft: 3, totalDays: 7 },
-    { id: 2, image: '../static/images/dslr.jpg', name: 'Nikon D3500 Camera', owner: 'Ananya Joshi', pickup: '20 May 2026', returnDate: '27 May 2026', deposit: 'paid', daysLeft: 1, totalDays: 7 },
-    { id: 3, image: '../static/images/accessories.png', name: 'Yonex Badminton Set', owner: 'Karan Mishra', pickup: '24 May 2026', returnDate: '31 May 2026', deposit: 'paid', daysLeft: 5, totalDays: 7 },
-];
-
-const HISTORY_DATA = [
-    { id: 1, image: '../static/images/headphone.png', name: 'Wireless Headphones', date: '14 May 2026', type: 'Borrow', rent: '₹300', deposit: '₹1,500', status: 'returned' },
-    { id: 2, image: '../static/images/books.jpg', name: 'Linear Algebra Textbook', date: '8 May 2026', type: 'Borrow', rent: '₹150', deposit: '₹500', status: 'returned' },
-    { id: 3, image: '../static/images/dell_Laptop.jpg', name: 'Dell Laptop (i5)', date: '5 May 2026', type: 'Lend', rent: '₹800', deposit: '₹2,000', status: 'returned' },
-    { id: 4, image: '../static/images/controller.png', name: 'PS5 Controller', date: '28 Apr 2026', type: 'Borrow', rent: '₹200', deposit: '₹800', status: 'returned' },
-    { id: 5, image: '../static/images/dslr.jpg', name: 'Canon DSLR Camera', date: '20 Apr 2026', type: 'Lend', rent: '₹1,500', deposit: '₹5,000', status: 'returned' },
-    { id: 6, image: '../static/images/electronics.png', name: 'Bluetooth Speaker', date: '12 Apr 2026', type: 'Borrow', rent: '₹140', deposit: '₹500', status: 'returned' },
-];
-
-const NOTIFICATIONS_DATA = [
-    { id: 1, type: 'accepted', iconClass: 'green', icon: 'fa-check-circle', title: 'Request Approved', desc: 'Your borrow request for "Sony WH-1000XM5 Headphones" has been approved by Vikram Desai.', time: '2 hours ago', unread: true },
-    { id: 2, type: 'request', iconClass: 'blue', icon: 'fa-hand-holding', title: 'New Borrow Request', desc: 'Priya Mehta has requested your Dell Laptop (i5) from 28 May to 2 Jun 2026.', time: '5 hours ago', unread: true },
-    { id: 3, type: 'request', iconClass: 'blue', icon: 'fa-hand-holding', title: 'New Borrow Request', desc: 'Rahul Singh wants to borrow your Engineering Textbooks from 30 May to 5 Jun 2026.', time: '8 hours ago', unread: true },
-    { id: 4, type: 'returned', iconClass: 'amber', icon: 'fa-rotate-left', title: 'Item Returned', desc: 'You have successfully returned "Linear Algebra Textbook" to Ananya Joshi. Deposit refund due.', time: '2 days ago', unread: false },
-    { id: 5, type: 'rejected', iconClass: 'red', icon: 'fa-times-circle', title: 'Request Rejected', desc: 'Your borrow request for "MacBook Pro" was not accepted by Kabir Sharma.', time: '3 days ago', unread: false },
-    { id: 6, type: 'returned', iconClass: 'green', icon: 'fa-rotate-left', title: 'Item Returned', desc: 'Sneha Patil has returned your Portable Projector in good condition.', time: '4 days ago', unread: false },
-    { id: 7, type: 'accepted', iconClass: 'green', icon: 'fa-check-circle', title: 'Request Approved', desc: 'Your borrow request for "Gaming Controller (PS5)" has been approved. Pick up by 1 Jun 2026.', time: '5 days ago', unread: false },
-];
+let USER = {};
 
 // ============================================================
 // PAGE: DASHBOARD HOME (Connected to Backend)
@@ -376,10 +461,19 @@ async function initDashboardHome() {
     const welcomeName = document.getElementById('welcome-name');
     if (welcomeName) welcomeName.textContent = USER.name.split(' ')[0];
 
+    const statsGrid = document.querySelector('.stats-grid');
+    if (statsGrid && !window.originalStatsGridHtml) {
+        window.originalStatsGridHtml = statsGrid.innerHTML;
+    }
+
     try {
         const response = await authenticatedFetch('http://127.0.0.1:8000/api/transactions/stats/');
         if (!response.ok) throw new Error(`API Error: ${response.status}`);
         const stats = await response.json();
+
+        if (statsGrid && window.originalStatsGridHtml) {
+            statsGrid.innerHTML = window.originalStatsGridHtml;
+        }
 
         // 1. UPDATE STATS GRID (Bulletproof targeting by exact name)
         const cards = document.querySelectorAll('.stat-card-body');
@@ -430,6 +524,9 @@ async function initDashboardHome() {
 
     } catch (err) {
         console.error('Dashboard Stats Error:', err);
+        if (statsGrid) {
+            statsGrid.innerHTML = getErrorStateHtml('Failed to load campus stats.', 'initDashboardHome');
+        }
     }
 }
 
@@ -504,10 +601,7 @@ async function initRecentActivity() {
 
     } catch (err) {
         console.error('Recent Activity Error:', err);
-        // Inject the exact error directly into your HTML panel so we can see what broke
-        activityList.innerHTML = `<div style="color: #ef4444; padding: 15px; border: 1px solid #ef4444; border-radius: 8px; margin: 10px;">
-            <strong>Data Fetch Failed:</strong> ${err.message}
-        </div>`;
+        activityList.innerHTML = getErrorStateHtml('Failed to load recent activity.', 'initRecentActivity');
     }
 }
 
@@ -543,7 +637,7 @@ async function initListings() {
         renderListings(mappedData, grid);
     } catch (err) {
         console.error(err);
-        grid.innerHTML = '<p>Error loading listings.</p>';
+        grid.innerHTML = getErrorStateHtml('Failed to load listings.', 'initListings');
     }
 }
 
@@ -628,6 +722,48 @@ window.openEditListing = async function (id) {
         document.getElementById('edit-item-rent').value = item.price_per_day;
         document.getElementById('edit-item-deposit').value = item.security_deposit || 0;
         document.getElementById('edit-item-condition').value = item.condition;
+
+        // Populate availability status
+        const statusSelect = document.getElementById('edit-item-status');
+        const rentedOpt = statusSelect.querySelector('option[value="RENTED"]');
+        const indefiniteCheckbox = document.getElementById('edit-item-indefinite');
+        const availFromInput = document.getElementById('edit-item-avail-from');
+        const availUntilInput = document.getElementById('edit-item-avail-until');
+        const dateContainer = document.getElementById('edit-date-range-container');
+
+        if (item.availability_status === 'RENTED') {
+            rentedOpt.disabled = false;
+            statusSelect.value = 'RENTED';
+            statusSelect.disabled = true;
+        } else {
+            rentedOpt.disabled = true;
+            statusSelect.value = item.availability_status || 'AVAILABLE';
+            statusSelect.disabled = false;
+        }
+
+        // Dates
+        availFromInput.value = item.available_from || '';
+        availUntilInput.value = item.available_until || '';
+        
+        const todayStr = new Date().toISOString().split('T')[0];
+        availFromInput.setAttribute('min', todayStr);
+        if (availFromInput.value) {
+            availUntilInput.setAttribute('min', availFromInput.value);
+        } else {
+            availUntilInput.setAttribute('min', todayStr);
+        }
+
+        if (!item.available_from && !item.available_until) {
+            indefiniteCheckbox.checked = true;
+            availFromInput.disabled = true;
+            availUntilInput.disabled = true;
+            dateContainer.style.display = 'none';
+        } else {
+            indefiniteCheckbox.checked = false;
+            availFromInput.disabled = false;
+            availUntilInput.disabled = false;
+            dateContainer.style.display = 'grid';
+        }
 
         // Reset inputs and previews
         document.getElementById('edit-item-image-input').value = '';
@@ -777,6 +913,36 @@ function initEditListingForm() {
             }
         });
     }
+
+    // Toggle logic for Indefinite Checkbox
+    const indefiniteCheckbox = document.getElementById('edit-item-indefinite');
+    const availFromInput = document.getElementById('edit-item-avail-from');
+    const availUntilInput = document.getElementById('edit-item-avail-until');
+    const dateContainer = document.getElementById('edit-date-range-container');
+
+    if (indefiniteCheckbox) {
+        indefiniteCheckbox.addEventListener('change', function () {
+            if (this.checked) {
+                availFromInput.disabled = true;
+                availUntilInput.disabled = true;
+                dateContainer.style.display = 'none';
+                availFromInput.value = '';
+                availUntilInput.value = '';
+            } else {
+                availFromInput.disabled = false;
+                availUntilInput.disabled = false;
+                dateContainer.style.display = 'grid';
+            }
+        });
+    }
+
+    if (availFromInput) {
+        availFromInput.addEventListener('change', function () {
+            if (availUntilInput) {
+                availUntilInput.setAttribute('min', this.value);
+            }
+        });
+    }
 }
 
 document.getElementById('edit-item-form')?.addEventListener('submit', async (e) => {
@@ -787,6 +953,21 @@ document.getElementById('edit-item-form')?.addEventListener('submit', async (e) 
     const rent = document.getElementById('edit-item-rent').value;
     const deposit = document.getElementById('edit-item-deposit').value;
     const condition = document.getElementById('edit-item-condition').value;
+    const status = document.getElementById('edit-item-status').value;
+    const indefinite = document.getElementById('edit-item-indefinite').checked;
+
+    // Date validations
+    let fromVal = '';
+    let untilVal = '';
+    if (!indefinite) {
+        fromVal = document.getElementById('edit-item-avail-from').value;
+        untilVal = document.getElementById('edit-item-avail-until').value;
+        if (fromVal && untilVal && untilVal < fromVal) {
+            showToast('Available Until date cannot be earlier than Available From date.', 'error');
+            return;
+        }
+    }
+
     const imgInput = document.getElementById('edit-item-image-input');
     const input2 = document.getElementById('edit-item-image-input-2');
     const input3 = document.getElementById('edit-item-image-input-3');
@@ -796,6 +977,9 @@ document.getElementById('edit-item-form')?.addEventListener('submit', async (e) 
     formData.append('price_per_day', rent);
     formData.append('security_deposit', deposit);
     formData.append('condition', condition);
+    formData.append('availability_status', status);
+    formData.append('available_from', fromVal);
+    formData.append('available_until', untilVal);
 
     if (imgInput && imgInput.files[0]) {
         formData.append('image', imgInput.files[0]);
@@ -852,7 +1036,7 @@ async function initRequests() {
         setupRequestFilters(list);
     } catch (err) {
         console.error('Error loading requests:', err);
-        list.innerHTML = '<p>Error loading requests. Ensure your backend is running.</p>';
+        list.innerHTML = getErrorStateHtml('Failed to load borrow requests.', 'initRequests');
     }
 }
 
@@ -948,6 +1132,17 @@ function renderRequests(data, listElement) {
                             <span class="status-subtext">Transaction Created</span>
                             <a href="#" class="status-action-link" onclick="activatePage('borrowings'); return false;">View Transaction</a>
                         </div>
+                    ` : req.status === 'RETURNED' ? `
+                        <div class="request-accepted-status" style="color: #10B981;">
+                            <span class="status-indicator-returned" style="color: #10B981; font-weight: 600;"><i class="fas fa-rotate-left"></i> Returned</span>
+                            <span class="status-subtext">Transaction Completed</span>
+                            <a href="#" class="status-action-link" onclick="activatePage('history'); return false;">View History</a>
+                        </div>
+                    ` : req.status === 'CANCELLED' ? `
+                        <div class="request-rejected-status" style="color: var(--text-muted);">
+                            <span class="status-indicator-rejected" style="color: var(--text-muted);"><i class="fas fa-circle-xmark"></i> Cancelled</span>
+                            <span class="status-subtext">Request Closed</span>
+                        </div>
                     ` : `
                         <div class="request-rejected-status">
                             <span class="status-indicator-rejected"><i class="fas fa-circle-xmark"></i> Rejected</span>
@@ -990,6 +1185,10 @@ window.handleRequest = async function (id, action) {
         if (response.ok) {
             showToast(`Request successfully ${action}ed!`);
             initRequests(); // Refresh the list from the database
+            initListings();
+            initRentals();
+            initBorrowings();
+            initDashboardHome();
         } else {
             const errData = await response.json();
             showToast(errData.error || `Failed to ${action} request`, 'error');
@@ -1001,7 +1200,7 @@ window.handleRequest = async function (id, action) {
 };
 
 // ============================================================
-// PAGE: ACTIVE BORROWINGS & RENTALS (Connected to Backend)
+// PAGE: ACTIVE BORROWINGS & RENTALS
 // ============================================================
 async function initBorrowings() {
     const grid = document.getElementById('borrowings-grid');
@@ -1010,22 +1209,14 @@ async function initBorrowings() {
     grid.innerHTML = getSkeletonHtml('borrowing').repeat(3);
 
     try {
-        const response = await authenticatedFetch('http://127.0.0.1:8000/api/transactions/');
+        const response = await authenticatedFetch('http://127.0.0.1:8000/api/transactions/?role=borrower&status=ACTIVE,RETURN_PENDING');
         if (!response.ok) throw new Error('Failed to fetch transactions');
 
-        const allTransactions = await response.json();
-        const activeTransactions = allTransactions.filter(t => t.status === 'ACTIVE' || t.status === 'RETURN_PENDING');
-
+        const activeTransactions = await response.json();
         renderBorrowings(activeTransactions, grid);
     } catch (err) {
         console.error('Error loading active transactions:', err);
-        grid.innerHTML = `
-            <div class="api-error-container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; text-align: center; width: 100%;">
-                <i class="fas fa-circle-exclamation" style="font-size: 2.5rem; color: #ef4444; margin-bottom: 16px;"></i>
-                <p style="font-size: 1rem; color: var(--text-secondary); margin-bottom: 16px;">Unable to load your borrowings.</p>
-                <button class="btn-primary" onclick="initBorrowings()" style="width: auto; padding: 10px 24px; border-radius: 8px; font-weight: 600;">Retry</button>
-            </div>
-        `;
+        grid.innerHTML = getErrorStateHtml('Failed to load borrowings.', 'initBorrowings');
     }
 }
 
@@ -1230,6 +1421,163 @@ function renderBorrowings(data, grid) {
     });
 }
 
+async function initRentals() {
+    const grid = document.getElementById('rentals-grid');
+    if (!grid) return;
+
+    grid.innerHTML = getSkeletonHtml('borrowing').repeat(3);
+
+    try {
+        const response = await authenticatedFetch('http://127.0.0.1:8000/api/transactions/?role=owner&status=ACTIVE,RETURN_PENDING');
+        if (!response.ok) throw new Error('Failed to fetch transactions');
+
+        const activeRentals = await response.json();
+        renderRentals(activeRentals, grid);
+    } catch (err) {
+        console.error('Error loading active rentals:', err);
+        grid.innerHTML = getErrorStateHtml('Failed to load active rentals.', 'initRentals');
+    }
+}
+
+function renderRentals(data, grid) {
+    if (data.length === 0) {
+        grid.innerHTML = getEmptyStateHtml(
+            'fa-handshake',
+            'No active rentals',
+            'You are not currently lending out any items to other students.',
+            'Create a Listing',
+            "window.location.hash='#page-add-item'; document.querySelector('[data-page=\"add-item\"]').click();"
+        );
+        return;
+    }
+
+    grid.innerHTML = data.map(b => {
+        const start = new Date(b.start_date);
+        const end = new Date(b.end_date);
+        const today = new Date();
+
+        today.setHours(0, 0, 0, 0);
+        const endCopy = new Date(end);
+        endCopy.setHours(0, 0, 0, 0);
+
+        const totalDays = Math.max(1, Math.ceil((end - start) / (1000 * 60 * 60 * 24)));
+        const daysLeft = Math.ceil((endCopy - today) / (1000 * 60 * 60 * 24));
+        const pct = Math.round(((totalDays - Math.max(0, daysLeft)) / totalDays) * 100);
+
+        let daysLeftText = `${daysLeft} Day${daysLeft === 1 ? '' : 's'} Left`;
+        let daysClass = '';
+
+        if (daysLeft === 0) {
+            daysLeftText = 'Due Today';
+            daysClass = 'due-today';
+        } else if (daysLeft < 0) {
+            daysLeftText = 'Overdue';
+            daysClass = 'danger';
+        } else if (daysLeft <= 2) {
+            daysClass = 'danger';
+        } else if (daysLeft <= 4) {
+            daysClass = 'warning';
+        }
+
+        const fillClass = daysLeft <= 2 ? 'danger' : daysLeft <= 4 ? 'warning' : '';
+
+        const itemName = b.listing_title || `Listing #${b.listing}`;
+        const borrowerName = b.borrower_username || `User #${b.borrower}`;
+        const imgUrl = (b.listing_details && b.listing_details.image) ? formatImageUrl(b.listing_details.image) : '../static/images/dell_Laptop.jpg';
+
+        let footerHtml = '';
+        if (b.status === 'ACTIVE') {
+            footerHtml = `
+                <div class="borrowing-card-footer" style="text-align: center; color: var(--text-muted); font-size: 0.9rem; font-weight: 600; padding: 10px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <i class="fas fa-hourglass-half"></i> Awaiting Return
+                </div>
+            `;
+        } else if (b.status === 'RETURN_PENDING') {
+            footerHtml = `
+                <div class="borrowing-card-footer" style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
+                    <div style="text-align: center; color: #D97706; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px;">
+                        <i class="fas fa-exclamation-triangle"></i> Waiting for Return Confirmation
+                    </div>
+                    <button class="btn-primary btn-sm owner-confirm-return-btn" data-txn-id="${b.id}" style="width:100%;justify-content:center; background-color: #10B981; border-color: #10B981;">
+                        <i class="fas fa-circle-check"></i> Confirm Return
+                    </button>
+                </div>
+            `;
+        }
+
+        return `
+            <div class="borrowing-card" id="transaction-${b.id}">
+                <div class="borrowing-card-image-wrap">
+                    <img class="borrowing-card-image" src="${imgUrl}" alt="${itemName}">
+                    <span class="borrowing-card-days-badge ${daysClass}">
+                        ${daysLeftText}
+                    </span>
+                </div>
+                <div class="borrowing-card-details">
+                    <h3 class="borrowing-card-title">${itemName}</h3>
+                    <div class="borrowing-card-owner"><i class="fas fa-user-circle" style="color: var(--accent-primary); margin-right: 4px;"></i> Borrower: ${borrowerName}</div>
+                    
+                    <div class="borrowing-card-meta">
+                        <div class="borrowing-detail-row">
+                            <span class="borrowing-detail-label"><i class="fas fa-calendar-check"></i> Pickup</span>
+                            <span class="borrowing-detail-value">${start.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
+                        </div>
+                        <div class="borrowing-detail-row">
+                            <span class="borrowing-detail-label"><i class="fas fa-calendar-times"></i> Return By</span>
+                            <span class="borrowing-detail-value">${end.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
+                        </div>
+                        <div class="borrowing-detail-row">
+                            <span class="borrowing-detail-label"><i class="fas fa-rupee-sign"></i> Rate</span>
+                            <span class="borrowing-detail-value">₹${b.price_per_day}/day</span>
+                        </div>
+                    </div>
+                    
+                    <div class="days-progress">
+                        <div class="days-progress-label">
+                            <span>Days remaining</span>
+                            <span style="color:${daysLeft <= 2 ? 'var(--secondary-color)' : daysLeft <= 4 ? '#D97706' : 'var(--text-main)'}; font-weight: 600;">${daysLeft} / ${totalDays}</span>
+                        </div>
+                        <div class="days-progress-bar">
+                            <div class="days-progress-fill ${fillClass}" style="width:${pct}%"></div>
+                        </div>
+                    </div>
+                    
+                    ${footerHtml}
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    // Attach Confirm Return Button listeners
+    const confirmButtons = grid.querySelectorAll('.owner-confirm-return-btn');
+    confirmButtons.forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            const transactionId = this.getAttribute('data-txn-id');
+
+            ratingModalAction = 'confirm';
+
+            const titleEl = document.querySelector('#return-rating-modal .card-title');
+            if (titleEl) titleEl.innerHTML = '<i class="fas fa-circle-check"></i> Confirm Receipt';
+
+            const submitBtn = document.querySelector('#return-rating-form button[type="submit"]');
+            if (submitBtn) submitBtn.textContent = 'Confirm & Complete';
+
+            document.getElementById('return-txn-id').value = transactionId;
+            document.getElementById('return-rating-val').value = 0;
+
+            const stars = document.querySelectorAll('.star-rating-container .rating-star');
+            stars.forEach(s => {
+                s.classList.remove('fas');
+                s.classList.add('far');
+            });
+
+            const modal = document.getElementById('return-rating-modal');
+            if (modal) modal.style.display = 'flex';
+        });
+    });
+}
+
 window.closeReturnModal = function () {
     const modal = document.getElementById('return-rating-modal');
     if (modal) modal.style.display = 'none';
@@ -1291,6 +1639,9 @@ function initReturnRatingForm() {
                 showToast(msg);
                 closeReturnModal();
                 initBorrowings(); // Refresh grid
+                initRentals(); // Refresh grid
+                initListings(); // Refresh listings
+                initHistory(); // Refresh history
                 initDashboardHome(); // Refresh statistics counts
             } else {
                 const errData = await response.json();
@@ -1325,7 +1676,7 @@ async function initHistory() {
         renderHistory(data, tbody);
     } catch (err) {
         console.error('Error loading history:', err);
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: gray;">Error loading history.</td></tr>';
+        tbody.innerHTML = getTableErrorStateHtml('Failed to load transaction history.', 'initHistory');
     }
 }
 
@@ -1359,7 +1710,7 @@ function renderHistory(data, tbody) {
 
         const itemName = (txn.listing_details && txn.listing_details.title) || txn.listing_title || `Listing #${txn.listing}`;
         const amount = `₹${txn.total_amount || '0.00'}`;
-        const deposit = `₹${txn.security_deposit || '0.00'}`;
+        const deposit = `₹${txn.security_deposit !== undefined && txn.security_deposit !== null ? txn.security_deposit : ((txn.listing_details && txn.listing_details.security_deposit) || '0.00')}`;
 
         const statusClass = txn.status.toLowerCase();
         const statusText = capitalize(txn.status);
@@ -1398,7 +1749,7 @@ async function initNotifications() {
         setupMarkAllRead(list);
     } catch (err) {
         console.error('Error loading notifications:', err);
-        list.innerHTML = '<div style="padding: 20px; color: gray; text-align: center;">Error loading notifications. Ensure the backend endpoint exists.</div>';
+        list.innerHTML = getErrorStateHtml('Failed to load notifications.', 'initNotifications');
     }
 }
 
@@ -1525,13 +1876,24 @@ function setupMarkAllRead(list) {
 // PAGE: PROFILE
 // ============================================================
 function initProfile() {
+    // Restore pane body from original HTML to replace the skeleton
+    const paneBody = document.querySelector('#profile-pane-personal .pane-body');
+    if (paneBody && window.originalProfileBody) {
+        paneBody.innerHTML = window.originalProfileBody;
+    }
+
     // Populate static user info
     setTextById('profile-name', USER.name);
     setTextById('profile-email', USER.email);
     setTextById('profile-phone', USER.phone);
-    setTextById('profile-rating', USER.rating + ' ★');
-    setTextById('profile-listings-count', USER.totalListings);
-    setTextById('profile-borrowings-count', USER.totalBorrowings);
+
+    // Display reputation rating nicely
+    const ratingVal = parseFloat(USER.rating);
+    if (!isNaN(ratingVal) && ratingVal > 0) {
+        setTextById('profile-rating', ratingVal + ' ★');
+    } else {
+        setTextById('profile-rating', 'New User ★');
+    }
     setTextById('profile-since', USER.memberSince);
 
     // Init avatar initials
@@ -1543,6 +1905,7 @@ function initProfile() {
     setInputById('edit-name', USER.name);
     setInputById('edit-email', USER.email);
     setInputById('edit-phone', USER.phone);
+    setInputById('edit-bio', USER.bio || '');
 
     // Pre-fill theme preference selectors
     const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
@@ -1580,41 +1943,42 @@ function initProfile() {
     // Save button logic (with live mock updating)
     const saveBtn = document.getElementById('save-profile-btn');
     if (saveBtn) {
-        saveBtn.addEventListener('click', () => {
-            const newName = document.getElementById('edit-name')?.value?.trim();
-            const newPhone = document.getElementById('edit-phone')?.value?.trim();
-            const newBio = document.getElementById('edit-bio')?.value?.trim();
+        saveBtn.addEventListener('click', async () => {
+            const newBio = document.getElementById('edit-bio')?.value || '';
 
-            if (!newName) {
-                showToast('Please enter a valid name', 'error');
-                return;
+            try {
+                // Disable button and show spinner
+                saveBtn.disabled = true;
+                const originalHTML = saveBtn.innerHTML;
+                saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+                // Send ONLY the bio field to the profile API via PATCH
+                const response = await authenticatedFetch('http://127.0.0.1:8000/api/auth/profile/', {
+                    method: 'PATCH',
+                    body: JSON.stringify({
+                        bio: newBio
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    USER.bio = data.bio || '';
+                    showToast('Profile updated successfully!');
+                } else {
+                    const errorData = await response.json();
+                    console.error('Profile update failed:', errorData);
+                    showToast('Failed to update profile.', 'error');
+                }
+
+                // Restore button
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = originalHTML;
+            } catch (err) {
+                console.error('Submit error:', err);
+                showToast('Network error while updating.', 'error');
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = originalHTML;
             }
-
-            // Update USER object
-            USER.name = newName;
-            if (newPhone) USER.phone = newPhone;
-            if (newBio) USER.bio = newBio;
-
-            // Generate initials
-            const parts = newName.split(' ');
-            let initials = '';
-            if (parts.length > 0 && parts[0]) initials += parts[0][0];
-            if (parts.length > 1 && parts[parts.length - 1]) initials += parts[parts.length - 1][0];
-            USER.initials = initials.toUpperCase() || 'AS';
-
-            // Propagate initials to all avatars
-            document.querySelectorAll('.profile-avatar, .profile-avatar-lg, .sidebar-avatar-sm, .topnav-avatar').forEach(el => {
-                el.textContent = USER.initials;
-            });
-
-            // Propagate name to headers & welcome texts
-            const welcomeName = document.getElementById('welcome-name');
-            if (welcomeName) welcomeName.textContent = newName.split(' ')[0];
-
-            const profileName = document.getElementById('profile-name');
-            if (profileName) profileName.textContent = newName;
-
-            showToast('Profile updated successfully!');
         });
     }
 }

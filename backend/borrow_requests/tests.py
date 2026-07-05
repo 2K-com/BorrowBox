@@ -42,7 +42,7 @@ class BorrowRequestValidationTests(APITestCase):
             description="Claw hammer",
             price_per_day=2.00,
             condition="GOOD",
-            availability_status="BORROWED"
+            availability_status="RENTED"
         )
 
         self.request_create_url = reverse('request_create')
