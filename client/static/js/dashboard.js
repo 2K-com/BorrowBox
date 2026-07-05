@@ -268,6 +268,7 @@ async function initDashboardAuth() {
             if (statsResponse.ok) {
                 const statsData = await statsResponse.json();
                 USER.rating = statsData.reputation_rating !== undefined ? statsData.reputation_rating : 0.0;
+                USER.reviewCount = statsData.review_count !== undefined ? statsData.review_count : 0;
                 USER.memberSince = statsData.member_since || 'January 2025';
             }
         } catch (statsErr) {
@@ -1889,10 +1890,14 @@ function initProfile() {
 
     // Display reputation rating nicely
     const ratingVal = parseFloat(USER.rating);
-    if (!isNaN(ratingVal) && ratingVal > 0) {
-        setTextById('profile-rating', ratingVal + ' ★');
+    const reviewCountVal = parseInt(USER.reviewCount) || 0;
+    
+    if (!isNaN(ratingVal) && reviewCountVal > 0) {
+        setTextById('profile-rating', ratingVal.toFixed(1));
+        setTextById('profile-reviews-count', `(${reviewCountVal} ${reviewCountVal === 1 ? 'review' : 'reviews'})`);
     } else {
-        setTextById('profile-rating', 'New User ★');
+        setTextById('profile-rating', 'New User');
+        setTextById('profile-reviews-count', '');
     }
     setTextById('profile-since', USER.memberSince);
 
