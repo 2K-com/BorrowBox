@@ -58,11 +58,6 @@ function getSkeletonHtml(type) {
             </div>
         `;
     }
-<<<<<<< HEAD
-    return '';
-}
-
-=======
     if (type === 'profile') {
         return `
             <div class="skeleton-profile" style="display: flex; flex-direction: column; gap: 20px; padding: 20px; box-sizing: border-box; width: 100%;">
@@ -189,7 +184,6 @@ function showAllSkeletons() {
     }
 }
 
->>>>>>> 34241502cbc58cd24e1d74f6ac147ab8195c8701
 async function authenticatedFetch(url, options = {}) {
     let accessToken = localStorage.getItem('access_token');
     if (!accessToken) {
@@ -259,10 +253,7 @@ async function initDashboardAuth() {
         USER.name = data.full_name || localStorage.getItem('username') || 'Student';
         USER.email = data.email || '';
         USER.phone = data.phone_number || '';
-<<<<<<< HEAD
-=======
         USER.bio = data.bio || '';
->>>>>>> 34241502cbc58cd24e1d74f6ac147ab8195c8701
 
         // Compute Initials
         const parts = USER.name.split(' ');
@@ -733,8 +724,6 @@ window.openEditListing = async function (id) {
         document.getElementById('edit-item-deposit').value = item.security_deposit || 0;
         document.getElementById('edit-item-condition').value = item.condition;
 
-<<<<<<< HEAD
-=======
         // Populate availability status
         const statusSelect = document.getElementById('edit-item-status');
         const rentedOpt = statusSelect.querySelector('option[value="RENTED"]');
@@ -777,7 +766,6 @@ window.openEditListing = async function (id) {
             dateContainer.style.display = 'grid';
         }
 
->>>>>>> 34241502cbc58cd24e1d74f6ac147ab8195c8701
         // Reset inputs and previews
         document.getElementById('edit-item-image-input').value = '';
         document.getElementById('edit-item-image-input-2').value = '';
@@ -926,8 +914,6 @@ function initEditListingForm() {
             }
         });
     }
-<<<<<<< HEAD
-=======
 
     // Toggle logic for Indefinite Checkbox
     const indefiniteCheckbox = document.getElementById('edit-item-indefinite');
@@ -958,7 +944,6 @@ function initEditListingForm() {
             }
         });
     }
->>>>>>> 34241502cbc58cd24e1d74f6ac147ab8195c8701
 }
 
 document.getElementById('edit-item-form')?.addEventListener('submit', async (e) => {
@@ -969,8 +954,6 @@ document.getElementById('edit-item-form')?.addEventListener('submit', async (e) 
     const rent = document.getElementById('edit-item-rent').value;
     const deposit = document.getElementById('edit-item-deposit').value;
     const condition = document.getElementById('edit-item-condition').value;
-<<<<<<< HEAD
-=======
     const status = document.getElementById('edit-item-status').value;
     const indefinite = document.getElementById('edit-item-indefinite').checked;
 
@@ -986,7 +969,6 @@ document.getElementById('edit-item-form')?.addEventListener('submit', async (e) 
         }
     }
 
->>>>>>> 34241502cbc58cd24e1d74f6ac147ab8195c8701
     const imgInput = document.getElementById('edit-item-image-input');
     const input2 = document.getElementById('edit-item-image-input-2');
     const input3 = document.getElementById('edit-item-image-input-3');
@@ -996,12 +978,9 @@ document.getElementById('edit-item-form')?.addEventListener('submit', async (e) 
     formData.append('price_per_day', rent);
     formData.append('security_deposit', deposit);
     formData.append('condition', condition);
-<<<<<<< HEAD
-=======
     formData.append('availability_status', status);
     formData.append('available_from', fromVal);
     formData.append('available_until', untilVal);
->>>>>>> 34241502cbc58cd24e1d74f6ac147ab8195c8701
 
     if (imgInput && imgInput.files[0]) {
         formData.append('image', imgInput.files[0]);
@@ -1154,8 +1133,6 @@ function renderRequests(data, listElement) {
                             <span class="status-subtext">Transaction Created</span>
                             <a href="#" class="status-action-link" onclick="activatePage('borrowings'); return false;">View Transaction</a>
                         </div>
-<<<<<<< HEAD
-=======
                     ` : req.status === 'RETURNED' ? `
                         <div class="request-accepted-status" style="color: #10B981;">
                             <span class="status-indicator-returned" style="color: #10B981; font-weight: 600;"><i class="fas fa-rotate-left"></i> Returned</span>
@@ -1167,7 +1144,6 @@ function renderRequests(data, listElement) {
                             <span class="status-indicator-rejected" style="color: var(--text-muted);"><i class="fas fa-circle-xmark"></i> Cancelled</span>
                             <span class="status-subtext">Request Closed</span>
                         </div>
->>>>>>> 34241502cbc58cd24e1d74f6ac147ab8195c8701
                     ` : `
                         <div class="request-rejected-status">
                             <span class="status-indicator-rejected"><i class="fas fa-circle-xmark"></i> Rejected</span>
@@ -1237,27 +1213,11 @@ async function initBorrowings() {
         const response = await authenticatedFetch('http://127.0.0.1:8000/api/transactions/?role=borrower&status=ACTIVE,RETURN_PENDING');
         if (!response.ok) throw new Error('Failed to fetch transactions');
 
-<<<<<<< HEAD
-        const allTransactions = await response.json();
-        const activeTransactions = allTransactions.filter(t => t.status === 'ACTIVE' || t.status === 'RETURN_PENDING');
-
-        renderBorrowings(activeTransactions, grid);
-    } catch (err) {
-        console.error('Error loading active transactions:', err);
-        grid.innerHTML = `
-            <div class="api-error-container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; text-align: center; width: 100%;">
-                <i class="fas fa-circle-exclamation" style="font-size: 2.5rem; color: #ef4444; margin-bottom: 16px;"></i>
-                <p style="font-size: 1rem; color: var(--text-secondary); margin-bottom: 16px;">Unable to load your borrowings.</p>
-                <button class="btn-primary" onclick="initBorrowings()" style="width: auto; padding: 10px 24px; border-radius: 8px; font-weight: 600;">Retry</button>
-            </div>
-        `;
-=======
         const activeTransactions = await response.json();
         renderBorrowings(activeTransactions, grid);
     } catch (err) {
         console.error('Error loading active transactions:', err);
         grid.innerHTML = getErrorStateHtml('Failed to load borrowings.', 'initBorrowings');
->>>>>>> 34241502cbc58cd24e1d74f6ac147ab8195c8701
     }
 }
 
@@ -1462,8 +1422,6 @@ function renderBorrowings(data, grid) {
     });
 }
 
-<<<<<<< HEAD
-=======
 async function initRentals() {
     const grid = document.getElementById('rentals-grid');
     if (!grid) return;
@@ -1621,7 +1579,6 @@ function renderRentals(data, grid) {
     });
 }
 
->>>>>>> 34241502cbc58cd24e1d74f6ac147ab8195c8701
 window.closeReturnModal = function () {
     const modal = document.getElementById('return-rating-modal');
     if (modal) modal.style.display = 'none';
@@ -1683,12 +1640,9 @@ function initReturnRatingForm() {
                 showToast(msg);
                 closeReturnModal();
                 initBorrowings(); // Refresh grid
-<<<<<<< HEAD
-=======
                 initRentals(); // Refresh grid
                 initListings(); // Refresh listings
                 initHistory(); // Refresh history
->>>>>>> 34241502cbc58cd24e1d74f6ac147ab8195c8701
                 initDashboardHome(); // Refresh statistics counts
             } else {
                 const errData = await response.json();
@@ -2030,35 +1984,6 @@ function initProfile() {
                 saveBtn.disabled = false;
                 saveBtn.innerHTML = originalHTML;
             }
-<<<<<<< HEAD
-
-            // Update USER object
-            USER.name = newName;
-            if (newPhone) USER.phone = newPhone;
-            if (newBio) USER.bio = newBio;
-
-            // Generate initials
-            const parts = newName.split(' ');
-            let initials = '';
-            if (parts.length > 0 && parts[0]) initials += parts[0][0];
-            if (parts.length > 1 && parts[parts.length - 1]) initials += parts[parts.length - 1][0];
-            USER.initials = initials.toUpperCase() || 'AS';
-
-            // Propagate initials to all avatars
-            document.querySelectorAll('.profile-avatar, .profile-avatar-lg, .sidebar-avatar-sm, .topnav-avatar').forEach(el => {
-                el.textContent = USER.initials;
-            });
-
-            // Propagate name to headers & welcome texts
-            const welcomeName = document.getElementById('welcome-name');
-            if (welcomeName) welcomeName.textContent = newName.split(' ')[0];
-
-            const profileName = document.getElementById('profile-name');
-            if (profileName) profileName.textContent = newName;
-
-            showToast('Profile updated successfully!');
-=======
->>>>>>> 34241502cbc58cd24e1d74f6ac147ab8195c8701
         });
     }
 }
