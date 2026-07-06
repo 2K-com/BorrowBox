@@ -21,3 +21,9 @@ node_modules/
 # OS Files
 .DS_Store
 Thumbs.db
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
