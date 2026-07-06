@@ -5,7 +5,7 @@ from .views import (
 )
 
 urlpatterns = [
-    path('', BorrowRequestCreateView.as_view(), name='borrow_request_create'),
+    path('', BorrowRequestCreateView.as_view(), name='request_create'),
     path('incoming/', IncomingRequestsView.as_view(), name='requests_incoming'),
     path('outgoing/', OutgoingRequestsView.as_view(), name='requests_outgoing'),
     path('<int:pk>/accept/', AcceptRequestView.as_view(), name='request_accept'),

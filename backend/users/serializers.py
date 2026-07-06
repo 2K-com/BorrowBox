@@ -34,10 +34,11 @@ class UserProfileSerializer(serializers.ModelSerializer):
     full_name = serializers.CharField(source='profile.full_name', required=False, allow_blank=True, allow_null=True)
     phone_number = serializers.CharField(source='profile.phone_number', required=False, allow_blank=True, allow_null=True)
     profile_picture = serializers.ImageField(source='profile.profile_picture', required=False, allow_null=True)
+    bio = serializers.CharField(source='first_name', required=False, allow_blank=True, allow_null=True)
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'full_name', 'phone_number', 'profile_picture']
+        fields = ['username', 'email', 'full_name', 'phone_number', 'profile_picture', 'bio']
         read_only_fields = ['username']
 
     def update(self, instance, validated_data):
@@ -46,6 +47,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         
         # Update User fields
         instance.email = validated_data.get('email', instance.email)
+        instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.save()
 
         # Update Profile fields

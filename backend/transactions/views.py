@@ -16,7 +16,22 @@ class TransactionListView(generics.ListAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        return Transaction.objects.filter(Q(borrower=user) | Q(owner=user)).order_by('-created_at')
+        queryset = Transaction.objects.all()
+        
+        role = self.request.query_params.get('role')
+        if role == 'borrower':
+            queryset = queryset.filter(borrower=user)
+        elif role == 'owner':
+            queryset = queryset.filter(owner=user)
+        else:
+            queryset = queryset.filter(Q(borrower=user) | Q(owner=user))
+            
+        status_param = self.request.query_params.get('status')
+        if status_param:
+            statuses = status_param.split(',')
+            queryset = queryset.filter(status__in=statuses)
+            
+        return queryset.order_by('-created_at')
 
 
 class TransactionDetailView(generics.RetrieveAPIView):
@@ -171,6 +186,7 @@ class DashboardStatsView(APIView):
             avg_rating = avg_rating_dict['rating__avg']
             user_rating = round(
                 avg_rating, 1) if avg_rating is not None else 0.0
+            review_count = Review.objects.filter(receiver=user).count()
 
             return Response({
                 "total_listings": total_listings,
@@ -182,6 +198,7 @@ class DashboardStatsView(APIView):
                 "total_rent_earned": rent_earned,
                 "total_rent_paid": rent_paid,
                 "reputation_rating": user_rating,
+                "review_count": review_count,
                 "member_since": user.date_joined.strftime("%B %Y") if hasattr(user, 'date_joined') else "January 2025"
             })
 

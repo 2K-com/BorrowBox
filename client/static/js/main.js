@@ -122,35 +122,30 @@ document.addEventListener('DOMContentLoaded', () => {
 function initStructuredInventoryConsole() {
     const tabs = document.querySelectorAll('.structured-tab');
     const productGridContainer = document.getElementById('structuredProductGrid');
-    if (tabs.length === 0 || !productGridContainer) return;
+    if (!productGridContainer) return;
 
-    let allLiveListings = []; // Will store the fetched data in memory for quick tab switching
+    let allLiveListings = [];
 
     // 1. Fetch Live Data from Django
     async function fetchCatalogData() {
         productGridContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Syncing campus network...</p>';
         
         try {
-            const response = await fetch('http://127.0.0.1:8000/api/listings/');
-            if (!response.ok) throw new Error('Network response was not ok');
-            
-            const data = await response.json();
-            const currentUser = localStorage.getItem('username');
-            
-            // Store only AVAILABLE items that the user doesn't own
-            allLiveListings = data.filter(item => 
-                item.availability_status === 'AVAILABLE' && 
-                item.owner_username !== currentUser
-            );
+            // Fetch 6 most recently created available listings
+            const previewResponse = await fetch('http://127.0.0.1:8000/api/listings/?limit=6&exclude_owner=true');
+            if (!previewResponse.ok) throw new Error('Failed to fetch preview listings');
+            const previewItems = await previewResponse.json();
 
-            updateTabCounts(); // Update the numbers in the sidebar
+            // Render the preview grid directly
+            renderPreviewGrid(previewItems);
 
-            // Render the initially active tab
-            const activeTab = document.querySelector('.structured-tab.active');
-            if (activeTab) {
-                renderActiveProductGroup(activeTab.getAttribute('data-target'));
-            } else {
-                renderActiveProductGroup('electronics');
+            // Fetch all listings for informational category counts
+            if (tabs.length > 0) {
+                const countsResponse = await fetch('http://127.0.0.1:8000/api/listings/?exclude_owner=true');
+                if (countsResponse.ok) {
+                    allLiveListings = await countsResponse.json();
+                    updateTabCounts();
+                }
             }
 
         } catch (error) {
@@ -184,19 +179,16 @@ function initStructuredInventoryConsole() {
         });
     }
 
-    // 4. Render function preserving your exact HTML structure and animations
-    function renderActiveProductGroup(categoryKey) {
-        // Filter and limit to max 6 featured items per tab
-        const activeItems = filterItemsByCategory(categoryKey).slice(0, 6);
-        
+    // 4. Render function to display the 8 preview items
+    function renderPreviewGrid(items) {
         productGridContainer.innerHTML = '';
 
-        if (activeItems.length === 0) {
-            productGridContainer.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 2rem; color: #666;">No items available in this category yet.</p>`;
+        if (items.length === 0) {
+            productGridContainer.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 2rem; color: #666;">No items available on campus yet.</p>`;
             return;
         }
 
-        activeItems.forEach((product, idx) => {
+        items.forEach((product, idx) => {
             const cardNode = document.createElement('div');
             cardNode.className = 'sc-card';
             
@@ -254,20 +246,7 @@ function initStructuredInventoryConsole() {
         });
     }
 
-    // 5. Setup Tab Listeners
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            if (tab.classList.contains('active')) return;
-            
-            tabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            
-            const selectedTarget = tab.getAttribute('data-target');
-            renderActiveProductGroup(selectedTarget);
-        });
-    });
-
-    // 6. Kickoff the fetch!
+    // 5. Kickoff the fetch!
     fetchCatalogData();
 }
 

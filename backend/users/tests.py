@@ -67,20 +67,24 @@ class AuthTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['username'], 'testuser')
         self.assertEqual(response.data['full_name'], None) # Profile starts empty
+        self.assertEqual(response.data['bio'], '') # Bio starts empty
         
         # Update Profile
         update_data = {
             'email': 'newemail@example.com',
             'full_name': 'Test User',
-            'phone_number': '123-456-7890'
+            'phone_number': '123-456-7890',
+            'bio': 'My test bio'
         }
         response = self.client.put(self.profile_url, update_data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['email'], 'newemail@example.com')
         self.assertEqual(response.data['full_name'], 'Test User')
         self.assertEqual(response.data['phone_number'], '123-456-7890')
+        self.assertEqual(response.data['bio'], 'My test bio')
         
         # Verify changes saved in User and Profile models
         user.refresh_from_db()
         self.assertEqual(user.email, 'newemail@example.com')
         self.assertEqual(user.profile.full_name, 'Test User')
+        self.assertEqual(user.first_name, 'My test bio')
