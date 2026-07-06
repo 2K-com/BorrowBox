@@ -82,14 +82,11 @@ class ListingDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwner]
 
     def perform_update(self, serializer):
-<<<<<<< HEAD
-=======
         listing = self.get_object()
         if listing.availability_status == 'RENTED':
             from rest_framework.exceptions import ValidationError
             raise ValidationError("Rented listings cannot be edited.")
         
->>>>>>> 34241502cbc58cd24e1d74f6ac147ab8195c8701
         listing = serializer.save()
         # Handle secondary images if provided on update
         if 'secondary_images' in self.request.FILES:
@@ -98,15 +95,11 @@ class ListingDetailView(generics.RetrieveUpdateDestroyAPIView):
             for img in secondary_images:
                 ListingImage.objects.create(listing=listing, image=img)
 
-<<<<<<< HEAD
-=======
     def perform_destroy(self, instance):
         if instance.availability_status == 'RENTED':
             from rest_framework.exceptions import ValidationError
             raise ValidationError("Rented listings cannot be deleted.")
         instance.delete()
-
->>>>>>> 34241502cbc58cd24e1d74f6ac147ab8195c8701
 
 class MyListingsView(generics.ListAPIView):
     """GET: Fetch only the AVAILABLE listings belonging to the logged-in user."""
